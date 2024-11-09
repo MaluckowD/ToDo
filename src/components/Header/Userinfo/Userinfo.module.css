@@ -1,0 +1,30 @@
+
+.header_infouser{
+  display: flex;
+  align-items: center;
+}
+
+.photo{
+  display: block;
+  margin-top: 7px;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+}
+
+.username{
+  margin-left: 16px;
+  color: #fff;
+  position: relative;
+}
+
+.username::after {
+  content: "";
+  background-image: url('https://termowood.ru/en/assets/template/images/hamburger.png');
+  position: absolute;
+  top: -4px;
+  left: 40px;
+  width: 30px;
+  height: 30px;
+  background-size: cover;
+}

@@ -1,0 +1,21 @@
+body{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.header{
+  height: 90px;
+  background-color: #253C42;
+}
+
+.container{
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header_inner{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
