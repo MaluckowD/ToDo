@@ -1,0 +1,52 @@
+
+
+.categorylist{
+  padding-top: 45px;
+  width: 480px;
+  background-color: #E4E4E4;
+  margin-right: 20px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.btn button{
+  width: 195px;
+  height: 45px;
+  border-radius: 10px;
+  border: none;
+  background-color: #CB1C1C;
+  color: #fff;
+  margin-bottom: 20px;
+}
+.list{
+  background-color: #D9D9D9;
+  padding-top: 25px;
+  padding-left: 25px;
+  width: 350px;
+  height: 295px;
+  border-radius: 10px;
+}
+.list input{
+  background-color: #fff;
+  border-radius: 10px;
+  border: none;
+  width: 270px;
+  height: 25px;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.list img{
+  width: 20px;
+  height: 20px;
+  margin-top: -16px;
+  margin-left: 5px;
+}
+
+
+.list_item{
+  display: flex;
+  align-items: center;
+}

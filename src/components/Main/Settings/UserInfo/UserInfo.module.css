@@ -7,13 +7,18 @@ input {
 input[type="text"] {
   padding-left: 20px;
   color: #000;
-  font-weight: 800;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+input::placeholder{
+  color: #000;
 }
 
 
 .userinfo{
   box-sizing: border-box;
-  max-width: 650px;
+  width: 650px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,6 +27,10 @@ input[type="text"] {
   padding-top: 45px;
   padding-bottom: 45px;
   
+}
+
+.user_data{
+  width: 575px;
 }
 
 .user_img{
@@ -43,7 +52,7 @@ input[type="text"] {
   margin-bottom: 45px;
 }
 .email input{
-  width: 551.4px;
+  width: 548px;
   height: 45px;
 }
 .user_name_item{
