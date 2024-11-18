@@ -18,7 +18,10 @@ const UserInfo = () => {
         </div>
         <div className={s.user_sex}>
           <input type="text" placeholder="Пол" />
-          <input type="text" placeholder="Shortname" className={s.user_sex_item} />
+          <input type="text" placeholder="Псевдоним" className={s.user_sex_item} />
+        </div>
+        <div className={s.save_change}>
+          <button>Сохранить изменения</button>
         </div>
 
       </div>
