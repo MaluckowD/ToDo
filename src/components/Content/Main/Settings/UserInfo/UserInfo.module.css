@@ -11,10 +11,16 @@ input[type="text"] {
   font-size: 14px;
 }
 
-input::placeholder{
+.user_name input::placeholder{
+  color: #000;
+}
+.email input::placeholder{
   color: #000;
 }
 
+.user_sex input::placeholder {
+  color: #000;
+}
 
 .userinfo{
   box-sizing: border-box;
@@ -48,6 +54,7 @@ input::placeholder{
 .user_name input{
   width: 240px;
   height: 45px;
+  background-color: #D9D9D9;
 }
 .email{
   padding: 0px;
@@ -55,7 +62,7 @@ input::placeholder{
   margin-bottom: 45px;
 }
 .email input{
-  width: 548px;
+  width: 525px;
   height: 45px;
 }
 .user_name_item{

@@ -7,7 +7,6 @@ const UserInfo = () => {
       <div className={s.user_logo}>
         <img className={s.user_img} src="user.png" alt=""/>
       </div>
-
       <div className={s.user_data}>
         <div className={s.user_name}>
           <input type="text" placeholder = "Имя"/>
@@ -23,7 +22,6 @@ const UserInfo = () => {
         <div className={s.save_change}>
           <button>Сохранить изменения</button>
         </div>
-
       </div>
 
     </div>
