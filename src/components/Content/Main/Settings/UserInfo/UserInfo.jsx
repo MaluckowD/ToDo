@@ -1,11 +1,11 @@
 import s from "./UserInfo.module.css"
-
+import user from "../../../../../images/user.png"
 const UserInfo = () => {
 
   return (
     <div className={s.userinfo}>
       <div className={s.user_logo}>
-        <img className={s.user_img} src="user.png" alt=""/>
+        <img className={s.user_img} src={user} alt=""/>
       </div>
       <div className={s.user_data}>
         <div className={s.user_name}>

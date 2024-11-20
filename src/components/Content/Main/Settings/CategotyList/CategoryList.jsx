@@ -1,5 +1,6 @@
 import s from "./CategoryList.module.css"
-
+import close from "../../../../../images/close.svg"
+import image from "../../../../../images/image.svg"
 const CategoryList = () => {
   return (
     <div className={s.categorylist}>
@@ -10,13 +11,13 @@ const CategoryList = () => {
         <div className={s.list_items}>
           <div className={s.list_item}>
             <input/>
-            <img src= "image.svg"/>
-            <img src="close.svg" />
+            <img src= {image}/>
+            <img src={close} />
           </div>
           <div className={s.list_item}>
             <input />
-            <img src="image.svg" />
-            <img src="close.svg" />
+            <img src={image} />
+            <img src={close} />
           </div>
         </div>
       </div>

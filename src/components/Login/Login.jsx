@@ -1,4 +1,5 @@
 
+import { NavLink } from "react-router-dom"
 import s from "./Login.module.css"
 
 const Login = () => {
@@ -58,18 +59,23 @@ const Login = () => {
             </div>
 
             <div className={s.send_info}>
-              <button
-                type="submit"
+              
+              <NavLink
+                to="/Content"
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 ВОЙТИ
-              </button>
-              <button
-                type="submit"
+              </NavLink>
+              
+              
+              <NavLink
+                to="/Registration"
+                
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 РЕГИСТРАЦИЯ
-              </button>
+              </NavLink>
+              
             </div>
           </form>
 

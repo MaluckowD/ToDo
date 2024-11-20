@@ -1,4 +1,5 @@
 
+import { NavLink } from "react-router-dom"
 import s from "./Registration.module.css"
 
 const Registration = () => {
@@ -33,7 +34,7 @@ const Registration = () => {
       </div>
       <button className={s.registration_click}>ЗАРЕГИСТРИРОВАТЬСЯ</button>
       <div className={s.questions}>
-        <p>Уже есть аккаунт? <a href="#">Войти</a></p>
+        <p>Уже есть аккаунт? <NavLink to="/">Войти</NavLink></p>
       </div>
       
       

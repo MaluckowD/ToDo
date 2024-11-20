@@ -1,21 +1,23 @@
-a{
+a {
   text-decoration: none;
   color: #fff;
 }
 
-.buttons_item{
+.buttons_item {
   display: flex;
+  justify-content: center;
   align-items: center;
-  margin-top: 8px;
 }
 
-
-
-.exit{
+.exit {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
   margin-left: 53px;
   width: 138px;
   height: 52px;
   background-color: #6D868A;
   color: #fff;
   border: none;
+  border-radius: 20px;
 }
