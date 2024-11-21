@@ -13,7 +13,6 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/Registration" element={<Registration />} />
-          {/* Вложенные маршруты внутри /Content */}
           <Route path="/Content" element={<Content />}>
             <Route index element={<Calendar />} />
             <Route path="Settings" element={<Settings />} />

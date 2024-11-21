@@ -55,6 +55,8 @@ const Calendar = () => {
 
   const events = [
     { event_date: new Date(2021, 9, 4), event_title: "My Birthday :)", event_theme: "red" },
+    { event_date: new Date(2021, 9, 4), event_title: "My Birthday :)", event_theme: "red" },
+    { event_date: new Date(2021, 9, 4), event_title: "My Birthday :)", event_theme: "red" },
     { event_date: new Date(2021, 11, 25), event_title: "Xmas Day", event_theme: "green" },
     { event_date: new Date(2021, 9, 31), event_title: "Halloween", event_theme: "yellow" },
     { event_date: new Date(2021, 11, 31), event_title: "New Years Eve", event_theme: "yellow" }
@@ -69,17 +71,25 @@ const Calendar = () => {
   ];
 
   const btnClass = (limit) => {
-    return month === limit ? "cursor-not-allowed opacity-25" : "leading-none rounded-lg transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 items-center focus:outline-none";
+    return "leading-none rounded-lg transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 items-center focus:outline-none";
   };
 
   const nextMonth = () => {
-    setMonth(month + 1);
-    getNoOfDays();
+    if (month === 11) {
+      setYear((prevYear) => prevYear + 1);
+      setMonth(0);
+    } else {
+      setMonth((prevMonth) => prevMonth + 1);
+    }
   };
 
   const prevMonth = () => {
-    setMonth(month - 1);
-    getNoOfDays();
+    if (month === 0) {
+      setYear((prevYear) => prevYear - 1);
+      setMonth(11); // Go to December of the previous year
+    } else {
+      setMonth((prevMonth) => prevMonth - 1);
+    }
   };
 
   const eventClass = (t) => {
@@ -110,7 +120,7 @@ const Calendar = () => {
               <button
                 type="button"
                 onClick={() => prevMonth()}
-                disabled={month === 0}
+                disabled={false}
                 className={btnClass(0)}
               >
                 <ArrowLeftIcon className="h-6 w-6 text-gray-500 inline-flex leading-none" />
@@ -120,7 +130,7 @@ const Calendar = () => {
               <button
                 type="button"
                 onClick={() => nextMonth()}
-                disabled={month === 11}
+                disabled = {false}
                 className={btnClass(11)}
               >
                 <ArrowRightIcon className="h-6 w-6 text-gray-500 inline-flex leading-none" />
