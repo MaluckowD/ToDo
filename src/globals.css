@@ -4,4 +4,14 @@
 @tailwind components;
 @tailwind utilities;
 
+.p-datepicker p-component p-datepicker-monthpicker p-ripple-disabled p-connected-overlay-enter-done{
+  background-color: #000;
+}
+
+.p-datepicker-monthpicker {
+  background-color: #a5cab6;
+  border-radius: 10px;
+  padding: 20px;
+}
+
 

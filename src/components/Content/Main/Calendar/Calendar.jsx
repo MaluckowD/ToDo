@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/solid';
+import s from "./Calendar.module.css"
 import classNames from "./helper";
 import "./style.css"
+import CalendarMonth from './Calendarmonth';
 const monthNames = [
   "January",
   "February",
@@ -86,10 +88,14 @@ const Calendar = () => {
   const prevMonth = () => {
     if (month === 0) {
       setYear((prevYear) => prevYear - 1);
-      setMonth(11); // Go to December of the previous year
+      setMonth(11);
     } else {
       setMonth((prevMonth) => prevMonth - 1);
     }
+  };
+  const updateMonthYear = (newMonth, newYear) => {
+    setMonth(newMonth);
+    setYear(newYear);
   };
 
   const eventClass = (t) => {
@@ -104,12 +110,14 @@ const Calendar = () => {
 
   return (
     <>
+      
       <div className="container mx-auto py-4 px-6">
         <div className="bg-white rounded-lg shadow overflow-hidden">
           <div className="flex items-center justify-between px-6 py-4 border-b">
-            <div>
+            <div className={s.content}>
               <span className="text-lg font-bold text-gray-800">
                 {monthNames[month]}
+                <CalendarMonth updateMonthAndYear={updateMonthYear} year={year}/>
               </span>
               <span className="ml-1 text-lg text-gray-600 font-normal">
                 {year}

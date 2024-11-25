@@ -1,0 +1,48 @@
+
+.item span{
+  color: #000;
+  background-color: #000;
+}
+.month .p-calendar-month{
+  background-color: #E5EDF6;
+}
+.p-datepicker p-component p-datepicker-monthpicker p-ripple-disabled p-connected-overlay-enter-done{
+  background-color: #000;
+}
+#pr_id_151_panel{
+  background-color: #000;
+}
+
+.element.style{
+  background-color: #000;
+}
+.p-monthpicker span{
+  background-color: #E5EDF6;
+}
+.p-focus{
+  background-color: #000;
+  color: #000;
+}
+.month{
+  color: #000;
+  background-color: #000;
+}
+
+.item span{
+  opacity: 0;
+}
+
+.item span {
+  display: block;
+  opacity: 0;
+  width: 117px;
+  margin-top: -30px;
+}
+
+.content {
+  display: flex;
+}
+
+.month input{
+  width: 100px;
+}
