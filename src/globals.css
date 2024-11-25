@@ -14,4 +14,11 @@
   padding: 20px;
 }
 
+.p-datepicker-title button{
+  pointer-events: none;
+  cursor: default;
+}
+
+
+
 
