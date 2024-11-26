@@ -8,7 +8,7 @@ const Userinfo = () => {
       <NavLink to= "Settings">
         <img className={s.photo} src="../../../user.png" alt="" />
       </NavLink>
-      <div className={s.username}> Igor </div>
+      <div className={s.username}> Саша </div>
     </div>
   )
 }

@@ -30,6 +30,7 @@
 
 .item span{
   opacity: 0;
+  cursor: pointer;
 }
 
 .item span {
@@ -37,6 +38,11 @@
   opacity: 0;
   width: 117px;
   margin-top: -30px;
+  cursor: pointer;
+}
+
+.item span input{
+  cursor: pointer;
 }
 
 .content {
@@ -46,3 +52,16 @@
 .month input{
   width: 100px;
 }
+
+.ml-1{
+  margin-left: -20px;
+}
+
+.ml-1 text-lg text-gray-600 font-normal{
+  margin-left: -10px;
+}
+.text-lg font-bold text-gray-800{
+  cursor: pointer;
+}
+
+

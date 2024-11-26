@@ -59,7 +59,7 @@ const Calendar = () => {
     { event_date: new Date(2021, 9, 4), event_title: "My Birthday :)", event_theme: "red" },
     { event_date: new Date(2021, 9, 4), event_title: "My Birthday :)", event_theme: "red" },
     { event_date: new Date(2021, 9, 4), event_title: "My Birthday :)", event_theme: "red" },
-    { event_date: new Date(2021, 11, 25), event_title: "Xmas Day", event_theme: "green" },
+    { event_date: new Date(2022, 0, 7), event_title: "Рождество", event_theme: "green" },
     { event_date: new Date(2021, 9, 31), event_title: "Halloween", event_theme: "yellow" },
     { event_date: new Date(2021, 11, 31), event_title: "New Years Eve", event_theme: "yellow" }
   ];
