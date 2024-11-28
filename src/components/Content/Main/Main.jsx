@@ -2,8 +2,9 @@ import s from "./Main.module.css"
 import Settings from "./Settings/Settings"
 import Calendar from "./Calendar/Calendar"
 import { Route, Routes } from "react-router-dom"
-const Main = () => {
 
+const Main = () => {
+  
   return (
     <main className = {s.main}>
       <Routes>

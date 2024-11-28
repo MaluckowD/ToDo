@@ -64,4 +64,10 @@
   cursor: pointer;
 }
 
+@media (max-width: 770px) {
+  .flex-wrap div{
+    margin-top: 10px;
+  }
+}
+
 
