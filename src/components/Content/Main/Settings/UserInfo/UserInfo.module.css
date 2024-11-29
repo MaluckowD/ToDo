@@ -90,3 +90,51 @@ input[type="text"] {
   background-color: #CB1C1C;
   color: #fff;
 }
+
+@media (max-width: 1200px) {
+  .userinfo {
+      width: 600px;
+    }
+}
+
+@media (max-width: 1050px) {
+  .userinfo {
+      margin: 0 auto;
+      margin-bottom: 20px;
+      margin-top: 20px;
+  }
+}
+
+@media (max-width: 650px) {
+  .userinfo {
+    width: 590px;
+  }
+}
+
+@media (max-width: 610px) {
+  
+  .user_name, .user_sex {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    vertical-align: center;
+  }
+  .email input{
+    width: 240px;
+  }
+  .userinfo{
+    width: 450px;
+  }
+  .user_name input, .user_sex input{
+    margin-left: 0;
+  }
+
+
+}
+
+@media (max-width: 460px) {
+  .userinfo{
+    width: 350px;
+    overflow: hidden;
+  }
+}

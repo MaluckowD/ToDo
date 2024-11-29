@@ -50,3 +50,27 @@
   display: flex;
   align-items: center;
 }
+
+@media (max-width: 1200px) {
+  .categorylist {
+    width: 400px;
+  }
+}
+
+@media (max-width: 1050px) {
+  .categorylist {
+    margin-top: 30px;
+    margin: 0 auto;
+    margin-bottom: 20px;
+  }
+  .list{
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 460px) {
+  .categorylist {
+    width: 350px;
+    overflow: hidden;
+  }
+}

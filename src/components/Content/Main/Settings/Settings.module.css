@@ -14,3 +14,42 @@
   display: flex;
   justify-content: space-between;
 }
+
+@media (max-width: 1050px){
+  .content{
+    flex-direction: column;
+  }
+  .settings_item{
+    padding: 0;
+    width: 640px;
+    margin: 0 auto;
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 650px){
+  .settings_item {
+    width: 600px;
+  }
+}
+
+@media (max-width: 610px) {
+  .settings_item {
+    width: 550px;
+  }
+}
+
+@media (max-width: 610px) {
+  .settings_item {
+    width: 460px;
+    overflow: hidden;
+  }
+}
+
+@media (max-width: 460px) {
+  .settings_item {
+    width: 350px;
+    overflow: hidden;
+  }
+}
