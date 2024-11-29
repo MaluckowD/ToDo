@@ -7,10 +7,9 @@ const Header = () => {
     <header className = {s.header}>
       <div className={s.container}>
         <div className={s.header_inner}>
-          <Userinfo />
+          <Userinfo/>
           <Buttons/>
         </div>
-        
       </div>
     </header>
     
