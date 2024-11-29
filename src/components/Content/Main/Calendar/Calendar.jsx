@@ -151,7 +151,7 @@ const Calendar = () => {
               style={{ marginBottom: "-30px" }}
             >
               {days.map((day) => (
-                <div key={day} className="px-2 py-2 w-[14.28%]">
+                <div key={day} className={"px-2 py-2 w-[14.28%]"}>
                   <div className="text-gray-600 text-sm uppercase tracking-wide font-bold text-center">
                     {day}
                   </div>
@@ -168,7 +168,7 @@ const Calendar = () => {
               {numOfDays.map((date, index) => (
                 <div
                   key={index}
-                  className="px-4 pt-2 border-r border-b relative h-32 w-[14.28%]"
+                  className={["px-4 pt-2 border-r border-b relative h-32 w-[14.28%]", s.adaptive].join(" ")}
                 >
                   <div
                     className={classNames(

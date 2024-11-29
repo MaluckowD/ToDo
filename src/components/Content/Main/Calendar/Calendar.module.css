@@ -63,10 +63,12 @@
 .text-lg font-bold text-gray-800{
   cursor: pointer;
 }
-
+.adaptive {
+  padding-top: 0.5rem;
+}
 @media (max-width: 770px) {
-  .flex-wrap div{
-    margin-top: 10px;
+  .adaptive{
+    padding-top: 1rem;
   }
 }
 
