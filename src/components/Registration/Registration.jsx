@@ -21,7 +21,7 @@ const Registration = () => {
       <div className={s.content_wrapper}>
         <div className={s.email}>
           <p className={s.name_description}>Ваша эл. почта</p>
-          <input placeholder="Введите  адрес электронной почты" />
+          <input placeholder="Введите вашу почту" />
         </div>
         <div className={s.sex}>
           <p className={s.sex_description}>Пароль</p>
