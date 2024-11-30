@@ -74,3 +74,18 @@
     overflow: hidden;
   }
 }
+
+@media (max-width: 350px) {
+  .categorylist {
+    width: 240px;
+    
+  }
+  .list_item input{
+    align-items: center;
+    width: 120px;
+    margin-left: 70px;
+    margin-bottom: 5px;
+  }
+  .list_item img{
+  }
+}

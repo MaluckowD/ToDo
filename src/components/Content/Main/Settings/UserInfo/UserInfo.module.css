@@ -139,3 +139,11 @@ input[type="text"] {
     overflow: hidden;
   }
 }
+
+@media (max-width: 350px) {
+  .userinfo {
+    
+      width: 240px;
+      overflow: hidden;
+    }
+}
