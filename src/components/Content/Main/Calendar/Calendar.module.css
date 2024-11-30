@@ -73,3 +73,14 @@
 }
 
 
+@media (max-width: 270px) {
+
+  .content span{
+    width: 50px;
+    font-size: 12px;
+  }
+
+}
+
+
+

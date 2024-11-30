@@ -128,8 +128,9 @@ input[type="text"] {
   .user_name input, .user_sex input{
     margin-left: 0;
   }
-
-
+  .user_name, .email{
+    margin-bottom: 15px;
+  }
 }
 
 @media (max-width: 460px) {

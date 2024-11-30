@@ -28,3 +28,14 @@ a {
     margin-left: 20px;
   }
 }
+
+@media (max-width: 350px) {
+  .exit {
+    width: 70px;
+  }
+  .buttons_item{
+    margin-top: 10px;
+    font-size: 13px;
+  }
+}
+

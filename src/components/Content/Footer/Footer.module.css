@@ -27,3 +27,14 @@
   }
 }
 
+@media (max-width: 550px) {
+  .footer {
+    margin-top: 0px;
+    box-sizing: border-box;
+    position: absolute;
+    bottom: 0px;
+    top: 100%;
+    width: 100%;
+  }
+}
+
