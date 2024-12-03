@@ -1,22 +1,39 @@
-
 import { NavLink } from "react-router-dom"
 import s from "./Registration.module.css"
-
+import axios from "axios"
 const Registration = () => {
+
+  const Register = ( () => {
+    let User = {
+      "name": "Dim",
+      "surname": "Asdgghj",
+      "short_name": "fnt",
+      "email": "cerbr.fishing",
+      "gender": "male",
+      "password": "12345"
+    }
+    axios.post("https://energy-cerber.ru/user/register", User)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  })
 
   return (
     <div className={s.content}>
-      <div className = {s.content_flex}></div>
-        <h2>Регистрация</h2>
-        <div className={s.name}>
-          <div className={s.name_item}>
-            <p className = {s.name_description}>Имя</p>
-            <input placeholder="Введите имя" />
-          </div>
-          <div className={s.name_itemsecond}>
-            <p className={s.name_description}>Фамилия</p>
-            <input placeholder = "Введите фамилию"/>
-          </div>
+      <div className={s.content_flex}></div>
+      <h2>Регистрация</h2>
+      <div className={s.name}>
+        <div className={s.name_item}>
+          <p className={s.name_description}>Имя</p>
+          <input placeholder="Введите имя" />
+        </div>
+        <div className={s.name_itemsecond}>
+          <p className={s.name_description}>Фамилия</p>
+          <input placeholder="Введите фамилию" />
+        </div>
       </div>
       <div className={s.content_wrapper}>
         <div className={s.email}>
@@ -32,12 +49,12 @@ const Registration = () => {
           <input placeholder="Подтвердите  пароль" />
         </div>
       </div>
-      <button className={s.registration_click}>ЗАРЕГИСТРИРОВАТЬСЯ</button>
+      <button onClick={ Register } className={s.registration_click}>ЗАРЕГИСТРИРОВАТЬСЯ</button>
       <div className={s.questions}>
         <p>Уже есть аккаунт? <NavLink to="/">Войти</NavLink></p>
       </div>
-      
-      
+
+
     </div>
   )
 }

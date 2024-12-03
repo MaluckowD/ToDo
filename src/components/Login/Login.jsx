@@ -1,8 +1,27 @@
 
 import { NavLink } from "react-router-dom"
 import s from "./Login.module.css"
-
+import axios from "axios"
 const Login = () => {
+  const LoginCallback = (() => {
+    
+    let email = "cerbr.fishing"
+    let password = '12345'
+    axios.post("https://energy-cerber.ru/user/login", null, { 
+      params: {
+      email,
+      password
+    }
+      
+    })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  })
+
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -61,6 +80,7 @@ const Login = () => {
             <div className={s.send_info}>
               
               <NavLink
+                onClick={LoginCallback}
                 to="/Content"
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
@@ -70,7 +90,6 @@ const Login = () => {
               
               <NavLink
                 to="/Registration"
-                
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 РЕГИСТРАЦИЯ
