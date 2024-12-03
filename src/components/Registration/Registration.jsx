@@ -1,72 +1,132 @@
-import React from "react"
-import { NavLink } from "react-router-dom"
-import s from "./Registration.module.css"
-import axios from "axios"
-const Registration = (props) => {
-  let newElementName = React.createRef();
+import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
+import s from "./Registration.module.css";
+import axios from "axios";
 
-  let addname = () => {
-    props.addname()
-  }
+const Registration = () => {
+  const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [shortName, setShortName] = useState("");
+  const [email, setEmail] = useState("");
+  const [gender, setGender] = useState("male");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  let changeOnName = () => {
-    let name = newElementName.current.value;
-    props.changeOnName(name)
+  const Register = async () => {
+    const userData = {
+      name: name,
+      surname: surname,
+      short_name: shortName,
+      email: email,
+      gender: gender,
+      password: password,
+    };
 
-  }
+    try {
+      const response = await axios.post(
+        "https://energy-cerber.ru/user/register",
+        userData
+      );
+      if (response.status === 200 || response.status === 201) {
+        console.log("Регистрация успешна:", response.data);
 
-  const Register = ( () => {
-    let User = {
-      "name": "Dim",
-      "surname": "Asdgghj",
-      "short_name": "fnt",
-      "email": "cerbr.fishing",
-      "gender": "male",
-      "password": "12345"
+      } else {
+        console.error("Ошибка регистрации:", response.status, response.data);
+
+      }
+    } catch (error) {
+      console.error("Ошибка:", error);
     }
-    axios.post("https://energy-cerber.ru/user/register", User)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  })
+  };
 
   return (
     <div className={s.content}>
-      <div className={s.content_flex}></div>
       <h2>Регистрация</h2>
       <div className={s.name}>
         <div className={s.name_item}>
           <p className={s.name_description}>Имя</p>
-          <input ref={newElementName} onChange={changeOnName} value={props.postName} placeholder="Введите имя" />
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Введите имя"
+          />
         </div>
         <div className={s.name_itemsecond}>
           <p className={s.name_description}>Фамилия</p>
-          <input placeholder="Введите фамилию" />
+          <input
+            type="text"
+            value={surname}
+            onChange={(e) => setSurname(e.target.value)}
+            placeholder="Введите фамилию"
+          />
         </div>
       </div>
+      <input
+        type="text"
+        value={shortName}
+        onChange={(e) => setShortName(e.target.value)}
+        placeholder="Введите короткое имя"
+      />
+      <h2>Укажите пол</h2>
+      <p>
+        <input
+          type="radio"
+          value="male"
+          checked={gender === "male"}
+          onChange={(e) => setGender(e.target.value)}
+          name="gender"
+          id="male"
+        />
+        <label htmlFor="male">мужской</label>
+      </p>
+      <p>
+        <input
+          type="radio"
+          value="female"
+          checked={gender === "female"}
+          onChange={(e) => setGender(e.target.value)}
+          name="gender"
+          id="female"
+        />
+        <label htmlFor="female">женский</label>
+      </p>
+
       <div className={s.content_wrapper}>
         <div className={s.email}>
           <p className={s.name_description}>Ваша эл. почта</p>
-          <input placeholder="Введите вашу почту" />
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Введите вашу почту"
+          />
         </div>
         <div className={s.sex}>
           <p className={s.sex_description}>Пароль</p>
-          <input placeholder="Введите  пароль" />
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Введите  пароль"
+          />
         </div>
         <div className={s.validation}>
           <p className={s.validation_description}>Подтвердите пароль</p>
-          <input placeholder="Подтвердите  пароль" />
+          <input
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            placeholder="Подтвердите  пароль"
+          />
         </div>
       </div>
-      <button onClick={ Register } className={s.registration_click}>ЗАРЕГИСТРИРОВАТЬСЯ</button>
+      <button onClick={Register} className={s.registration_click}>
+        ЗАРЕГИСТРИРОВАТЬСЯ
+      </button>
       <div className={s.questions}>
         <p>Уже есть аккаунт? <NavLink to="/">Войти</NavLink></p>
       </div>
-
-
     </div>
   )
 }
