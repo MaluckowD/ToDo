@@ -1,7 +1,19 @@
+import React from "react"
 import { NavLink } from "react-router-dom"
 import s from "./Registration.module.css"
 import axios from "axios"
-const Registration = () => {
+const Registration = (props) => {
+  let newElementName = React.createRef();
+
+  let addname = () => {
+    props.addname()
+  }
+
+  let changeOnName = () => {
+    let name = newElementName.current.value;
+    props.changeOnName(name)
+
+  }
 
   const Register = ( () => {
     let User = {
@@ -28,7 +40,7 @@ const Registration = () => {
       <div className={s.name}>
         <div className={s.name_item}>
           <p className={s.name_description}>Имя</p>
-          <input placeholder="Введите имя" />
+          <input ref={newElementName} onChange={changeOnName} value={props.postName} placeholder="Введите имя" />
         </div>
         <div className={s.name_itemsecond}>
           <p className={s.name_description}>Фамилия</p>
