@@ -64,37 +64,24 @@ const Registration = () => {
           />
         </div>
       </div>
-      <input
-        type="text"
-        value={shortName}
-        onChange={(e) => setShortName(e.target.value)}
-        placeholder="Введите короткое имя"
-      />
-      <h2>Укажите пол</h2>
-      <p>
-        <input
-          type="radio"
-          value="male"
-          checked={gender === "male"}
-          onChange={(e) => setGender(e.target.value)}
-          name="gender"
-          id="male"
-        />
-        <label htmlFor="male">мужской</label>
-      </p>
-      <p>
-        <input
-          type="radio"
-          value="female"
-          checked={gender === "female"}
-          onChange={(e) => setGender(e.target.value)}
-          name="gender"
-          id="female"
-        />
-        <label htmlFor="female">женский</label>
-      </p>
+      <p className={s.name_description1}>Выберите пол</p>
+      <select className = {s.male} name="gender" id="pet-select" value={gender} onChange={(e) => setGender(e.target.value)}>
+        <option value="">Укажите пол</option>
+        <option value="male">Мужской</option>
+        <option value="female">Женский</option>
+      </select>
+      
 
       <div className={s.content_wrapper}>
+        <div className={s.email}>
+          <p className={s.name_description}>Введите ваше короткое имя</p>
+          <input
+            type="text"
+            value={shortName}
+            onChange={(e) => setShortName(e.target.value)}
+            placeholder="Введите короткое имя"
+          />
+        </div>
         <div className={s.email}>
           <p className={s.name_description}>Ваша эл. почта</p>
           <input

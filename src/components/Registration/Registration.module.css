@@ -1,4 +1,6 @@
 .content {
+  font-weight: 500;
+  font-size: 0.875rem;
   color: #000;
   margin: 0 auto;
   width: 430px;
@@ -8,6 +10,28 @@
   justify-content: center;
   height: 100vh;
   min-height: 100vh;
+}
+input[type="email"] {
+  padding-left: 20px;
+  color: #000;
+  font-weight: bold;
+  font-size: 14px;}
+input[type="password"] {
+  padding-left: 20px;
+  color: #000;
+  font-weight: bold;
+  font-size: 14px;
+}
+.male{
+  margin-left: -321px;
+  margin-bottom: 0.5rem;
+}
+.name_description1{
+  margin-left: -335px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .content_flex {
@@ -62,6 +86,7 @@
 .email,
 .sex,
 .validation {
+  
   margin-bottom: 1rem;
   width: 100%;
 }
@@ -84,6 +109,11 @@
   margin-bottom: 2px;
   margin-top: 0.5rem;
 }
+.registration_click input{
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
 
 .questions {
   width: 100%;
