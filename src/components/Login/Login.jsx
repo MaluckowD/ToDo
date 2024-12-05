@@ -1,12 +1,14 @@
-import React from "react";
+import React, {useState} from "react";
 import { NavLink } from "react-router-dom"
 import s from "./Login.module.css"
 import axios from "axios"
+import { useNavigate } from "react-router-dom";
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate()
   const LoginCallback = (() => {
     
-    let email = "cerbr.fishing"
-    let password = '12345'
     axios.post("https://energy-cerber.ru/user/login", null, { 
       params: {
       email,
@@ -16,8 +18,11 @@ const Login = () => {
     })
       .then((response) => {
         console.log(response);
+        navigate("/Content")
+        console.log(email, password)
       })
       .catch(function (error) {
+        console.error("Ошибка регистрации:");
         console.log(error);
       });
   })
@@ -50,6 +55,8 @@ const Login = () => {
                   required
                   autoComplete="email"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
             </div>
@@ -73,19 +80,20 @@ const Login = () => {
                   required
                   autoComplete="current-password"
                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
             </div>
 
             <div className={s.send_info}>
               
-              <NavLink
+              <button
                 onClick={LoginCallback}
-                to="/Content"
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 ВОЙТИ
-              </NavLink>
+              </button>
               
               
               <NavLink
