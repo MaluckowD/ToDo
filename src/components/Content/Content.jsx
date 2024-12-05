@@ -45,7 +45,7 @@ const Content = (props) => {
       )}
       <div className={isModalOpen ? [s.wrapper, s.opacity].join(' ') : s.wrapper}>
         <Header getToken={props.getToken} name={userName}/>
-        <Main userData={userData} />
+        <Main getToken={props.getToken} userData={userData} />
         <Footer openModal={openModal} />
       </div>
     </div>

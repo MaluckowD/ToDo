@@ -7,7 +7,7 @@ const Settings = (props) => {
     <div className={s.settings_item}>
       <div className={s.container}>
         <div className={s.content}>
-          <UserInfo userData={props.userData}/>
+          <UserInfo getToken={props.getToken} userData={props.userData}/>
           <CategoryList/>
         </div>
       </div>
