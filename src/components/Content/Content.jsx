@@ -12,16 +12,23 @@ const Content = (props) => {
   const closeModal = () => setIsModalOpen(false);
   const token = props.getToken();
 
-  axios.get("https://energy-cerber.ru/user/self", {
-    headers: {
-      Authorization: `Bearer ${token}`
+  useEffect( () => {
+    const fetchUserName = async () => {
+      axios.get("https://energy-cerber.ru/user/self", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }).then(response => {
+        console.log(response)
+        setUserName(response.data.name);
+        return response.data;
+      }
+      )
     }
-  }).then( response => {
-    console.log(response)
-    setUserName(response.data.name);
-    return response.data;
-  }
-  )
+    if (token) {
+      fetchUserName();
+    }
+  }, [token])
   
   return(
     <div className = {s.root}>
