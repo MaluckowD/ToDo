@@ -7,7 +7,7 @@ const Header = (props) => {
     <header className = {s.header}>
       <div className={s.container}>
         <div className={s.header_inner}>
-          <Userinfo name = {props.name}/>
+          <Userinfo getToken={props.getToken} name = {props.name}/>
           <Buttons/>
         </div>
       </div>
