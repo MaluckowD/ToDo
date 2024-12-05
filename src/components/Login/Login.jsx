@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom"
 import s from "./Login.module.css"
 import axios from "axios"
 import { useNavigate } from "react-router-dom";
-const Login = () => {
+const Login = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate()
@@ -18,6 +18,7 @@ const Login = () => {
     })
       .then((response) => {
         console.log(response);
+        props.saveToken(response.data.access_token);
         navigate("/Content")
         console.log(email, password)
       })

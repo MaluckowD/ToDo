@@ -31,7 +31,7 @@ const Registration = (props) => {
       if (response.status === 200 || response.status === 201) {
         console.log("Регистрация успешна:", response.data);
         props.onDataUser({email, password});
-
+        props.saveToken(response.data.access_token);
         navigate("/Content")
 
       } else {

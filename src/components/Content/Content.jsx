@@ -4,13 +4,24 @@ import Footer from "./Footer/Footer"
 import s from "./Content.module.css"
 import React, { useCallback, useEffect, useState } from 'react';
 import axios from "axios";
-import { Ping, RegistrateUser } from "../../api/api"
 import Kirillloh from "../../images/KirillLoh.jpg"
-const Content = () => {
+const Content = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userName, setUserName] = useState("");
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+  const token = props.getToken();
 
+  axios.get("https://energy-cerber.ru/user/self", {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }).then( response => {
+    console.log(response)
+    setUserName(response.data.name);
+    return response.data;
+  }
+  )
   
   return(
     <div className = {s.root}>
@@ -24,7 +35,7 @@ const Content = () => {
         </div>
       )}
       <div className={isModalOpen ? [s.wrapper, s.opacity].join(' ') : s.wrapper}>
-        <Header />
+        <Header name={userName}/>
         <Main />
         <Footer openModal={openModal} />
       </div>

@@ -1,13 +1,13 @@
 import s from "./Header.module.css"
 import Userinfo from "./Userinfo/Userinfo"
 import Buttons from "./Buttons/Buttons"
-const Header = () => {
+const Header = (props) => {
 
   return (
     <header className = {s.header}>
       <div className={s.container}>
         <div className={s.header_inner}>
-          <Userinfo/>
+          <Userinfo name = {props.name}/>
           <Buttons/>
         </div>
       </div>

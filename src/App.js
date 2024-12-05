@@ -13,6 +13,18 @@ function App(props) {
     console.log(userDatafromRegistration)
   }
 
+  const saveToken = (token) => {
+    localStorage.setItem('access_token', token);
+  };
+
+  const getToken = () => {
+    return localStorage.getItem('access_token');
+  };
+
+  const removeToken = () => {
+    localStorage.removeItem('access_token');
+  }
+
   useEffect(() => {
     console.log("Текущее состояние userDatafromRegistration:", userDatafromRegistration);
   }, [userDatafromRegistration]);
@@ -21,9 +33,9 @@ function App(props) {
 
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/Registration" store={props.store} element={<Registration onDataUser={handleuserDatafromRegistration} />} />
-          <Route path="/Content" element={<Content  />}>
+          <Route path="/" element={<Login saveToken={saveToken}/>} />
+          <Route path="/Registration" store={props.store} element={<Registration onDataUser={handleuserDatafromRegistration} saveToken={saveToken} />} />
+          <Route path="/Content" element={<Content getToken={getToken}/>}>
             <Route index element={<Calendar />} />
             <Route path="Settings" element={<Settings />} />
           </Route>
