@@ -3,7 +3,8 @@ import { NavLink } from "react-router-dom";
 import s from "./Registration.module.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-const Registration = () => {
+
+const Registration = (props) => {
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [shortName, setShortName] = useState("");
@@ -11,8 +12,7 @@ const Registration = () => {
   const [gender, setGender] = useState("male");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const navigate = useNavigate();
-
+  const navigate = useNavigate()
   const Register = async () => {
     const userData = {
       name: name,
@@ -30,6 +30,8 @@ const Registration = () => {
       );
       if (response.status === 200 || response.status === 201) {
         console.log("Регистрация успешна:", response.data);
+        props.onDataUser({email, password});
+
         navigate("/Content")
 
       } else {
