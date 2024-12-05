@@ -8,6 +8,7 @@ import Kirillloh from "../../images/KirillLoh.jpg"
 const Content = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userName, setUserName] = useState("");
+  const [userData, setUserData] = useState(null);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const token = props.getToken();
@@ -21,6 +22,7 @@ const Content = (props) => {
       }).then(response => {
         console.log(response)
         setUserName(response.data.name);
+        setUserData(response.data)
         return response.data;
       }
       )
@@ -43,7 +45,7 @@ const Content = (props) => {
       )}
       <div className={isModalOpen ? [s.wrapper, s.opacity].join(' ') : s.wrapper}>
         <Header getToken={props.getToken} name={userName}/>
-        <Main />
+        <Main userData={userData} />
         <Footer openModal={openModal} />
       </div>
     </div>

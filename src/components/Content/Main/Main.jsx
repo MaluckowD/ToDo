@@ -3,13 +3,13 @@ import Settings from "./Settings/Settings"
 import Calendar from "./Calendar/Calendar"
 import { Route, Routes } from "react-router-dom"
 
-const Main = () => {
+const Main = (props) => {
   
   return (
     <main className = {s.main}>
       <Routes>
         <Route index element={<Calendar />} />
-        <Route path="Settings" element={<Settings />} />
+        <Route path="Settings" element={<Settings userData={props.userData}/>} />
       </Routes>
       
       

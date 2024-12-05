@@ -1,6 +1,6 @@
 import s from "./UserInfo.module.css"
 import user from "../../../../../images/user.png"
-const UserInfo = () => {
+const UserInfo = (props) => {
 
   return (
     <div className={s.userinfo}>
@@ -9,15 +9,15 @@ const UserInfo = () => {
       </div>
       <div className={s.user_data}>
         <div className={s.user_name}>
-          <input type="text" placeholder = "Имя"/>
-          <input type="text" placeholder = "Фамилия" className = {s.user_name_item}/>
+          <input value={props.userData.name} type="text" placeholder = "Имя"/>
+          <input value={props.userData.surname} type="text" placeholder = "Фамилия" className = {s.user_name_item}/>
         </div>
         <div className={s.email}>
-          <input type="text" placeholder="Ваша эл.почта" />
+          <input value={props.userData.email} type="text" placeholder="Ваша эл.почта" />
         </div>
         <div className={s.user_sex}>
-          <input type="text" placeholder="Пол" />
-          <input type="text" placeholder="Псевдоним" className={s.user_sex_item} />
+          <input value={props.userData.gender} type="text" placeholder="Пол" />
+          <input value={props.userData.short_name} type="text" placeholder="Псевдоним" className={s.user_sex_item} />
         </div>
         <div className={s.save_change}>
           <button>Сохранить изменения</button>
