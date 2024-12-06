@@ -4,12 +4,36 @@ import React, {useState, useEffect} from "react";
 import axios from "axios";
 
 const UserInfo = (props) => {
-  const [name, setName] = useState(props.userData.name);
-  const [surname, setSurname] = useState(props.userData.surname);
-  const [gender, setGender] = useState(props.userData.gender);
 
+  const [userData, setUserData] = useState(props.userData);
+  const [name, setName] = useState('');
+  const [surname, setSurname] = useState("");
+  const [gender, setGender] = useState("");
+  const token = props.getToken()
+
+  useEffect(() => {
+    const fetchUserName = async () => {
+      axios.get("https://energy-cerber.ru/user/self", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }).then(response => {
+        console.log(response)
+        setName(response.data.name);
+        setSurname(response.data.surname)
+        setUserData(response.data)
+        setGender(response.data.gender)
+        return response.data;
+      }
+      )
+    }
+    if (token) {
+      fetchUserName();
+    }
+  }, [token])
+
+  
   const UpdateUserInfo = () => {
-    const token = props.getToken()
     if (token){
       axios.put("https://energy-cerber.ru/user/edit", {
         name, surname, gender
@@ -22,6 +46,7 @@ const UserInfo = (props) => {
       })
     }
   }
+  if (!props.userData) return <p>Загрузка данных...</p>;
 
   return (
     <div className={s.userinfo}>
@@ -45,7 +70,7 @@ const UserInfo = (props) => {
           />
         </div>
         <div className={s.email}>
-          <input value={props.userData.email} type="text" placeholder="Ваша эл.почта" />
+          <input disabled value={props.userData.email} type="text" placeholder="Ваша эл.почта" />
         </div>
         <div className={s.user_sex}>
           <input 
@@ -54,7 +79,7 @@ const UserInfo = (props) => {
             placeholder="Пол"
             onChange={(e) => setGender(e.target.value)}
           />
-          <input value={props.userData.short_name} type="text" placeholder="Псевдоним" className={s.user_sex_item} />
+          <input disabled value={props.userData.short_name} type="text" placeholder="Псевдоним" className={s.user_sex_item} />
         </div>
         <div className={s.save_change}>
           <button onClick = {UpdateUserInfo}>Сохранить изменения</button>
