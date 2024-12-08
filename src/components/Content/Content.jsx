@@ -7,7 +7,6 @@ import axios from "axios";
 import Kirillloh from "../../images/KirillLoh.jpg"
 const Content = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [userData, setUserData] = useState(null);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   
@@ -16,27 +15,14 @@ const Content = (props) => {
   const [gender, setGender] = useState("");
   const token = props.getToken()
 
-  useEffect(() => {
-    const fetchUserName = async () => {
-      axios.get("https://energy-cerber.ru/user/self", {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }).then(response => {
-        console.log(response)
-        setName(response.data.name);
-        setSurname(response.data.surname)
-        setUserData(response.data)
-        setGender(response.data.gender)
-        return response.data;
-      }
-      )
-    }
-    if (token) {
-      fetchUserName();
-    }
-  }, [token])
-  
+  if (props.isLoading) {
+    return <p>Загрузка данных...</p>;
+  }
+
+  if (props.error) {
+    return <p>Ошибка: {props.error.message}</p>;
+  }
+
   return(
     <div className = {s.root}>
       {isModalOpen && (
@@ -49,8 +35,8 @@ const Content = (props) => {
         </div>
       )}
       <div className={isModalOpen ? [s.wrapper, s.opacity].join(' ') : s.wrapper}>
-        <Header getToken={props.getToken} name={name}/>
-        <Main name={name} surname={surname} gender={gender} getToken={props.getToken} userData={userData} />
+        <Header getToken={props.getToken} name={props.userData.name} />
+        <Main name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} getToken={props.getToken} userData={props.userData} />
         <Footer openModal={openModal} />
       </div>
     </div>

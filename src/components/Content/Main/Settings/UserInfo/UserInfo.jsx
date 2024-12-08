@@ -6,33 +6,12 @@ import axios from "axios";
 const UserInfo = (props) => {
 
   const [userData, setUserData] = useState(props.userData);
-  const [name, setName] = useState('');
-  const [surname, setSurname] = useState("");
-  const [gender, setGender] = useState("");
+  const [name, setName] = useState(props.name);
+  const [surname, setSurname] = useState(props.surname);
+  const [gender, setGender] = useState(props.gender);
   const token = props.getToken()
 
-  useEffect(() => {
-    const fetchUserName = async () => {
-      axios.get("https://energy-cerber.ru/user/self", {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }).then(response => {
-        console.log(response)
-        setName(response.data.name);
-        setSurname(response.data.surname)
-        setUserData(response.data)
-        setGender(response.data.gender)
-        return response.data;
-      }
-      )
-    }
-    if (token) {
-      fetchUserName();
-    }
-  }, [token])
 
-  
   const UpdateUserInfo = () => {
     if (token){
       axios.put("https://energy-cerber.ru/user/edit", {
