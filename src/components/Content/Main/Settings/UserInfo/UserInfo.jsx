@@ -22,6 +22,7 @@ const UserInfo = (props) => {
       }
       },).then(response => {
         console.log(response.data)
+        props.updateUserDataInApp(response.data)
       })
     }
   }

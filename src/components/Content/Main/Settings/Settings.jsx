@@ -11,7 +11,7 @@ const Settings = (props) => {
     <div className={s.settings_item}>
       <div className={s.container}>
         <div className={s.content}>
-          <UserInfo name={props.name} surname={props.surname} gender={props.gender} getToken={props.getToken} userData={props.userData}/>
+          <UserInfo name={props.name} surname={props.surname} gender={props.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp} />
           <CategoryList/>
         </div>
       </div>

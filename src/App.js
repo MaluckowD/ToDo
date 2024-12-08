@@ -16,17 +16,24 @@ function App(props) {
     setuserDatafromRegistration(data);
     console.log(userDatafromRegistration)
   }
+  
+  const updateUserDataInApp = (updatedUserData) => {
+    setUserData(updatedUserData);
+  };
+
+
+ // Используем useState для отслеживания токена
 
   const saveToken = (token) => {
     localStorage.setItem('access_token', token);
+    setToken(token); // Обновляем состояние токена после сохранения в localStorage
   };
 
-  const getToken = () => {
-    return localStorage.getItem('access_token');
-  };
-  const token = getToken()
+  const getToken = () => localStorage.getItem('access_token');
+  const [token, setToken] = useState(getToken());
   useEffect(() => {
     const fetchUserData = async () => {
+      setIsLoading(true);
       try {
         const response = await axios.get("https://energy-cerber.ru/user/self", {
           headers: {
@@ -38,7 +45,7 @@ function App(props) {
         setError(error);
         console.error("Ошибка при загрузке данных пользователя:", error);
       } finally {
-        setIsLoading(false); // Установлено isLoading в false в finally
+        setIsLoading(false);
       }
     };
 
@@ -59,9 +66,9 @@ function App(props) {
 
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Login saveToken={saveToken}/>} />
+          <Route path="/" element={<Login saveToken={saveToken} updateUserDataInApp={updateUserDataInApp}/>} />
           <Route path="/Registration" store={props.store} element={<Registration onDataUser={handleuserDatafromRegistration} saveToken={saveToken} />} />
-          <Route path="/Content" element={<Content userData={userData} getToken={getToken} isLoading={isLoading} error={error} />}>
+          <Route path="/Content" element={<Content userData={userData} getToken={getToken} isLoading={isLoading} error={error} updateUserDataInApp={updateUserDataInApp}/>}>
             <Route index element={<Calendar />} />
             <Route path="Settings" element={<Settings />} />
           </Route>

@@ -21,6 +21,7 @@ const Login = (props) => {
         props.saveToken(response.data.access_token);
         navigate("/Content")
         console.log(email, password)
+
       })
       .catch(function (error) {
         console.error("Ошибка регистрации:");
