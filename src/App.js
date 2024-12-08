@@ -6,6 +6,7 @@ import Login from "./components/Login/Login";
 import Registration from "./components/Registration/Registration";
 import Calendar from "./components/Content/Main/Calendar/Calendar";
 import Settings from "./components/Content/Main/Settings/Settings";
+
 function App(props) {
   const [userDatafromRegistration, setuserDatafromRegistration] = useState(null);
   const handleuserDatafromRegistration = (data) => {

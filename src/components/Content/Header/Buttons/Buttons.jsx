@@ -6,7 +6,6 @@ const Buttons = (props) => {
   const UpdateCallBack = () => {
     const token = props.getToken();
 
-
     const fetchUserName = async () => {
       axios.get("https://energy-cerber.ru/user/self", {
         headers: {

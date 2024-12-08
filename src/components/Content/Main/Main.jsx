@@ -9,7 +9,7 @@ const Main = (props) => {
     <main className = {s.main}>
       <Routes>
         <Route index element={<Calendar />} />
-        <Route path="Settings" element={<Settings getToken={props.getToken} userData = {props.userData}/>} />
+        <Route path="Settings" element={<Settings name={props.name} surname={props.surname} gender={props.gender} getToken={props.getToken} userData = {props.userData}/>} />
       </Routes>
       
       

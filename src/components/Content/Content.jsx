@@ -7,13 +7,16 @@ import axios from "axios";
 import Kirillloh from "../../images/KirillLoh.jpg"
 const Content = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [userName, setUserName] = useState("");
   const [userData, setUserData] = useState(null);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-  const token = props.getToken();
+  
+  const [name, setName] = useState('');
+  const [surname, setSurname] = useState("");
+  const [gender, setGender] = useState("");
+  const token = props.getToken()
 
-  useEffect( () => {
+  useEffect(() => {
     const fetchUserName = async () => {
       axios.get("https://energy-cerber.ru/user/self", {
         headers: {
@@ -21,8 +24,10 @@ const Content = (props) => {
         }
       }).then(response => {
         console.log(response)
-        setUserName(response.data.name);
+        setName(response.data.name);
+        setSurname(response.data.surname)
         setUserData(response.data)
+        setGender(response.data.gender)
         return response.data;
       }
       )
@@ -44,8 +49,8 @@ const Content = (props) => {
         </div>
       )}
       <div className={isModalOpen ? [s.wrapper, s.opacity].join(' ') : s.wrapper}>
-        <Header getToken={props.getToken} name={userName}/>
-        <Main getToken={props.getToken} userData={userData} />
+        <Header getToken={props.getToken} name={name}/>
+        <Main name={name} surname={surname} gender={gender} getToken={props.getToken} userData={userData} />
         <Footer openModal={openModal} />
       </div>
     </div>
