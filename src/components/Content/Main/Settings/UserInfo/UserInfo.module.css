@@ -89,6 +89,7 @@ input[type="text"] {
   border: none;
   background-color: #CB1C1C;
   color: #fff;
+  margin-bottom: 10px;
 }
 
 @media (max-width: 1200px) {

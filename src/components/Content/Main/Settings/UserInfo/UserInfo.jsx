@@ -2,7 +2,7 @@ import s from "./UserInfo.module.css"
 import user from "../../../../../images/user.png"
 import React, {useState, useEffect} from "react";
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
 const UserInfo = (props) => {
 
   const [userData, setUserData] = useState(props.userData);
@@ -10,6 +10,7 @@ const UserInfo = (props) => {
   const [surname, setSurname] = useState(props.surname);
   const [gender, setGender] = useState(props.gender);
   const token = props.getToken()
+  const navigate = useNavigate()
 
 
   const UpdateUserInfo = () => {
@@ -23,6 +24,19 @@ const UserInfo = (props) => {
       },).then(response => {
         console.log(response.data)
         props.updateUserDataInApp(response.data)
+      })
+    }
+  }
+
+  const DeleteUser = () => {
+    if (token){
+      axios.delete("https://energy-cerber.ru/user/", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }).then(response => {
+        console.log(response.data)
+        navigate("/")
       })
     }
   }
@@ -63,6 +77,9 @@ const UserInfo = (props) => {
         </div>
         <div className={s.save_change}>
           <button onClick = {UpdateUserInfo}>Сохранить изменения</button>
+        </div>
+        <div className={s.save_change}>
+          <button onClick={DeleteUser}>Удалить пользователя</button>
         </div>
       </div>
 

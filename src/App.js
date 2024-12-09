@@ -21,12 +21,9 @@ function App(props) {
     setUserData(updatedUserData);
   };
 
-
- // Используем useState для отслеживания токена
-
   const saveToken = (token) => {
     localStorage.setItem('access_token', token);
-    setToken(token); // Обновляем состояние токена после сохранения в localStorage
+    setToken(token); 
   };
 
   const getToken = () => localStorage.getItem('access_token');
