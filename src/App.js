@@ -9,6 +9,7 @@ import Settings from "./components/Content/Main/Settings/Settings";
 import axios from "axios";
 function App(props) {
   const [userDatafromRegistration, setuserDatafromRegistration] = useState(null);
+  const [categories, setCategories] = useState(null);
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true); // Добавлено состояние загрузки
   const [error, setError] = useState(null);       // Добавлено состояние для ошибок
@@ -38,6 +39,7 @@ function App(props) {
           }
         });
         setUserData(response.data);
+        setCategories(response.data.categories)
       } catch (error) {
         setError(error);
         console.error("Ошибка при загрузке данных пользователя:", error);
@@ -54,7 +56,7 @@ function App(props) {
   const removeToken = () => {
     localStorage.removeItem('access_token');
   }
-
+  console.log(categories)
   useEffect(() => {
     console.log("Текущее состояние userDatafromRegistration:", userDatafromRegistration);
   }, [userDatafromRegistration]);
@@ -65,7 +67,7 @@ function App(props) {
         <Routes>
           <Route path="/" element={<Login saveToken={saveToken} updateUserDataInApp={updateUserDataInApp}/>} />
           <Route path="/Registration" store={props.store} element={<Registration onDataUser={handleuserDatafromRegistration} saveToken={saveToken} />} />
-          <Route path="/Content" element={<Content userData={userData} getToken={getToken} isLoading={isLoading} error={error} updateUserDataInApp={updateUserDataInApp}/>}>
+          <Route path="/Content" element={<Content categories={categories} userData={userData} getToken={getToken} isLoading={isLoading} error={error} updateUserDataInApp={updateUserDataInApp}/>}>
             <Route index element={<Calendar />} />
             <Route path="Settings" element={<Settings />} />
           </Route>

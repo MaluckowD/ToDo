@@ -1,7 +1,8 @@
 import s from "./CategoryList.module.css"
 import close from "../../../../../images/close.svg"
 import image from "../../../../../images/image.svg"
-const CategoryList = () => {
+const CategoryList = (props) => {
+  console.log(props.categories)
   return (
     <div className={s.categorylist}>
       <div className={s.btn}>
@@ -9,16 +10,14 @@ const CategoryList = () => {
       </div>
       <div className={s.list}>
         <div className={s.list_items}>
-          <div className={s.list_item}>
-            <input/>
-            <img src= {image}/>
-            <img src={close} />
-          </div>
-          <div className={s.list_item}>
-            <input />
-            <img src={image} />
-            <img src={close} />
-          </div>
+          {props.categories.map( (item) => (
+            <div className={s.list_item}>
+              <input style={{ backgroundColor: item.color }} value = {item.name}/>
+              <img src={image} />
+              <img src={close} />
+            </div>
+          ))}
+          
         </div>
       </div>
     </div>

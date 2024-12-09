@@ -9,6 +9,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: #000;
 }
 
 .btn button{
@@ -51,6 +52,11 @@
   align-items: center;
 }
 
+.list_items{
+  overflow-y: scroll;
+  height: 250px;
+}
+
 @media (max-width: 1200px) {
   .categorylist {
     width: 400px;
@@ -85,7 +91,5 @@
     width: 120px;
     margin-left: 70px;
     margin-bottom: 5px;
-  }
-  .list_item img{
   }
 }
