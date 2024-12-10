@@ -28,7 +28,7 @@ const CategoryList = (props) => {
           {props.categories.map( (item) => (
             <div className={s.list_item}>
               <input disabled style={{ backgroundColor: item.color }} value = {item.name}/>
-              <img  src={image} />
+              <img onClick={() => props.openModalEditCategory(item.id)} src={image} />
               <img onClick={() => deleteCategory(item.id)} src={close} />
             </div>
           ))}
