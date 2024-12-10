@@ -12,6 +12,7 @@ const Content = (props) => {
   const [isModalCategoryOpen, setIsModalCategoryOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+  const closeModalCat = () => setIsModalCategoryOpen(false);
   const [categoryName, setCategoryName] = useState("");
   const [categoryColor, setCategoryColor] = useState("#F44336");
   const openModalCategory = () => setIsModalCategoryOpen(true);
@@ -45,6 +46,7 @@ const Content = (props) => {
     return <p>Ошибка: {props.error.message}</p>;
   }
 
+  const colors = ["#F44336","#4CAF50","#2196F3","#FFC107","#FF9800","#9C27B0","#E91E63","#795548","#9E9E9E","#212121","#FFFFFF","#00BCD4","#C0CA33","#009688","#3F51B5","#673AB7","#03A9F4","#8BC34A","#EEEEEE","#FFC107","#FF5722","#F48FB1"]
   return(
     <div className = {s.root}>
       {isModalOpen && (
@@ -61,31 +63,28 @@ const Content = (props) => {
       {isModalCategoryOpen && (
         <div className={s.modal}>
           <div className={s.modalcontent}>
-            <input 
+            <input className= {s.categoryName}
               type="text"
               value={categoryName}
               onChange={(e) => setCategoryName(e.target.value)}
               placeholder="Введите название категории" 
             />
 
-            <select name="color" value={categoryColor} onChange={(e) => setCategoryColor(e.target.value)}>
+            <select style={{ backgroundColor: categoryColor }} className={s.categoryColor} name="color" value="Укажите цвет для категории" onChange={(e) => setCategoryColor(e.target.value)}>
               <option value="">Укажите цвет для категории</option>
-              <option value="#F44336">Красный</option>
-              <option value="#4CAF50">Зеленый</option>
-              <option value="#2196F3">Синий</option>
-              <option value="#FFC107">Желтый</option>
-              <option value="#FF9800">Оранжевый</option>
-              <option value="#9C27B0">Фиолетовый</option>
-              <option value="#E91E63">Красный</option>
+              {colors.map((item) => (
+                <option style={{ backgroundColor: item }} value= {item}></option>
+              ))}
             </select>
-            <button className={s.close} onClick={closeModalCategory}>Добавить категорию</button>
+            <button className={s.closeModalCategory} onClick={closeModalCategory}>Добавить категорию</button>
+            <button className={s.closeModalCategory} onClick={closeModalCat}>Выйти</button>
           </div>
         </div>
       )}
       
       <div className={isModalOpen || isModalCategoryOpen ? [s.wrapper, s.opacity].join(' ') : s.wrapper}>
         <Header getToken={props.getToken} name={props.userData.name} />
-        <Main openModalCategory={openModalCategory} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp}/>
+        <Main updateCategories={props.updateCategories} openModalCategory={openModalCategory} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp}/>
         <Footer openModal={openModal} />
       </div>
     </div>
