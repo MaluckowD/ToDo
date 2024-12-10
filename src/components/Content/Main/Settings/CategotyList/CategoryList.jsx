@@ -12,7 +12,7 @@ const CategoryList = (props) => {
         <div className={s.list_items}>
           {props.categories.map( (item) => (
             <div className={s.list_item}>
-              <input style={{ backgroundColor: item.color }} value = {item.name}/>
+              <input disabled style={{ backgroundColor: item.color }} value = {item.name}/>
               <img src={image} />
               <img src={close} />
             </div>

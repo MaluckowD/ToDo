@@ -28,9 +28,9 @@ const Content = (props) => {
       }
       }).then(response => {
         console.log(response.data)
+        props.updateCategories()
         setIsModalCategoryOpen(false)
       })
-    
   }
   
   const [name, setName] = useState('');

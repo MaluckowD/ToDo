@@ -21,7 +21,7 @@ function App(props) {
   const updateUserDataInApp = (updatedUserData) => {
     setUserData(updatedUserData);
   };
-
+  
   const saveToken = (token) => {
     localStorage.setItem('access_token', token);
     setToken(token); 
@@ -53,6 +53,19 @@ function App(props) {
     }
   }, [token]);
 
+  const updateCategories = async () => {
+    try {
+      const response = await axios.get("https://energy-cerber.ru/categories/", { 
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setCategories(response.data);
+    } catch (error) {
+      console.error("Ошибка при обновлении категорий:", error);
+    }
+  };
+
   const removeToken = () => {
     localStorage.removeItem('access_token');
   }
@@ -67,7 +80,7 @@ function App(props) {
         <Routes>
           <Route path="/" element={<Login saveToken={saveToken} updateUserDataInApp={updateUserDataInApp}/>} />
           <Route path="/Registration" store={props.store} element={<Registration onDataUser={handleuserDatafromRegistration} saveToken={saveToken} />} />
-          <Route path="/Content" element={<Content categories={categories} userData={userData} getToken={getToken} isLoading={isLoading} error={error} updateUserDataInApp={updateUserDataInApp}/>}>
+          <Route path="/Content" element={<Content updateCategories={updateCategories} categories={categories} userData={userData} getToken={getToken} isLoading={isLoading} error={error} updateUserDataInApp={updateUserDataInApp}/>}>
             <Route index element={<Calendar />} />
             <Route path="Settings" element={<Settings />} />
           </Route>
