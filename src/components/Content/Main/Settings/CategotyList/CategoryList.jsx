@@ -6,7 +6,7 @@ const CategoryList = (props) => {
   return (
     <div className={s.categorylist}>
       <div className={s.btn}>
-        <button>Добавить категорию</button>
+        <button onClick={props.openModalCategory}>Добавить категорию</button>
       </div>
       <div className={s.list}>
         <div className={s.list_items}>
