@@ -11,8 +11,8 @@ function App(props) {
   const [userDatafromRegistration, setuserDatafromRegistration] = useState(null);
   const [categories, setCategories] = useState(null);
   const [userData, setUserData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true); // Добавлено состояние загрузки
-  const [error, setError] = useState(null);       // Добавлено состояние для ошибок
+  const [isLoading, setIsLoading] = useState(true); 
+  const [error, setError] = useState(null);
   const handleuserDatafromRegistration = (data) => {
     setuserDatafromRegistration(data);
     console.log(userDatafromRegistration)
