@@ -10,6 +10,7 @@ import axios from "axios";
 function App(props) {
   const [userDatafromRegistration, setuserDatafromRegistration] = useState(null);
   const [categories, setCategories] = useState(null);
+  const [tasks, setTasks] = useState(null);
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true); 
   const [error, setError] = useState(null);
@@ -33,13 +34,14 @@ function App(props) {
     const fetchUserData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get("https://energy-cerber.ru/user/self", {
+        const response = await axios.get("https://energy-cerber.ru/api/v1/user/self", {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
         setUserData(response.data);
         setCategories(response.data.categories)
+        setTasks(response.data.tasks)
       } catch (error) {
         setError(error);
         console.error("Ошибка при загрузке данных пользователя:", error);
@@ -53,9 +55,30 @@ function App(props) {
     }
   }, [token]);
 
+
+  const taskData = {
+    name: "string",
+    description: "green",
+    priority: 1,
+    category_id: 91728110,
+    date: "2024-12-12"
+  }
+
+  const addTask = () => {
+    axios.post("https://energy-cerber.ru/api/v1/tasks/", taskData, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then(response => {
+      setTasks(response.data)
+      console.log(response.data)
+
+    })
+  }
+
   const updateCategories = async () => {
     try {
-      const response = await axios.get("https://energy-cerber.ru/categories/", { 
+      const response = await axios.get("https://energy-cerber.ru/api/v1/categories/", { 
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -80,7 +103,7 @@ function App(props) {
         <Routes>
           <Route path="/" element={<Login saveToken={saveToken} updateUserDataInApp={updateUserDataInApp}/>} />
           <Route path="/Registration" store={props.store} element={<Registration onDataUser={handleuserDatafromRegistration} saveToken={saveToken} />} />
-          <Route path="/Content" element={<Content updateCategories={updateCategories} categories={categories} userData={userData} getToken={getToken} isLoading={isLoading} error={error} updateUserDataInApp={updateUserDataInApp}/>}>
+          <Route path="/Content" element={<Content addTask={addTask} tasks={tasks} updateCategories={updateCategories} categories={categories} userData={userData} getToken={getToken} isLoading={isLoading} error={error} updateUserDataInApp={updateUserDataInApp}/>}>
             <Route index element={<Calendar />} />
             <Route path="Settings" element={<Settings />} />
           </Route>

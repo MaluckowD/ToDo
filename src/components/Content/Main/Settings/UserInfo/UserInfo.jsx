@@ -15,7 +15,7 @@ const UserInfo = (props) => {
 
   const UpdateUserInfo = () => {
     if (token){
-      axios.put("https://energy-cerber.ru/user/edit", {
+      axios.put("https://energy-cerber.ru/api/v1/user/edit", {
         name, surname, gender
       }, {
         headers: {
@@ -30,7 +30,7 @@ const UserInfo = (props) => {
 
   const DeleteUser = () => {
     if (token){
-      axios.delete("https://energy-cerber.ru/user/", {
+      axios.delete("https://energy-cerber.ru/api/v1/user/", {
         headers: {
           Authorization: `Bearer ${token}`
         }

@@ -8,7 +8,7 @@ const Main = (props) => {
   return (
     <main className = {s.main}>
       <Routes>
-        <Route index element={<Calendar />} />
+        <Route index element={<Calendar addTask={props.addTask} tasks = {props.tasks} />} />
         <Route path="Settings" element={<Settings openModalEditCategory={props.openModalEditCategory} updateCategories={props.updateCategories} openModalCategory={props.openModalCategory} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp} />} />
       </Routes>
       

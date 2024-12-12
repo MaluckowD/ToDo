@@ -25,7 +25,7 @@ const Registration = (props) => {
 
     try {
       const response = await axios.post(
-        "https://energy-cerber.ru/user/register",
+        "https://energy-cerber.ru/api/v1/user/register",
         userData
       );
       if (response.status === 200 || response.status === 201) {

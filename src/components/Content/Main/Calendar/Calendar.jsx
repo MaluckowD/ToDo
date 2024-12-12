@@ -21,7 +21,7 @@ const monthNames = [
 
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-const Calendar = () => {
+const Calendar = (props) => {
   const date = new Date();
   const [month, setMonth] = useState(date.getMonth());
   const [year, setYear] = useState(date.getFullYear());
@@ -33,6 +33,8 @@ const Calendar = () => {
     const d = new Date(year, month, date);
     return today.toDateString() === d.toDateString();
   };
+
+
 
   const getNoOfDays = () => {
     let i;
@@ -71,6 +73,39 @@ const Calendar = () => {
     { value: "green", label: "Green Theme" },
     { value: "purple", label: "Purple Theme" }
   ];
+
+  function addNewEvent(events, newEventData) {
+    // Error handling: Check for null or undefined newEventData
+    if (!newEventData) {
+      console.error("Error: newEventData is null or undefined.");
+      return events; // Return original array if data is invalid
+    }
+
+    // Error handling: Check for required fields
+    const requiredFields = ["date", "name", "description"];
+    for (const field of requiredFields) {
+      if (!(field in newEventData)) {
+        console.error(`Error: Missing required field '${field}' in newEventData.`);
+        return events; // Return original array if data is invalid
+      }
+    }
+
+    try {
+      const newEvent = {
+        event_date: new Date(newEventData.date),
+        event_title: newEventData.name,
+        event_theme: newEventData.description,
+      };
+      return [...events, newEvent]; // Use spread syntax to create a new array
+    } catch (error) {
+      console.error("Error parsing date:", error);
+      return events; // Return original array if date parsing fails
+    }
+  }
+  const updatedEvents = addNewEvent(events, props.tasks);
+  console.log(updatedEvents);
+
+
 
   const btnClass = (limit) => {
     return "leading-none rounded-lg transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 items-center focus:outline-none";
@@ -118,7 +153,7 @@ const Calendar = () => {
                 {monthNames[month]}
                 <CalendarMonth updateMonthAndYear={updateMonthYear} year={year}/>
               </span>
-              <span className="ml-1 text-lg text-gray-600 font-normal">
+              <span onClick={props.addTask} className="ml-1 text-lg text-gray-600 font-normal">
                 {year}
               </span>
             </div>
@@ -151,7 +186,7 @@ const Calendar = () => {
             >
               {days.map((day) => (
                 <div key={day} className={"px-2 py-2 w-[14.28%]"}>
-                  <div className="text-gray-600 text-sm uppercase tracking-wide font-bold text-center">
+                  <div  className="text-gray-600 text-sm uppercase tracking-wide font-bold text-center">
                     {day}
                   </div>
                 </div>

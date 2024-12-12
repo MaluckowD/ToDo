@@ -31,7 +31,7 @@ const Content = (props) => {
       color: categoryColor
     }
     
-    axios.post("https://energy-cerber.ru/categories/", categoryData,{
+    axios.post("https://energy-cerber.ru/api/v1/categories/", categoryData,{
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -47,7 +47,7 @@ const Content = (props) => {
       name: categoryName,
       color: categoryColor
     }
-    axios.put(`https://energy-cerber.ru/categories/${id}`, categoryData, {
+    axios.put(`https://energy-cerber.ru/api/v1/categories/${id}`, categoryData, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -131,7 +131,7 @@ const Content = (props) => {
       
       <div className={isModalOpen || isModalCategoryOpen || isEditCategoryOpen ? [s.wrapper, s.opacity].join(' ') : s.wrapper}>
         <Header getToken={props.getToken} name={props.userData.name} />
-        <Main openModalEditCategory={openModalEditCategory} updateCategories={props.updateCategories} openModalCategory={openModalCategory} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp}/>
+        <Main addTask={props.addTask} tasks = {props.tasks} openModalEditCategory={openModalEditCategory} updateCategories={props.updateCategories} openModalCategory={openModalCategory} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp}/>
         <Footer openModal={openModal} />
       </div>
     </div>

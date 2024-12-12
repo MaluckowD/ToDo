@@ -9,7 +9,7 @@ const Login = (props) => {
   const navigate = useNavigate()
   const LoginCallback = (() => {
     
-    axios.post("https://energy-cerber.ru/user/login", null, { 
+    axios.post("https://energy-cerber.ru/api/v1/user/login", null, { 
       params: {
       email,
       password
