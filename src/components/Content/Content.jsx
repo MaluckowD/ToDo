@@ -8,9 +8,10 @@ import Kirillloh from "../../images/KirillLoh.jpg"
 import Ville from "../../images/Vinne.jpg"
 const Content = (props) => {
   const token = props.getToken()
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isOpenTaskInfo, setOpenTaskInfo] = useState(false);
   const [isModalCategoryOpen, setIsModalCategoryOpen] = useState(false);
   const [isEditCategoryOpen, setIsEditModalCategoryOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const closeModalCat = () => setIsModalCategoryOpen(false);
@@ -19,11 +20,16 @@ const Content = (props) => {
   const [categoryColor, setCategoryColor] = useState("#F44336");
   const [categoryId, setcategoryId] = useState(0);
   const openModalCategory = () => setIsModalCategoryOpen(true);
+  const closeIsOpenTaskInfo = () => setOpenTaskInfo(false);
   const openModalEditCategory = (id) => {
     setcategoryId(id)
     setIsEditModalCategoryOpen(true)
 
   };
+
+  const openTaskInfo = () => {
+    setOpenTaskInfo(true)
+  }
 
   const closeModalCategory = () => {
     const categoryData = {
@@ -58,6 +64,7 @@ const Content = (props) => {
     })
   }
   
+  
   if (props.isLoading) {
     return <p>Загрузка данных...</p>;
   }
@@ -74,18 +81,54 @@ const Content = (props) => {
 
   return(
     <div className = {s.root}>
-      {isModalOpen && (
+      {isModalOpen&& (
         <div className={s.modal}>
           <div className={s.modalcontent}>
-            <img classNane={s.modalcontent_image} src={Ville}></img>
-            <p>ВИНИСИУС ЛОХ</p>
+            <img classNane={s.modalcontent_image} src={Kirillloh}></img>
+            <p>КИРИЛЛ ЛОХ</p>
             <button className={s.close} onClick={closeModal}>Выйти</button>
           </div>
         </div>
       )}
 
+      {isOpenTaskInfo && (
+        <div className={s.modal}>
+          <div className={s.modalcontent}>
+            <input className={s.categoryName}
+              type="text"
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
+              placeholder="Введите название для задачи"
+            />
+            <input className={s.categoryName}
+              type="text"
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
+              placeholder="Описание"
+            />
+            <input className={s.categoryName}
+              type="text"
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
+              placeholder="Дата задачи"
+            />
+            <input className={s.categoryName}
+              type="text"
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
+              placeholder="Приоритет"
+            />
 
-      {isModalCategoryOpen && (
+            <button className={s.closeModalCategory} onClick={closeModalCategory}>
+              Добавить задачу
+            </button>
+            <button className={s.closeModalCategory} onClick={closeIsOpenTaskInfo}>Выйти</button>
+          </div>
+        </div>
+      )}
+
+
+      {isModalCategoryOpen&& (
         <div className={s.modal}>
           <div className={s.modalcontent}>
             <input className= {s.categoryName}
@@ -131,7 +174,7 @@ const Content = (props) => {
       
       <div className={isModalOpen || isModalCategoryOpen || isEditCategoryOpen ? [s.wrapper, s.opacity].join(' ') : s.wrapper}>
         <Header getToken={props.getToken} name={props.userData.name} />
-        <Main addTask={props.addTask} tasks = {props.tasks} openModalEditCategory={openModalEditCategory} updateCategories={props.updateCategories} openModalCategory={openModalCategory} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp}/>
+        <Main openTaskInfo={openTaskInfo} addTask={props.addTask} tasks = {props.tasks} openModalEditCategory={openModalEditCategory} updateCategories={props.updateCategories} openModalCategory={openModalCategory} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp}/>
         <Footer openModal={openModal} />
       </div>
     </div>

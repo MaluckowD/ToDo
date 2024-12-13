@@ -18,7 +18,7 @@ function App(props) {
     setuserDatafromRegistration(data);
     console.log(userDatafromRegistration)
   }
-  
+
   const updateUserDataInApp = (updatedUserData) => {
     setUserData(updatedUserData);
   };
@@ -54,6 +54,7 @@ function App(props) {
       fetchUserData();
     }
   }, [token]);
+
 
 
   const taskData = {
