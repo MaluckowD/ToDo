@@ -22,6 +22,11 @@ const Content = (props) => {
   const openModalCategory = () => setIsModalCategoryOpen(true);
   const closeIsOpenTaskInfo = () => setOpenTaskInfo(false);
   const [date, setDate] = useState("")
+  const [taskName, setTaskName] = useState("")
+  const [taskDescription, setTaskDescription] = useState("")
+  const [taskPriority, setTaskPriority] = useState(1)
+
+
   const openModalEditCategory = (id) => {
     setcategoryId(id)
     setIsEditModalCategoryOpen(true)
@@ -33,6 +38,26 @@ const Content = (props) => {
     setDate(dateString)
     setOpenTaskInfo(true)
   }
+
+  const addTask = () => {
+      const taskData = {
+        name: taskName,
+        description: "green",
+        priority: taskPriority,
+        category_id: 69017500,
+        date: date
+      }
+      axios.post("https://api.energy-cerber.ru/tasks/", taskData, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }).then(response => {
+        console.log(response.data)
+        props.updateTasks()
+  
+      })
+    }
+
 
   const closeModalCategory = () => {
     const categoryData = {
@@ -99,30 +124,30 @@ const Content = (props) => {
           <div className={s.modalcontent}>
             <input className={s.categoryName}
               type="text"
-              value={categoryName}
-              onChange={(e) => setCategoryName(e.target.value)}
+              value={taskName}
+              onChange={(e) => setTaskName(e.target.value)}
               placeholder="Введите название для задачи"
             />
             <input className={s.categoryName}
               type="text"
-              value={categoryName}
-              onChange={(e) => setCategoryName(e.target.value)}
+              value={taskDescription}
+              onChange={(e) => setTaskDescription(e.target.value)}
               placeholder="Описание"
             />
             <input className={s.categoryName}
               type="text"
               value={date}
-              disabled
+              onChange={(e) => setDate(e.target.value)}
               placeholder="Дата задачи"
             />
             <input className={s.categoryName}
               type="text"
-              value={categoryName}
-              onChange={(e) => setCategoryName(e.target.value)}
+              value={taskPriority}
+              onChange={(e) => setTaskPriority(parseInt(e.target.value))}
               placeholder="Приоритет"
             />
 
-            <button className={s.closeModalCategory} onClick={closeModalCategory}>
+            <button className={s.closeModalCategory} onClick={addTask}>
               Добавить задачу
             </button>
             <button className={s.closeModalCategory} onClick={closeIsOpenTaskInfo}>Выйти</button>

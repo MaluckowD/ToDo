@@ -14,6 +14,8 @@ function App(props) {
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true); 
   const [error, setError] = useState(null);
+
+
   const handleuserDatafromRegistration = (data) => {
     setuserDatafromRegistration(data);
     console.log(userDatafromRegistration)
@@ -55,27 +57,20 @@ function App(props) {
     }
   }, [token]);
 
+  const updateTasks = async () => {
+    try {
+      const response = await axios.get("https://api.energy-cerber.ru/tasks/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setTasks(response.data);
+    } catch (error) {
+      console.error("Ошибка при обновлении задач:", error);
+    }
+  };
 
 
-  const taskData = {
-    name: "string",
-    description: "green",
-    priority: 1,
-    category_id: 45560107,
-    date: "2024-12-13"
-  }
-
-  const addTask = () => {
-    axios.post("https://api.energy-cerber.ru/tasks/", taskData, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }).then(response => {
-      setTasks(response.data)
-      console.log(response.data)
-
-    })
-  }
 
   const updateCategories = async () => {
     try {
@@ -103,8 +98,13 @@ function App(props) {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login saveToken={saveToken} updateUserDataInApp={updateUserDataInApp}/>} />
-          <Route path="/Registration" store={props.store} element={<Registration onDataUser={handleuserDatafromRegistration} saveToken={saveToken} />} />
-          <Route path="/Content" element={<Content addTask={addTask} tasks={tasks} updateCategories={updateCategories} categories={categories} userData={userData} getToken={getToken} isLoading={isLoading} error={error} updateUserDataInApp={updateUserDataInApp}/>}>
+          <Route path="/Registration" store={props.store} element={<Registration 
+          onDataUser={handleuserDatafromRegistration} saveToken={saveToken} />} />
+          <Route path="/Content" element={<Content  
+            updateTasks={updateTasks} tasks={tasks} updateCategories={updateCategories} categories={categories} 
+          userData={userData} getToken={getToken} 
+          isLoading={isLoading} error={error} 
+          updateUserDataInApp={updateUserDataInApp}/>}>
             <Route index element={<Calendar />} />
             <Route path="Settings" element={<Settings />} />
           </Route>
