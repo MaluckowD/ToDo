@@ -22,6 +22,12 @@ const monthNames = [
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 const Calendar = (props) => {
+  const [events, setEvents] = useState([{ event_date: new Date(2021, 9, 4), event_title: "My Birthday :)", event_theme: "red" },
+    { event_date: new Date(2021, 9, 4), event_title: "My Birthday :)", event_theme: "red" },
+    { event_date: new Date(2021, 9, 4), event_title: "My Birthday :)", event_theme: "red" },
+    { event_date: new Date(2022, 0, 7), event_title: "Рождество", event_theme: "green" },
+    { event_date: new Date(2021, 9, 31), event_title: "Halloween", event_theme: "yellow" },
+    { event_date: new Date(2021, 11, 31), event_title: "New Years Eve", event_theme: "yellow" }]);
   const date = new Date();
   const [month, setMonth] = useState(date.getMonth());
   const [year, setYear] = useState(date.getFullYear());
@@ -57,14 +63,6 @@ const Calendar = (props) => {
     console.log(month, year);
   }, [month]);
 
-  const events = [
-    { event_date: new Date(2021, 9, 4), event_title: "My Birthday :)", event_theme: "red" },
-    { event_date: new Date(2021, 9, 4), event_title: "My Birthday :)", event_theme: "red" },
-    { event_date: new Date(2021, 9, 4), event_title: "My Birthday :)", event_theme: "red" },
-    { event_date: new Date(2022, 0, 7), event_title: "Рождество", event_theme: "green" },
-    { event_date: new Date(2021, 9, 31), event_title: "Halloween", event_theme: "yellow" },
-    { event_date: new Date(2021, 11, 31), event_title: "New Years Eve", event_theme: "yellow" }
-  ];
 
   const themes = [
     { value: "blue", label: "Blue Theme" },
@@ -74,37 +72,42 @@ const Calendar = (props) => {
     { value: "purple", label: "Purple Theme" }
   ];
 
-  function addNewEvent(events, newEventData) {
-    // Error handling: Check for null or undefined newEventData
-    if (!newEventData) {
-      console.error("Error: newEventData is null or undefined.");
-      return events; // Return original array if data is invalid
+  // Функция для обработки нового данных
+  const handleNewData = (incomingData) => {
+    if (!Array.isArray(incomingData)) {
+      console.error("Входящие данные не являются массивом.");
+      return;
     }
 
-    // Error handling: Check for required fields
-    const requiredFields = ["date", "name", "description"];
-    for (const field of requiredFields) {
-      if (!(field in newEventData)) {
-        console.error(`Error: Missing required field '${field}' in newEventData.`);
-        return events; // Return original array if data is invalid
+    const updatedEvents = incomingData.map((item) => {
+      // Важная проверка: Обработка ошибок и валидация данных
+      if (!item || !item.id || !item.name || !item.date) {
+        console.warn("Неверный элемент данных:", item);
+        return null; // Пропускаем невалидные элементы
       }
-    }
 
-    try {
-      const newEvent = {
-        event_date: new Date(newEventData.date),
-        event_title: newEventData.name,
-        event_theme: newEventData.description,
-      };
-      return [...events, newEvent]; // Use spread syntax to create a new array
-    } catch (error) {
-      console.error("Error parsing date:", error);
-      return events; // Return original array if date parsing fails
-    }
-  }
-  const updatedEvents = addNewEvent(events, props.tasks);
-  console.log(updatedEvents);
+      try {
+        const eventDate = new Date(item.date);
+        return {
+          id: item.id, // Сохраняем ID
+          event_date: eventDate,
+          event_title: item.name,
+          event_theme: item.description || '', // Обработка отсутствия описания
+        };
+      } catch (error) {
+        console.error("Ошибка при парсинге даты:", error, "для элемента:", item);
+        return null; // Пропускаем элементы с невалидными датами
+      }
+    }).filter(item => item !== null);
 
+    // ВАЖНО: Обновляем состояние правильно
+    setEvents((prevEvents) => [...prevEvents, ...updatedEvents]);
+  };
+
+  useEffect(() => {
+    handleNewData(props.tasks);
+  }, []); // Запускается только один раз после первоначальной отрисовки
+  
 
 
   const btnClass = (limit) => {

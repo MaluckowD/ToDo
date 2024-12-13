@@ -60,8 +60,8 @@ function App(props) {
     name: "string",
     description: "green",
     priority: 1,
-    category_id: 91728110,
-    date: "2024-12-12"
+    category_id: 45560107,
+    date: "2024-12-13"
   }
 
   const addTask = () => {
