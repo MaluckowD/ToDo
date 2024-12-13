@@ -68,7 +68,6 @@ const Registration = (props) => {
       </div>
       <p className={s.name_description1}>Выберите пол</p>
       <select className = {s.male} name="gender" id="pet-select" value={gender} onChange={(e) => setGender(e.target.value)}>
-        <option value="">Укажите пол</option>
         <option value="male">Мужской</option>
         <option value="female">Женский</option>
       </select>
