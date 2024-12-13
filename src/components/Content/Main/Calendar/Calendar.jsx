@@ -195,8 +195,9 @@ const Calendar = (props) => {
               ))}
               {numOfDays.map((date, index) => (
                 <div
-                  onClick = {props.openTaskInfo}
+                  onClick = { props.openTaskInfo}
                   key={index}
+                  data-date={`${year}-${month + 1}-${date}`}
                   className={["px-4 pt-2 border-r border-b relative h-32 w-[14.28%]", s.adaptive].join(" ")}
                 >
                   <div

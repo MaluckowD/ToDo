@@ -21,13 +21,16 @@ const Content = (props) => {
   const [categoryId, setcategoryId] = useState(0);
   const openModalCategory = () => setIsModalCategoryOpen(true);
   const closeIsOpenTaskInfo = () => setOpenTaskInfo(false);
+  const [date, setDate] = useState("")
   const openModalEditCategory = (id) => {
     setcategoryId(id)
     setIsEditModalCategoryOpen(true)
 
   };
 
-  const openTaskInfo = () => {
+  const openTaskInfo = (e) => {
+    const dateString = e.currentTarget.getAttribute('data-date');
+    setDate(dateString)
     setOpenTaskInfo(true)
   }
 
@@ -108,8 +111,8 @@ const Content = (props) => {
             />
             <input className={s.categoryName}
               type="text"
-              value={categoryName}
-              onChange={(e) => setCategoryName(e.target.value)}
+              value={date}
+              disabled
               placeholder="Дата задачи"
             />
             <input className={s.categoryName}
