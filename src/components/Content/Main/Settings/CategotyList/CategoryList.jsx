@@ -7,7 +7,7 @@ const CategoryList = (props) => {
   const token = props.getToken()
   const deleteCategory = (id) => {
     if (token){
-      axios.delete(`https://energy-cerber.ru/api/v1/categories/${id}`, {
+      axios.delete(`https://api.energy-cerber.ru/categories/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }

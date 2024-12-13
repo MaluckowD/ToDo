@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom"
 import s from "./Login.module.css"
 import axios from "axios"
@@ -8,13 +8,13 @@ const Login = (props) => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate()
   const LoginCallback = (() => {
-    
-    axios.post("https://energy-cerber.ru/api/v1/user/login", null, { 
+
+    axios.post("https://api.energy-cerber.ru/user/login", null, {
       params: {
-      email,
-      password
-    }
-      
+        email,
+        password
+      }
+
     })
       .then((response) => {
         console.log(response);
@@ -89,22 +89,22 @@ const Login = (props) => {
             </div>
 
             <div className={s.send_info}>
-              
+
               <button
                 onClick={LoginCallback}
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 ВОЙТИ
               </button>
-              
-              
+
+
               <NavLink
                 to="/Registration"
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 РЕГИСТРАЦИЯ
               </NavLink>
-              
+
             </div>
           </form>
 

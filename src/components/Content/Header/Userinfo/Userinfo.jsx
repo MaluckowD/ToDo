@@ -10,7 +10,7 @@ const Userinfo = (props) => {
     const token = props.getToken();
 
     const fetchUserName = async () => {
-      axios.get("https://energy-cerber.ru/api/v1/user/self", {
+      axios.get("https://api.energy-cerber.ru/user/self", {
         headers: {
           Authorization: `Bearer ${token}`
         }

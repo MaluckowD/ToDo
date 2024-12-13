@@ -25,12 +25,12 @@ const Registration = (props) => {
 
     try {
       const response = await axios.post(
-        "https://energy-cerber.ru/api/v1/user/register",
+        "https://api.energy-cerber.ru/user/register",
         userData
       );
       if (response.status === 200 || response.status === 201) {
         console.log("Регистрация успешна:", response.data);
-        props.onDataUser({email, password});
+        props.onDataUser({ email, password });
         props.saveToken(response.data.access_token);
         navigate("/Content")
 
@@ -67,11 +67,11 @@ const Registration = (props) => {
         </div>
       </div>
       <p className={s.name_description1}>Выберите пол</p>
-      <select className = {s.male} name="gender" id="pet-select" value={gender} onChange={(e) => setGender(e.target.value)}>
+      <select className={s.male} name="gender" id="pet-select" value={gender} onChange={(e) => setGender(e.target.value)}>
         <option value="male">Мужской</option>
         <option value="female">Женский</option>
       </select>
-      
+
 
       <div className={s.content_wrapper}>
         <div className={s.email}>

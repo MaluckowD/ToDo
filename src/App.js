@@ -34,7 +34,7 @@ function App(props) {
     const fetchUserData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get("https://energy-cerber.ru/api/v1/user/self", {
+        const response = await axios.get("https://api.energy-cerber.ru/user/self", {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -66,7 +66,7 @@ function App(props) {
   }
 
   const addTask = () => {
-    axios.post("https://energy-cerber.ru/api/v1/tasks/", taskData, {
+    axios.post("https://api.energy-cerber.ru/tasks/", taskData, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -79,7 +79,7 @@ function App(props) {
 
   const updateCategories = async () => {
     try {
-      const response = await axios.get("https://energy-cerber.ru/api/v1/categories/", { 
+      const response = await axios.get("https://api.energy-cerber.ru/categories/", { 
         headers: {
           Authorization: `Bearer ${token}`,
         },

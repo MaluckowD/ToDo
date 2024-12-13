@@ -1,6 +1,6 @@
 import axios from "axios"
 const instance = axios.create({
-  baseURL: 'https://energy-cerber.ru/'
+  baseURL: 'https://api.energy-cerber.ru/'
 })
 
 

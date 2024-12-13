@@ -37,7 +37,7 @@ const Content = (props) => {
       color: categoryColor
     }
     
-    axios.post("https://energy-cerber.ru/api/v1/categories/", categoryData,{
+    axios.post("https://api.energy-cerber.ru/categories/", categoryData,{
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -53,7 +53,7 @@ const Content = (props) => {
       name: categoryName,
       color: categoryColor
     }
-    axios.put(`https://energy-cerber.ru/api/v1/categories/${id}`, categoryData, {
+    axios.put(`https://api.energy-cerber.ru/categories/${id}`, categoryData, {
       headers: {
         Authorization: `Bearer ${token}`
       }
