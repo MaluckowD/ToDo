@@ -26,8 +26,10 @@ const Content = (props) => {
   const closeIsOpenTaskInfo = () => setOpenTaskInfo(false);
   const closeIsOpenTask = () => setIsTaskOpen(false)
   const [date, setDate] = useState("")
+  const [taskId, setTaskId] = useState(0)
   const [taskName, setTaskName] = useState("")
   const [taskDescription, setTaskDescription] = useState("")
+  const [completed, setCompleted] = useState(false)
   const [taskPriority, setTaskPriority] = useState(1)
   const [color, setColor] = useState('#ff0000');
   const [selectedCategoryName, setSelectedCategoryName] = useState('');
@@ -130,6 +132,7 @@ const Content = (props) => {
       const taskData = taskResponse.data;
       console.log(taskData)
       const categoryId = taskData.category_id;
+      setTaskId(taskData.id)
 
       let categoryName = "";
       try {
@@ -149,6 +152,7 @@ const Content = (props) => {
       setSelectedCategoryId(categoryId);
       setcategoryId(categoryId);
       setSelectedCategoryName(categoryName);
+      setCompleted(taskData.completed)
       console.log(categoryId);
       setIsTaskOpen(true);
     } catch (error) {
@@ -175,6 +179,44 @@ const Content = (props) => {
     setColor(newColor);
     console.log("Выбранный цвет:", newColor);
   };
+  
+  const handleCompletedChange = (event) => {
+    const newValue = event.target.value === "true";
+    setCompleted(newValue); // Обновляем состояние на основе выбранного значения
+  }
+
+  const changeTask = (id) => {
+    const taskData = {
+      name: taskName,
+      description: taskDescription,
+      priority: taskPriority,
+      category_id: parseInt(selectedCategoryId, 10),
+      date: date
+    }
+    axios.put(`https://api.energy-cerber.ru/tasks/${id}`, taskData, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then(response => {
+      console.log(response.data)
+      props.updateTasks()
+    })
+  }
+  const deleteTask = (id) => {
+    axios.delete(`https://api.energy-cerber.ru/tasks/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then(response => {
+      console.log(response.data)
+      props.updateTasks()
+      setIsTaskOpen(false)
+
+    })
+  }
+
+
+
   return(
     <div className = {s.root}>
       {isModalOpen&& (
@@ -190,7 +232,9 @@ const Content = (props) => {
       {isOpenTaskInfo && (
         <div className={s.modal}>
           <div className={s.modalcontent}>
-            <select value={selectedCategoryId} onChange={handleCategoryChange}>
+            <select style={
+              { color: "#000" }
+            } value={selectedCategoryId} onChange={handleCategoryChange}>
               <option value="">Выберите категорию</option>
               {categories.map((category) => (
                 <option style={{ backgroundColor: category.color }} key={category.id} value={category.id}>
@@ -274,9 +318,23 @@ const Content = (props) => {
               onChange={(e) => setTaskPriority(parseInt(e.target.value))}
               placeholder="Приоритет"
             />
+            <select style={{ color: "#000" }}
+              value={completed}
+              onChange={handleCompletedChange}
+            >
+              <option value={true}>Не активна</option>
+              <option value={false}>Активна</option>
+              
+            </select>
 
+            <button className={s.closeModalCategory} onClick={() => changeTask(taskId)}>
+              Изменить задачу
+            </button>
             <button className={s.closeModalCategory} onClick={addTask}>
-              Добавить задачу
+              Изменить статус
+            </button>
+            <button className={s.closeModalCategory} onClick={() => deleteTask(taskId)}>
+              удалить задачу
             </button>
             <button className={s.closeModalCategory} onClick={closeIsOpenTask}>Выйти</button>
           </div>
