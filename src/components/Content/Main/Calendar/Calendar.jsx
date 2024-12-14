@@ -71,12 +71,14 @@ const Calendar = (props) => {
   // Функция для обработки нового данных
   const handleNewData = (incomingData) => {
     if (!Array.isArray(incomingData)) {
-      return;
+      console.error("Ошибка: incomingData не является массивом");
+      return; // Добавляем проверку на массив и выводим ошибку
     }
 
     const updatedEvents = incomingData.map((item) => {
       if (!item || !item.id || !item.name || !item.date) {
-        return null;
+        console.warn("Неверные данные:", item);
+        return null; // Пропускаем невалидные данные
       }
 
       try {
@@ -88,17 +90,24 @@ const Calendar = (props) => {
           event_theme: item.description || '',
         };
       } catch (error) {
-        return null;
+        console.error("Ошибка при создании даты:", error, item);
+        return null; // Пропускаем невалидные даты
       }
     }).filter(item => item !== null);
 
-    setEvents((prevEvents) => [...prevEvents, ...updatedEvents]);
+    setEvents(updatedEvents);
   };
 
+
   useEffect(() => {
-    handleNewData(props.tasks);
-  }, []);
-  
+    if (props.tasks && props.tasks.length > 0) { // Проверяем, что tasks не null/undefined и не пуст
+      handleNewData(props.tasks);
+    }
+  }, [props.tasks]); // Зависимость от props.tasks
+
+  useEffect(() => {
+    console.log(events)
+  }, [events])
 
 
   const btnClass = (limit) => {
