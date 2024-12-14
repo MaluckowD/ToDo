@@ -124,6 +124,7 @@ const Calendar = (props) => {
   useEffect(() => {
     if (props.tasks && props.tasks.length > 0) { // Проверяем, что tasks не null/undefined и не пуст
       handleNewData(props.tasks);
+      console.log(props.tasks)
     }
   }, [props.tasks]); // Зависимость от props.tasks
 
@@ -337,7 +338,10 @@ const Calendar = (props) => {
                             style={{
                               borderColor: eventStyles.borderColor,
                               backgroundColor: eventStyles.backgroundColor,
-                              color: eventStyles.color
+                              color: eventStyles.color,
+                              textDecoration: props.completed ? 'line-through' : 'none',
+                              textDecorationThickness: props.completed ? '2px' : '0',
+                              opacity: props.completed ? '50%' : '1'
                             }}
                           >
                             <p className="text-sm truncate leading-tight"> 

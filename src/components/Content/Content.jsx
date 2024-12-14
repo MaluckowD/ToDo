@@ -33,6 +33,7 @@ const Content = (props) => {
   const [taskPriority, setTaskPriority] = useState(1)
   const [color, setColor] = useState('#ff0000');
   const [selectedCategoryName, setSelectedCategoryName] = useState('');
+  const [statusText, setStatusText] = useState("Активна");
   const openModalEditCategory = (id) => {
     setcategoryId(id)
     setIsEditModalCategoryOpen(true)
@@ -133,7 +134,7 @@ const Content = (props) => {
       console.log(taskData)
       const categoryId = taskData.category_id;
       setTaskId(taskData.id)
-
+      setCompleted(taskData.completed)
       let categoryName = "";
       try {
         const categoryResponse = await axios.get(`https://api.energy-cerber.ru/categories/${categoryId}`, {
@@ -152,7 +153,6 @@ const Content = (props) => {
       setSelectedCategoryId(categoryId);
       setcategoryId(categoryId);
       setSelectedCategoryName(categoryName);
-      setCompleted(taskData.completed)
       console.log(categoryId);
       setIsTaskOpen(true);
     } catch (error) {
@@ -212,6 +212,29 @@ const Content = (props) => {
       props.updateTasks()
       setIsTaskOpen(false)
 
+    })
+  }
+
+  const changeTaskStatus = (id) => {
+    const taskData = {
+      name: taskName,
+      description: taskDescription,
+      priority: taskPriority,
+      category_id: parseInt(selectedCategoryId, 10),
+      date: date
+    }
+    axios.put(`https://api.energy-cerber.ru/tasks/${id}/change_status`, taskData, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then(response => {
+      console.log(response.data)
+      if (response.data.completed === true){
+        setCompleted(true)
+      }
+      else{
+        setCompleted(false)
+      }
     })
   }
 
@@ -318,19 +341,16 @@ const Content = (props) => {
               onChange={(e) => setTaskPriority(parseInt(e.target.value))}
               placeholder="Приоритет"
             />
-            <select style={{ color: "#000" }}
-              value={completed}
-              onChange={handleCompletedChange}
-            >
-              <option value={true}>Не активна</option>
-              <option value={false}>Активна</option>
-              
-            </select>
+            <input className={s.categoryName}
+              type="text"
+              disabled
+              value={completed ? "Не активна" : "Активна"}
+            />
 
             <button className={s.closeModalCategory} onClick={() => changeTask(taskId)}>
               Изменить задачу
             </button>
-            <button className={s.closeModalCategory} onClick={addTask}>
+            <button className={s.closeModalCategory} onClick={() => changeTaskStatus(taskId)}>
               Изменить статус
             </button>
             <button className={s.closeModalCategory} onClick={() => deleteTask(taskId)}>
@@ -392,7 +412,7 @@ const Content = (props) => {
       
       <div className={isModalOpen || isModalCategoryOpen || isEditCategoryOpen ? [s.wrapper, s.opacity].join(' ') : s.wrapper}>
         <Header getToken={props.getToken} name={props.userData.name} />
-        <Main getTaskInfo={getTaskInfo} fetchCategories={fetchCategories} openTaskInfo={openTaskInfo} addTask={props.addTask} tasks = {props.tasks} openModalEditCategory={openModalEditCategory} updateCategories={props.updateCategories} openModalCategory={openModalCategory} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp}/>
+        <Main completed={completed} getTaskInfo={getTaskInfo} fetchCategories={fetchCategories} openTaskInfo={openTaskInfo} addTask={props.addTask} tasks = {props.tasks} openModalEditCategory={openModalEditCategory} updateCategories={props.updateCategories} openModalCategory={openModalCategory} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp}/>
         <Footer openModal={openModal} />
       </div>
     </div>
