@@ -50,6 +50,7 @@ const Registration = (props) => {
         <div className={s.name_item}>
           <p className={s.name_description}>Имя</p>
           <input
+            maxlength = '100'
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -59,6 +60,7 @@ const Registration = (props) => {
         <div className={s.name_itemsecond}>
           <p className={s.name_description}>Фамилия</p>
           <input
+            maxlength='100'
             type="text"
             value={surname}
             onChange={(e) => setSurname(e.target.value)}
@@ -77,6 +79,7 @@ const Registration = (props) => {
         <div className={s.email}>
           <p className={s.name_description}>Введите ваше короткое имя</p>
           <input
+            maxlength='100'
             type="text"
             value={shortName}
             onChange={(e) => setShortName(e.target.value)}
@@ -86,6 +89,7 @@ const Registration = (props) => {
         <div className={s.email}>
           <p className={s.name_description}>Ваша эл. почта</p>
           <input
+            maxlength='100'
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -95,6 +99,7 @@ const Registration = (props) => {
         <div className={s.sex}>
           <p className={s.sex_description}>Пароль</p>
           <input
+            maxlength='100'
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -104,6 +109,7 @@ const Registration = (props) => {
         <div className={s.validation}>
           <p className={s.validation_description}>Подтвердите пароль</p>
           <input
+            maxlength='100'
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}

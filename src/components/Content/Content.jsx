@@ -14,6 +14,7 @@ const Content = (props) => {
   const [isModalCategoryOpen, setIsModalCategoryOpen] = useState(false);
   const [isEditCategoryOpen, setIsEditModalCategoryOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isTaskOpen, setIsTaskOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const closeModalCat = () => setIsModalCategoryOpen(false);
@@ -23,12 +24,13 @@ const Content = (props) => {
   const [categoryId, setcategoryId] = useState(0);
   const openModalCategory = () => setIsModalCategoryOpen(true);
   const closeIsOpenTaskInfo = () => setOpenTaskInfo(false);
+  const closeIsOpenTask = () => setIsTaskOpen(false)
   const [date, setDate] = useState("")
   const [taskName, setTaskName] = useState("")
   const [taskDescription, setTaskDescription] = useState("")
   const [taskPriority, setTaskPriority] = useState(1)
-
-
+  const [color, setColor] = useState('#ff0000');
+  const [selectedCategoryName, setSelectedCategoryName] = useState('');
   const openModalEditCategory = (id) => {
     setcategoryId(id)
     setIsEditModalCategoryOpen(true)
@@ -65,7 +67,7 @@ const Content = (props) => {
   const addTask = () => {
       const taskData = {
         name: taskName,
-        description: "green",
+        description: taskDescription,
         priority: taskPriority,
         category_id: parseInt(selectedCategoryId, 10),
         date: date
@@ -116,6 +118,43 @@ const Content = (props) => {
       setIsEditModalCategoryOpen(false)
     })
   }
+
+  const getTaskInfo = async (id) => {
+    try {
+      const taskResponse = await axios.get(`https://api.energy-cerber.ru/tasks/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      const taskData = taskResponse.data;
+      console.log(taskData)
+      const categoryId = taskData.category_id;
+
+      let categoryName = "";
+      try {
+        const categoryResponse = await axios.get(`https://api.energy-cerber.ru/categories/${categoryId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        categoryName = categoryResponse.data.name
+      } catch (e) {
+        console.error("ошибка при получении имени категории", e)
+      }
+      setDate(taskData.date);
+      setTaskName(taskData.name);
+      setTaskDescription(taskData.description);
+      setTaskPriority(taskData.priority);
+      setSelectedCategoryId(categoryId);
+      setcategoryId(categoryId);
+      setSelectedCategoryName(categoryName);
+      console.log(categoryId);
+      setIsTaskOpen(true);
+    } catch (error) {
+      console.error("Ошибка при получении данных задачи:", error);
+    }
+  };
   
   
   if (props.isLoading) {
@@ -131,7 +170,11 @@ const Content = (props) => {
   "#E91E63","#795548","#9E9E9E","#212121","#FFFFFF","#00BCD4",
   "#C0CA33","#009688","#3F51B5","#673AB7","#03A9F4","#8BC34A",
   "#EEEEEE","#FFC107","#FF5722","#F48FB1"]
-
+  const handleColorChange = (event) => {
+    const newColor = event.target.value;
+    setColor(newColor);
+    console.log("Выбранный цвет:", newColor);
+  };
   return(
     <div className = {s.root}>
       {isModalOpen&& (
@@ -190,9 +233,64 @@ const Content = (props) => {
       )}
 
 
+      {isTaskOpen && (
+        <div className={s.modal}>
+          <div className={s.modalcontent}>
+            <select style={
+              {color: "#000"}
+            } value={selectedCategoryId} onChange={handleCategoryChange}>
+              <option value="">Выберите категорию</option>
+              {categories.map((category) => (
+                <option style={{ backgroundColor: category.color }} key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+            <h2>Название задачи</h2>
+            <input className={s.categoryName}
+              type="text"
+              value={taskName}
+              onChange={(e) => setTaskName(e.target.value)}
+              placeholder="Введите название для задачи"
+            />
+            <h2>Описание</h2>
+            <input className={s.categoryName}
+              type="text"
+              value={taskDescription}
+              onChange={(e) => setTaskDescription(e.target.value)}
+              placeholder="Описание"
+            />
+            <h2>Дата</h2>
+            <input className={s.categoryName}
+              type="text"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              placeholder="Дата задачи"
+            />
+            <h2>Приоритет</h2>
+            <input className={s.categoryName}
+              type="text"
+              value={taskPriority}
+              onChange={(e) => setTaskPriority(parseInt(e.target.value))}
+              placeholder="Приоритет"
+            />
+
+            <button className={s.closeModalCategory} onClick={addTask}>
+              Добавить задачу
+            </button>
+            <button className={s.closeModalCategory} onClick={closeIsOpenTask}>Выйти</button>
+          </div>
+        </div>
+      )}
+
+      
       {isModalCategoryOpen&& (
         <div className={s.modal}>
           <div className={s.modalcontent}>
+            <input type="color" id="colorPicker"
+              value={color}
+              onChange={handleColorChange}></input>
+            
             <input className= {s.categoryName}
               type="text"
               value={categoryName}
@@ -236,7 +334,7 @@ const Content = (props) => {
       
       <div className={isModalOpen || isModalCategoryOpen || isEditCategoryOpen ? [s.wrapper, s.opacity].join(' ') : s.wrapper}>
         <Header getToken={props.getToken} name={props.userData.name} />
-        <Main fetchCategories={fetchCategories} openTaskInfo={openTaskInfo} addTask={props.addTask} tasks = {props.tasks} openModalEditCategory={openModalEditCategory} updateCategories={props.updateCategories} openModalCategory={openModalCategory} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp}/>
+        <Main getTaskInfo={getTaskInfo} fetchCategories={fetchCategories} openTaskInfo={openTaskInfo} addTask={props.addTask} tasks = {props.tasks} openModalEditCategory={openModalEditCategory} updateCategories={props.updateCategories} openModalCategory={openModalCategory} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp}/>
         <Footer openModal={openModal} />
       </div>
     </div>

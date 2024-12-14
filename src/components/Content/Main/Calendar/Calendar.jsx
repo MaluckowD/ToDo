@@ -106,6 +106,7 @@ const Calendar = (props) => {
             event_date: eventDate,
             event_title: item.name,
             event_theme: theme,
+            task_id: item.id
           };
         } catch (error) {
           console.error("Ошибка при создании даты:", error, item);
@@ -182,7 +183,7 @@ const Calendar = (props) => {
 
     const { r, g, b } = rgb;
     const isLightBackground = (r * 0.299 + g * 0.587 + b * 0.114) > 186;
-    const textColor = 'black';
+    const textColor = isLightBackground ? '#000' : '#fff';
 
     switch (t) {
       case "#F44336":
@@ -326,13 +327,20 @@ const Calendar = (props) => {
                             className={classNames(
                               "px-2 py-1 rounded-lg mt-1 overflow-hidden border"
                             )}
+                            onClick={
+                              (event) => {
+                                event.stopPropagation(); // Останавливаем всплытие события
+                                props.getTaskInfo(e.task_id);
+                              }
+                            }
+                            id={ e.task_id }
                             style={{
                               borderColor: eventStyles.borderColor,
                               backgroundColor: eventStyles.backgroundColor,
                               color: eventStyles.color
                             }}
                           >
-                            <p className="text-sm truncate leading-tight">
+                            <p className="text-sm truncate leading-tight"> 
                               {e.event_title}
                             </p>
                           </div>
