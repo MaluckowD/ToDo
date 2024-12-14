@@ -57,6 +57,19 @@ function App(props) {
     }
   }, [token]);
 
+  const updateCategories = async () => {
+    try {
+      const response = await axios.get("https://api.energy-cerber.ru/categories/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setCategories(response.data);
+    } catch (error) {
+      console.error("Ошибка при обновлении категорий:", error);
+    }
+  };
+
   const updateTasks = async () => {
     try {
       const response = await axios.get("https://api.energy-cerber.ru/tasks/", {
@@ -72,18 +85,6 @@ function App(props) {
 
 
 
-  const updateCategories = async () => {
-    try {
-      const response = await axios.get("https://api.energy-cerber.ru/categories/", { 
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setCategories(response.data);
-    } catch (error) {
-      console.error("Ошибка при обновлении категорий:", error);
-    }
-  };
 
   const removeToken = () => {
     localStorage.removeItem('access_token');

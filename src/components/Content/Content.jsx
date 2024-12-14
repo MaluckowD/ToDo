@@ -2,12 +2,14 @@ import Header from "./Header/Header"
 import Main from "./Main/Main"
 import Footer from "./Footer/Footer"
 import s from "./Content.module.css"
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import Kirillloh from "../../images/KirillLoh.jpg"
 import Ville from "../../images/Vinne.jpg"
 const Content = (props) => {
   const token = props.getToken()
+  const [categories, setCategories] = useState([]);
+  const [selectedCategoryId, setSelectedCategoryId] = useState('');
   const [isOpenTaskInfo, setOpenTaskInfo] = useState(false);
   const [isModalCategoryOpen, setIsModalCategoryOpen] = useState(false);
   const [isEditCategoryOpen, setIsEditModalCategoryOpen] = useState(false);
@@ -39,12 +41,33 @@ const Content = (props) => {
     setOpenTaskInfo(true)
   }
 
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get("https://api.energy-cerber.ru/categories/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setCategories(response.data); // Сохраняем категории
+    } catch (error) {
+      console.error("Ошибка при загрузке категорий:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories(); // Загружаем категории при монтировании
+  }, [token]);
+
+  const handleCategoryChange = (event) => {
+    setSelectedCategoryId(event.target.value);
+  };
+
   const addTask = () => {
       const taskData = {
         name: taskName,
         description: "green",
         priority: taskPriority,
-        category_id: 69017500,
+        category_id: parseInt(selectedCategoryId, 10),
         date: date
       }
       axios.post("https://api.energy-cerber.ru/tasks/", taskData, {
@@ -72,6 +95,7 @@ const Content = (props) => {
       }).then(response => {
         console.log(response.data)
         props.updateCategories()
+        fetchCategories()
         setIsModalCategoryOpen(false)
       })
   }
@@ -88,6 +112,7 @@ const Content = (props) => {
     }).then(response => {
       console.log(response.data)
       props.updateCategories()
+      fetchCategories()
       setIsEditModalCategoryOpen(false)
     })
   }
@@ -122,6 +147,15 @@ const Content = (props) => {
       {isOpenTaskInfo && (
         <div className={s.modal}>
           <div className={s.modalcontent}>
+            <select value={selectedCategoryId} onChange={handleCategoryChange}>
+              <option value="">Выберите категорию</option>
+              {categories.map((category) => (
+                <option style={{ backgroundColor: category.color }} key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+
             <input className={s.categoryName}
               type="text"
               value={taskName}
@@ -202,7 +236,7 @@ const Content = (props) => {
       
       <div className={isModalOpen || isModalCategoryOpen || isEditCategoryOpen ? [s.wrapper, s.opacity].join(' ') : s.wrapper}>
         <Header getToken={props.getToken} name={props.userData.name} />
-        <Main openTaskInfo={openTaskInfo} addTask={props.addTask} tasks = {props.tasks} openModalEditCategory={openModalEditCategory} updateCategories={props.updateCategories} openModalCategory={openModalCategory} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp}/>
+        <Main fetchCategories={fetchCategories} openTaskInfo={openTaskInfo} addTask={props.addTask} tasks = {props.tasks} openModalEditCategory={openModalEditCategory} updateCategories={props.updateCategories} openModalCategory={openModalCategory} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp}/>
         <Footer openModal={openModal} />
       </div>
     </div>

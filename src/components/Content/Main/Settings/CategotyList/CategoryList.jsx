@@ -13,6 +13,7 @@ const CategoryList = (props) => {
         }
       }).then(response => {
         console.log(response.data)
+        props.fetchCategories()
         props.updateCategories();
       })
     }

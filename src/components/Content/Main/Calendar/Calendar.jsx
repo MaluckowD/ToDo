@@ -4,6 +4,8 @@ import s from "./Calendar.module.css"
 import classNames from "./helper";
 import "./style.css"
 import CalendarMonth from './Calendarmonth';
+import axios from 'axios';
+
 const monthNames = [
   "January",
   "February",
@@ -22,8 +24,8 @@ const monthNames = [
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 const Calendar = (props) => {
-  const [events, setEvents] = useState([
-    { event_date: new Date(2021, 9, 4), event_title: "My Birthday :)", event_theme: "red" },]);
+  const token = props.getToken()
+  const [events, setEvents] = useState([]);
   const date = new Date();
   const [month, setMonth] = useState(date.getMonth());
   const [year, setYear] = useState(date.getFullYear());
@@ -59,43 +61,62 @@ const Calendar = (props) => {
     console.log(month, year);
   }, [month]);
 
-
-  const themes = [
-    { value: "blue", label: "Blue Theme" },
-    { value: "red", label: "Red Theme" },
-    { value: "yellow", label: "Yellow Theme" },
-    { value: "green", label: "Green Theme" },
-    { value: "purple", label: "Purple Theme" }
+  const colors = [
+    "#F44336", "#4CAF50", "#2196F3", "#FFC107", "#FF9800", "#9C27B0",
+    "#E91E63", "#795548", "#9E9E9E", "#212121", "#FFFFFF", "#00BCD4",
+    "#C0CA33", "#009688", "#3F51B5", "#673AB7", "#03A9F4", "#8BC34A",
+    "#EEEEEE", "#FFC107", "#FF5722", "#F48FB1"
   ];
 
+  const themes = colors.map((color, index) => ({
+    value: color,
+    label: `Theme ${index + 1}`, // Простой лейбл, вы можете сделать его более описательным
+  }));
+
   // Функция для обработки нового данных
-  const handleNewData = (incomingData) => {
+  const handleNewData = async (incomingData) => {
     if (!Array.isArray(incomingData)) {
       console.error("Ошибка: incomingData не является массивом");
-      return; // Добавляем проверку на массив и выводим ошибку
+      return;
     }
 
-    const updatedEvents = incomingData.map((item) => {
-      if (!item || !item.id || !item.name || !item.date) {
-        console.warn("Неверные данные:", item);
-        return null; // Пропускаем невалидные данные
-      }
+    try {
+      const updatedEvents = await Promise.all(incomingData.map(async (item) => {
+        if (!item || !item.id || !item.name || !item.date) {
+          console.warn("Неверные данные:", item);
+          return null;
+        }
 
-      try {
-        const eventDate = new Date(item.date);
-        return {
-          id: item.id,
-          event_date: eventDate,
-          event_title: item.name,
-          event_theme: item.description || '',
-        };
-      } catch (error) {
-        console.error("Ошибка при создании даты:", error, item);
-        return null; // Пропускаем невалидные даты
-      }
-    }).filter(item => item !== null);
+        try {
+          const eventDate = new Date(item.date);
+          let theme = '';
+          try {
+            const response = await axios.get(`https://api.energy-cerber.ru/categories/${item.category_id}`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+            theme = response.data.color;
+          } catch (categoryError) {
+            console.error("Ошибка при получении категории:", categoryError, item);
+            theme = '';
+          }
+          return {
+            id: item.id,
+            event_date: eventDate,
+            event_title: item.name,
+            event_theme: theme,
+          };
+        } catch (error) {
+          console.error("Ошибка при создании даты:", error, item);
+          return null;
+        }
+      }));
 
-    setEvents(updatedEvents);
+      setEvents(updatedEvents.filter(item => item !== null));
+    } catch (error) {
+      console.error("Общая ошибка при обработке данных", error)
+    }
   };
 
 
@@ -137,12 +158,82 @@ const Calendar = (props) => {
   };
 
   const eventClass = (t) => {
+    const hexToRgb = (hex) => {
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result
+        ? {
+          r: parseInt(result[1], 16),
+          g: parseInt(result[2], 16),
+          b: parseInt(result[3], 16),
+        }
+        : null;
+    };
+
+    const rgb = hexToRgb(t);
+
+    if (!rgb) {
+      return {
+        borderColor: 'gray',
+        color: 'gray',
+        backgroundColor: 'lightgray',
+        textAlign: 'center', // Добавлено центрирование
+      };
+    }
+
+    const { r, g, b } = rgb;
+    const isLightBackground = (r * 0.299 + g * 0.587 + b * 0.114) > 186;
+    const textColor = 'black';
+
     switch (t) {
-      case "blue": return "border-blue-200 text-blue-800 bg-blue-100";
-      case "red": return "border-red-200 text-red-800 bg-red-100";
-      case "yellow": return "border-yellow-200 text-yellow-800 bg-yellow-1000";
-      case "green": return "border-green-200 text-green-800 bg-green-100";
-      default: return "border-purple-200 text-purple-800 bg-purple-100";
+      case "#F44336":
+        return { borderColor: 'red', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
+      case "#4CAF50":
+        return { borderColor: 'green', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
+      case "#2196F3":
+        return { borderColor: 'blue', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
+      case "#FFC107":
+        return { borderColor: 'yellow', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
+      case "#FF9800":
+        return { borderColor: 'orange', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
+      case "#9C27B0":
+        return { borderColor: 'purple', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
+      case "#E91E63":
+        return { borderColor: 'pink', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
+      case "#795548":
+        return { borderColor: 'amber', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
+      case "#9E9E9E":
+        return { borderColor: 'gray', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
+      case "#212121":
+        return { borderColor: 'black', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
+      case "#FFFFFF":
+        return { borderColor: 'gray', color: 'black', backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
+      case "#00BCD4":
+        return { borderColor: 'teal', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
+      case "#C0CA33":
+        return { borderColor: 'lime', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
+      case "#009688":
+        return { borderColor: 'emerald', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
+      case "#3F51B5":
+        return { borderColor: 'indigo', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
+      case "#673AB7":
+        return { borderColor: 'violet', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
+      case "#03A9F4":
+        return { borderColor: 'sky', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
+      case "#8BC34A":
+        return { borderColor: 'lime', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
+      case "#EEEEEE":
+        return { borderColor: 'gray', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
+      case "#FF5722":
+        return { borderColor: 'orange', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
+      case "#F48FB1":
+        return { borderColor: 'pink', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
+      default:
+        return {
+          borderColor: 'gray',
+          color: 'gray',
+          backgroundColor: 'lightgray',
+          textAlign: 'center',
+        };
     }
   };
 
@@ -156,7 +247,7 @@ const Calendar = (props) => {
                 {monthNames[month]}
                 <CalendarMonth updateMonthAndYear={updateMonthYear} year={year}/>
               </span>
-              <span onClick={props.addTask} className="ml-1 text-lg text-gray-600 font-normal">
+              <span className="ml-1 text-lg text-gray-600 font-normal">
                 {year}
               </span>
             </div>
@@ -227,19 +318,26 @@ const Calendar = (props) => {
                           new Date(e.event_date).toDateString() ===
                           new Date(year, month, date).toDateString()
                       )
-                      .map((e) => (
-                        <div
-                          key={e.event_title}
-                          className={classNames(
-                            eventClass(e.event_theme),
-                            "px-2 py-1 rounded-lg mt-1 overflow-hidden border"
-                          )}
-                        >
-                          <p className="text-sm truncate leading-tight">
-                            {e.event_title}
-                          </p>
-                        </div>
-                      ))}
+                      .map((e) => {
+                        const eventStyles = eventClass(e.event_theme);
+                        return (
+                          <div
+                            key={e.event_title}
+                            className={classNames(
+                              "px-2 py-1 rounded-lg mt-1 overflow-hidden border"
+                            )}
+                            style={{
+                              borderColor: eventStyles.borderColor,
+                              backgroundColor: eventStyles.backgroundColor,
+                              color: eventStyles.color
+                            }}
+                          >
+                            <p className="text-sm truncate leading-tight">
+                              {e.event_title}
+                            </p>
+                          </div>
+                        );
+                      })}
                   </div>
                 </div>
               ))}
