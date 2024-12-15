@@ -33,7 +33,7 @@ const Content = (props) => {
   const [taskPriority, setTaskPriority] = useState(1)
   const [color, setColor] = useState('#ffffff');
   const [selectedCategoryName, setSelectedCategoryName] = useState('');
-  
+  const [statusId, setStatusId] = useState(0)
   const openModalEditCategory = (id) => {
     setcategoryId(id)
     setIsEditModalCategoryOpen(true)
@@ -228,12 +228,15 @@ const Content = (props) => {
         Authorization: `Bearer ${token}`
       }
     }).then(response => {
+      setStatusId(id)
       console.log(response.data)
       if (response.data.completed === true){
         setCompleted(true)
+        props.updateTasks()
       }
       else{
         setCompleted(false)
+        props.updateTasks()
       }
     })
   }
@@ -410,7 +413,7 @@ const Content = (props) => {
       
       <div className={isModalOpen || isModalCategoryOpen || isEditCategoryOpen ? [s.wrapper, s.opacity].join(' ') : s.wrapper}>
         <Header getToken={props.getToken} name={props.userData.name} />
-        <Main completed={completed} getTaskInfo={getTaskInfo} fetchCategories={fetchCategories} openTaskInfo={openTaskInfo} addTask={props.addTask} tasks = {props.tasks} openModalEditCategory={openModalEditCategory} updateCategories={props.updateCategories} openModalCategory={openModalCategory} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp}/>
+        <Main statusId={statusId} completed={completed} getTaskInfo={getTaskInfo} fetchCategories={fetchCategories} openTaskInfo={openTaskInfo} addTask={props.addTask} tasks = {props.tasks} openModalEditCategory={openModalEditCategory} updateCategories={props.updateCategories} openModalCategory={openModalCategory} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp}/>
         <Footer openModal={openModal} />
       </div>
     </div>

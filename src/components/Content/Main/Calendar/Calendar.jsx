@@ -294,9 +294,9 @@ const Calendar = (props) => {
                               borderColor: eventStyles.borderColor,
                               backgroundColor: eventStyles.backgroundColor,
                               color: eventStyles.color,
-                              textDecoration: props.completed ? 'line-through' : 'none',
-                              textDecorationThickness: props.completed ? '2px' : '0',
-                              opacity: props.completed ? '50%' : '1'
+                              textDecoration: e.task_id === props.statusId && props.completed ? 'line-through' : 'none',
+                              textDecorationThickness: e.task_id === props.statusId && props.completed ? '2px' : '0',
+                              opacity: e.task_id === props.statusId && props.completed ? '50%' : '1'
                             }}
                           >
                             <p className="text-sm truncate leading-tight"> 
