@@ -57,6 +57,28 @@ function App(props) {
     }
   }, [token]);
 
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get("https://api.energy-cerber.ru/categories/no_base", {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setCategories(response.data)
+      } catch (error) {
+        setError(error);
+        console.error("Ошибка при загрузке данных пользователя:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (token) {
+      fetchCategories();
+    }
+  }, [token]);
+
   const updateCategories = async () => {
     try {
       const response = await axios.get("https://api.energy-cerber.ru/categories/no_base", {
