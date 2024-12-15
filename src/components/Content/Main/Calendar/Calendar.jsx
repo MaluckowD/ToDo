@@ -178,7 +178,7 @@ const Calendar = (props) => {
         borderColor: 'gray',
         color: 'gray',
         backgroundColor: 'lightgray',
-        textAlign: 'center', // Добавлено центрирование
+        textAlign: 'center',
       };
     }
 
@@ -186,57 +186,13 @@ const Calendar = (props) => {
     const isLightBackground = (r * 0.299 + g * 0.587 + b * 0.114) > 186;
     const textColor = isLightBackground ? '#000' : '#fff';
 
-    switch (t) {
-      case "#F44336":
-        return { borderColor: 'red', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
-      case "#4CAF50":
-        return { borderColor: 'green', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
-      case "#2196F3":
-        return { borderColor: 'blue', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
-      case "#FFC107":
-        return { borderColor: 'yellow', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
-      case "#FF9800":
-        return { borderColor: 'orange', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
-      case "#9C27B0":
-        return { borderColor: 'purple', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
-      case "#E91E63":
-        return { borderColor: 'pink', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
-      case "#795548":
-        return { borderColor: 'amber', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
-      case "#9E9E9E":
-        return { borderColor: 'gray', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
-      case "#212121":
-        return { borderColor: 'black', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
-      case "#FFFFFF":
-        return { borderColor: 'gray', color: 'black', backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
-      case "#00BCD4":
-        return { borderColor: 'teal', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
-      case "#C0CA33":
-        return { borderColor: 'lime', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
-      case "#009688":
-        return { borderColor: 'emerald', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
-      case "#3F51B5":
-        return { borderColor: 'indigo', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
-      case "#673AB7":
-        return { borderColor: 'violet', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
-      case "#03A9F4":
-        return { borderColor: 'sky', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
-      case "#8BC34A":
-        return { borderColor: 'lime', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
-      case "#EEEEEE":
-        return { borderColor: 'gray', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
-      case "#FF5722":
-        return { borderColor: 'orange', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
-      case "#F48FB1":
-        return { borderColor: 'pink', color: textColor, backgroundColor: `rgb(${r},${g},${b},1)`, textAlign: 'center' };
-      default:
-        return {
-          borderColor: 'gray',
-          color: 'gray',
-          backgroundColor: 'lightgray',
-          textAlign: 'center',
-        };
+    return {
+      borderColor: t,
+      color: textColor,
+      backgroundColor: `rgb(${r},${g},${b},1)`,
+      textAlign: 'center',
     }
+
   };
 
   return (
@@ -330,7 +286,7 @@ const Calendar = (props) => {
                             )}
                             onClick={
                               (event) => {
-                                event.stopPropagation(); // Останавливаем всплытие события
+                                event.stopPropagation();
                                 props.getTaskInfo(e.task_id);
                               }
                             }

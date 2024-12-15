@@ -20,7 +20,7 @@ const Content = (props) => {
   const closeModalCat = () => setIsModalCategoryOpen(false);
   const closeModalEditCat = () => setIsEditModalCategoryOpen(false);
   const [categoryName, setCategoryName] = useState("");
-  const [categoryColor, setCategoryColor] = useState("#F44336");
+  const [categoryColor, setCategoryColor] = useState('#ffffff')
   const [categoryId, setcategoryId] = useState(0);
   const openModalCategory = () => setIsModalCategoryOpen(true);
   const closeIsOpenTaskInfo = () => setOpenTaskInfo(false);
@@ -31,9 +31,11 @@ const Content = (props) => {
   const [taskDescription, setTaskDescription] = useState("")
   const [completed, setCompleted] = useState(false)
   const [taskPriority, setTaskPriority] = useState(1)
-  const [color, setColor] = useState('#ff0000');
+  const [color, setColor] = useState('#ffffff');
   const [selectedCategoryName, setSelectedCategoryName] = useState('');
   const [statusText, setStatusText] = useState("Активна");
+
+
   const openModalEditCategory = (id) => {
     setcategoryId(id)
     setIsEditModalCategoryOpen(true)
@@ -175,14 +177,12 @@ const Content = (props) => {
   "#C0CA33","#009688","#3F51B5","#673AB7","#03A9F4","#8BC34A",
   "#EEEEEE","#FFC107","#FF5722","#F48FB1"]
   const handleColorChange = (event) => {
-    const newColor = event.target.value;
-    setColor(newColor);
-    console.log("Выбранный цвет:", newColor);
+    setCategoryColor(event.target.value);
   };
   
   const handleCompletedChange = (event) => {
-    const newValue = event.target.value === "true";
-    setCompleted(newValue); // Обновляем состояние на основе выбранного значения
+    setColor(event.target.value);
+    setCategoryColor(event.target.value);
   }
 
   const changeTask = (id) => {
@@ -209,7 +209,8 @@ const Content = (props) => {
       }
     }).then(response => {
       console.log(response.data)
-      props.updateTasks()
+      const newTasks = props.tasks.filter(task => task.id !== id);
+      props.updateTasks(newTasks)
       setIsTaskOpen(false)
 
     })
@@ -365,9 +366,12 @@ const Content = (props) => {
       {isModalCategoryOpen&& (
         <div className={s.modal}>
           <div className={s.modalcontent}>
-            <input type="color" id="colorPicker"
+            <input
+              type="color"
+              id="colorPicker"
               value={color}
-              onChange={handleColorChange}></input>
+              onChange={handleColorChange}
+            />
             
             <input className= {s.categoryName}
               type="text"
@@ -376,12 +380,6 @@ const Content = (props) => {
               placeholder="Введите название категории" 
             />
 
-            <select style={{ backgroundColor: categoryColor }} className={s.categoryColor} name="color" value="Укажите цвет для категории" onChange={(e) => setCategoryColor(e.target.value)}>
-              <option value="">Укажите цвет для категории</option>
-              {colors.map((item) => (
-                <option style={{ backgroundColor: item }} value= {item}></option>
-              ))}
-            </select>
             <button className={s.closeModalCategory} onClick={closeModalCategory}>Добавить категорию</button>
             <button className={s.closeModalCategory} onClick={closeModalCat}>Выйти</button>
           </div>
@@ -391,6 +389,12 @@ const Content = (props) => {
       {isEditCategoryOpen && (
         <div className={s.modal}>
           <div className={s.modalcontent}>
+            <input
+              type="color"
+              id="colorPicker"
+              value={color}
+              onChange={handleColorChange}
+            />
             <input className={s.categoryName}
               type="text"
               value={categoryName}
@@ -398,12 +402,7 @@ const Content = (props) => {
               placeholder="Введите название категории"
             />
 
-            <select style={{ backgroundColor: categoryColor }} className={s.categoryColor} name="color" value="Укажите цвет для категории" onChange={(e) => setCategoryColor(e.target.value)}>
-              <option value="">Укажите цвет для категории</option>
-              {colors.map((item) => (
-                <option style={{ backgroundColor: item }} value={item}></option>
-              ))}
-            </select>
+            
             <button className={s.closeModalCategory} onClick={() => EditCategory(categoryId)}>Редактировать</button>
             <button className={s.closeModalCategory} onClick={closeModalEditCat}>Выйти</button>
           </div>
