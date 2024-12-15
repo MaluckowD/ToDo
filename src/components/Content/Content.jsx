@@ -34,7 +34,9 @@ const Content = (props) => {
   const [color, setColor] = useState('#ffffff');
   const [selectedCategoryName, setSelectedCategoryName] = useState('');
   const [statusText, setStatusText] = useState("Активна");
+  
 
+  
 
   const openModalEditCategory = (id) => {
     setcategoryId(id)
@@ -280,7 +282,7 @@ const Content = (props) => {
               placeholder="Описание"
             />
             <input className={s.categoryName}
-              type="text"
+              type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
               placeholder="Дата задачи"
