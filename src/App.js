@@ -59,7 +59,7 @@ function App(props) {
 
   const updateCategories = async () => {
     try {
-      const response = await axios.get("https://api.energy-cerber.ru/categories/", {
+      const response = await axios.get("https://api.energy-cerber.ru/categories/no_base", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
