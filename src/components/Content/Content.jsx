@@ -33,11 +33,7 @@ const Content = (props) => {
   const [taskPriority, setTaskPriority] = useState(1)
   const [color, setColor] = useState('#ffffff');
   const [selectedCategoryName, setSelectedCategoryName] = useState('');
-  const [statusText, setStatusText] = useState("Активна");
   
-
-  
-
   const openModalEditCategory = (id) => {
     setcategoryId(id)
     setIsEditModalCategoryOpen(true)
@@ -179,6 +175,7 @@ const Content = (props) => {
   "#C0CA33","#009688","#3F51B5","#673AB7","#03A9F4","#8BC34A",
   "#EEEEEE","#FFC107","#FF5722","#F48FB1"]
   const handleColorChange = (event) => {
+    setColor(event.target.value);
     setCategoryColor(event.target.value);
   };
   
@@ -332,7 +329,7 @@ const Content = (props) => {
             />
             <h2>Дата</h2>
             <input className={s.categoryName}
-              type="text"
+              type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
               placeholder="Дата задачи"
