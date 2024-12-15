@@ -210,7 +210,7 @@ const Content = (props) => {
     }).then(response => {
       console.log(response.data)
       const newTasks = props.tasks.filter(task => task.id !== id);
-      props.updateTasks(newTasks)
+      props.updateTasks()
       setIsTaskOpen(false)
 
     })

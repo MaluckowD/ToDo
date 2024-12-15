@@ -122,10 +122,9 @@ const Calendar = (props) => {
 
 
   useEffect(() => {
-    if (props.tasks && props.tasks.length > 0) { // Проверяем, что tasks не null/undefined и не пуст
-      handleNewData(props.tasks);
-      console.log(props.tasks)
-    }
+    handleNewData(props.tasks);
+    console.log(props.tasks)
+    
   }, [props.tasks]); // Зависимость от props.tasks
 
   useEffect(() => {
