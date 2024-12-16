@@ -63,8 +63,11 @@ const Content = (props) => {
       console.error("Ошибка при загрузке категорий:", error);
     }
   };
-
-  fetchCategories()
+  useEffect( () => {
+    if (token) {
+      fetchCategories()
+    }
+  }, [token])
 
   useEffect(() => {
     // Проверка токена при монтировании компонента или при изменении токена

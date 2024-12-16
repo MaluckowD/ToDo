@@ -14,7 +14,9 @@ function App(props) {
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true); 
   const [error, setError] = useState(null);
-
+  useEffect(() => {
+    document.title = "ToDo";
+  }, []); 
 
   const handleuserDatafromRegistration = (data) => {
     setuserDatafromRegistration(data);
