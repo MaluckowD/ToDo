@@ -20,7 +20,6 @@ const Content = (props) => {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const closeModalCat = () => setIsModalCategoryOpen(false);
-  const closeModalEditCat = () => setIsEditModalCategoryOpen(false);
   const [categoryName, setCategoryName] = useState("");
   const [categoryColor, setCategoryColor] = useState('#ffffff')
   const [categoryId, setcategoryId] = useState(0);
@@ -37,10 +36,26 @@ const Content = (props) => {
   const [selectedCategoryName, setSelectedCategoryName] = useState('');
   const [statusId, setStatusId] = useState(0)
   const navigate = useNavigate();
+
+  const closeModalEditCat = () => {
+    setIsEditModalCategoryOpen(false);
+    setCategoryName("")
+    setColor("#ffffff")
+  }
+
+
   
   const openModalEditCategory = (id) => {
     setcategoryId(id)
     setIsEditModalCategoryOpen(true)
+    axios.get(`https://api.energy-cerber.ru/categories/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }}
+    ).then( response => {
+      setCategoryName(response.data.name)
+      setColor(response.data.color)
+    })
 
   };
 
@@ -157,6 +172,8 @@ const Content = (props) => {
         console.log(response.data)
         props.updateCategories()
         fetchCategories()
+        setCategoryName("")
+        setColor("#ffffff")
         setIsModalCategoryOpen(false)
       })
   }
