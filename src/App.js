@@ -7,7 +7,6 @@ import Registration from "./components/Registration/Registration";
 import Calendar from "./components/Content/Main/Calendar/Calendar";
 import Profile from "./components/Content/Main/Profile/Profile";
 import axios from "axios";
-import CaseSensitiveRoute from "./CaseSensitiveRoute";
 function App(props) {
   const [userDatafromRegistration, setuserDatafromRegistration] = useState(null);
   const [categories, setCategories] = useState(null);
@@ -66,6 +65,7 @@ function App(props) {
             Authorization: `Bearer ${token}`
           }
         });
+        console.log(response.data)
         setCategories(response.data)
       } catch (error) {
         setError(error);

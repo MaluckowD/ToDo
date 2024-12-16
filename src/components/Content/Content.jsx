@@ -37,6 +37,7 @@ const Content = (props) => {
   const [selectedCategoryName, setSelectedCategoryName] = useState('');
   const [statusId, setStatusId] = useState(0)
   const navigate = useNavigate();
+  
   const openModalEditCategory = (id) => {
     setcategoryId(id)
     setIsEditModalCategoryOpen(true)
@@ -49,6 +50,7 @@ const Content = (props) => {
     setOpenTaskInfo(true)
   }
 
+ 
   const fetchCategories = async () => {
     try {
       const response = await axios.get("https://api.energy-cerber.ru/categories/", {
@@ -61,6 +63,8 @@ const Content = (props) => {
       console.error("Ошибка при загрузке категорий:", error);
     }
   };
+
+  fetchCategories()
 
   useEffect(() => {
     // Проверка токена при монтировании компонента или при изменении токена
