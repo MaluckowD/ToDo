@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import s from "./App.module.css";
 import Content from "./components/Content/Content";
 import Login from "./components/Login/Login";
@@ -7,6 +7,7 @@ import Registration from "./components/Registration/Registration";
 import Calendar from "./components/Content/Main/Calendar/Calendar";
 import Profile from "./components/Content/Main/Profile/Profile";
 import axios from "axios";
+import CaseSensitiveRoute from "./CaseSensitiveRoute";
 function App(props) {
   const [userDatafromRegistration, setuserDatafromRegistration] = useState(null);
   const [categories, setCategories] = useState(null);
@@ -104,7 +105,20 @@ function App(props) {
       console.error("Ошибка при обновлении задач:", error);
     }
   };
+  const AuthRedirect = () => {
+    const navigate = useNavigate();
+    const token = getToken();
 
+    useEffect(() => {
+      if (token) {
+        navigate("/content");
+      } else {
+        navigate("/login");
+      }
+    }, [navigate, token]);
+
+    return null;
+  };
 
 
 
@@ -120,14 +134,19 @@ function App(props) {
 
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<Login saveToken={saveToken} updateUserDataInApp={updateUserDataInApp}/>} />
-          <Route path="/registration" store={props.store} element={<Registration 
-          onDataUser={handleuserDatafromRegistration} saveToken={saveToken} />} />
-          <Route path="/content" element={<Content  
-            updateTasks={updateTasks} tasks={tasks} updateCategories={updateCategories} categories={categories} 
-          userData={userData} getToken={getToken} 
-          isLoading={isLoading} error={error} 
-          updateUserDataInApp={updateUserDataInApp}/>}>
+          <Route path="/" element={<AuthRedirect />} />
+          <Route path="/login" element={<Login saveToken={saveToken} updateUserDataInApp={updateUserDataInApp} />} />
+          <Route
+            path="/registration"
+            store={props.store}
+            element={<Registration onDataUser={handleuserDatafromRegistration} saveToken={saveToken} />}
+          />
+          <Route path="/content" element={<Content removeToken={removeToken}
+            updateTasks={updateTasks} tasks={tasks} updateCategories={updateCategories} categories={categories}
+            userData={userData} getToken={getToken}
+            isLoading={isLoading} error={error}
+            updateUserDataInApp={updateUserDataInApp}
+          />}>
             <Route index element={<Calendar />} />
             <Route path="settings" element={<Profile />} />
           </Route>

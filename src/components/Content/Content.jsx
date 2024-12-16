@@ -3,10 +3,12 @@ import Main from "./Main/Main"
 import Footer from "./Footer/Footer"
 import s from "./Content.module.css"
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Kirillloh from "../../images/KirillLoh.jpg"
 import Ville from "../../images/Vinne.jpg"
 const Content = (props) => {
+  const [redirectToLogin, setRedirectToLogin] = useState(false);
   const token = props.getToken()
   const [categories, setCategories] = useState([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState('');
@@ -34,6 +36,7 @@ const Content = (props) => {
   const [color, setColor] = useState('#ffffff');
   const [selectedCategoryName, setSelectedCategoryName] = useState('');
   const [statusId, setStatusId] = useState(0)
+  const navigate = useNavigate();
   const openModalEditCategory = (id) => {
     setcategoryId(id)
     setIsEditModalCategoryOpen(true)
@@ -60,8 +63,17 @@ const Content = (props) => {
   };
 
   useEffect(() => {
-    fetchCategories(); // Загружаем категории при монтировании
-  }, [token]);
+    // Проверка токена при монтировании компонента или при изменении токена
+    if (!token && !redirectToLogin) {
+      setRedirectToLogin(true); // Инициируем перенаправление
+    }
+  }, [token, redirectToLogin]);
+
+  useEffect(() => {
+    if (redirectToLogin) {
+      navigate('/login'); // Выполняем перенаправление только если нужно
+    }
+  }, [redirectToLogin, navigate])
   const modalRef = useRef(null);
 
   useEffect(() => {
@@ -467,8 +479,8 @@ const Content = (props) => {
       )}
       
       <div className={isModalOpen || isModalCategoryOpen || isEditCategoryOpen || isTaskOpen || isOpenTaskInfo ? [s.wrapper, s.opacity].join(' ') : s.wrapper}>
-        <Header getToken={props.getToken} name={props.userData.name} />
-        <Main statusId={statusId} completed={completed} getTaskInfo={getTaskInfo} fetchCategories={fetchCategories} openTaskInfo={openTaskInfo} addTask={props.addTask} tasks = {props.tasks} openModalEditCategory={openModalEditCategory} updateCategories={props.updateCategories} openModalCategory={openModalCategory} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp}/>
+        <Header removeToken={props.removeToken} getToken={props.getToken} name={props.userData.name} />
+        <Main removeToken={props.removeToken} statusId={statusId} completed={completed} getTaskInfo={getTaskInfo} fetchCategories={fetchCategories} openTaskInfo={openTaskInfo} addTask={props.addTask} tasks = {props.tasks} openModalEditCategory={openModalEditCategory} updateCategories={props.updateCategories} openModalCategory={openModalCategory} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp}/>
         <Footer openModal={openModal} />
       </div>
     </div>

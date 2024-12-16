@@ -36,7 +36,8 @@ const UserInfo = (props) => {
         }
       }).then(response => {
         console.log(response.data)
-        navigate("/")
+        props.removeToken()
+        navigate("/login");
       })
     }
   }
