@@ -26,7 +26,7 @@ const Buttons = (props) => {
 
   return (
     <div className={s.buttons_item}>
-      <NavLink onClick={UpdateCallBack} to="/Content" className={s.link_main}>Главная</NavLink>
+      <NavLink onClick={UpdateCallBack} to="/content" className={s.link_main}>Главная</NavLink>
       <NavLink to = "/" className={s.exit}>Выйти</NavLink>
     </div>
 

@@ -1,9 +1,9 @@
-import s from "./Settings.module.css"
+import s from "./Profile.module.css"
 import axios from "axios";
 import React, { useEffect, useState } from 'react';
 import UserInfo from "./UserInfo/UserInfo"
 import CategoryList from "./CategotyList/CategoryList"
-const Settings = (props) => {
+const Profile = (props) => {
   const [userData, setUserData] = useState(props.userData);
   const token = props.getToken();
 
@@ -19,4 +19,4 @@ const Settings = (props) => {
   )
 }
 
-export default Settings
+export default Profile

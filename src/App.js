@@ -5,7 +5,7 @@ import Content from "./components/Content/Content";
 import Login from "./components/Login/Login";
 import Registration from "./components/Registration/Registration";
 import Calendar from "./components/Content/Main/Calendar/Calendar";
-import Settings from "./components/Content/Main/Settings/Settings";
+import Profile from "./components/Content/Main/Profile/Profile";
 import axios from "axios";
 function App(props) {
   const [userDatafromRegistration, setuserDatafromRegistration] = useState(null);
@@ -120,16 +120,16 @@ function App(props) {
 
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Login saveToken={saveToken} updateUserDataInApp={updateUserDataInApp}/>} />
-          <Route path="/Registration" store={props.store} element={<Registration 
+          <Route path="/login" element={<Login saveToken={saveToken} updateUserDataInApp={updateUserDataInApp}/>} />
+          <Route path="/registration" store={props.store} element={<Registration 
           onDataUser={handleuserDatafromRegistration} saveToken={saveToken} />} />
-          <Route path="/Content" element={<Content  
+          <Route path="/content" element={<Content  
             updateTasks={updateTasks} tasks={tasks} updateCategories={updateCategories} categories={categories} 
           userData={userData} getToken={getToken} 
           isLoading={isLoading} error={error} 
           updateUserDataInApp={updateUserDataInApp}/>}>
             <Route index element={<Calendar />} />
-            <Route path="Settings" element={<Settings />} />
+            <Route path="settings" element={<Profile />} />
           </Route>
         </Routes>
       </BrowserRouter>

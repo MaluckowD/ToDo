@@ -2,7 +2,7 @@ import Header from "./Header/Header"
 import Main from "./Main/Main"
 import Footer from "./Footer/Footer"
 import s from "./Content.module.css"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from "axios";
 import Kirillloh from "../../images/KirillLoh.jpg"
 import Ville from "../../images/Vinne.jpg"
@@ -62,6 +62,42 @@ const Content = (props) => {
   useEffect(() => {
     fetchCategories(); // Загружаем категории при монтировании
   }, [token]);
+  const modalRef = useRef(null);
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        closeModalCat();
+        closeModal();
+        closeModalEditCat();
+        closeIsOpenTaskInfo();
+        closeIsOpenTask();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+    
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        closeModalCat();
+        closeModal();
+        closeModalEditCat();
+        closeIsOpenTaskInfo();
+        closeIsOpenTask();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [modalRef]);
 
   const handleCategoryChange = (event) => {
     setSelectedCategoryId(event.target.value);
@@ -82,6 +118,7 @@ const Content = (props) => {
       }).then(response => {
         console.log(response.data)
         props.updateTasks()
+        closeIsOpenTaskInfo()
   
       })
     }
@@ -241,12 +278,16 @@ const Content = (props) => {
     })
   }
 
+  const handlePriorityChange = (e) => {
+    setTaskPriority(parseInt(e.target.value, 10));
+  };
+
 
 
   return(
     <div className = {s.root}>
       {isModalOpen&& (
-        <div className={s.modal}>
+        <div className={s.modal} ref={modalRef}>
           <div className={s.modalcontent}>
             <img classNane={s.modalcontent_image} src={Kirillloh}></img>
             <p>КИРИЛЛ ЛОХ</p>
@@ -256,12 +297,12 @@ const Content = (props) => {
       )}
 
       {isOpenTaskInfo && (
-        <div className={s.modal}>
+        <div className={s.modal} ref={modalRef}>
           <div className={s.modalcontent}>
             <select style={
               { color: "#000" }
             } value={selectedCategoryId} onChange={handleCategoryChange}>
-              <option value="">Выберите категорию</option>
+              <option value="" disabled>Выберите категорию</option>
               {categories.map((category) => (
                 <option style={{ backgroundColor: category.color }} key={category.id} value={category.id}>
                   {category.name}
@@ -282,17 +323,24 @@ const Content = (props) => {
               placeholder="Описание"
             />
             <input className={s.categoryName}
+              style={
+                { color: "#000" }
+              }
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
               placeholder="Дата задачи"
             />
-            <input className={s.categoryName}
-              type="text"
+            <select
+              style={{ color: "#000" }}
               value={taskPriority}
-              onChange={(e) => setTaskPriority(parseInt(e.target.value))}
-              placeholder="Приоритет"
-            />
+              onChange={handlePriorityChange}
+            >
+              <option value="" disabled>Выберите приоритет</option>
+              <option value={1}>Высокий</option>
+              <option value={2}>Средний</option>
+              <option value={3}>Низкий</option>
+            </select>
 
             <button className={s.closeModalCategory} onClick={addTask}>
               Добавить задачу
@@ -304,12 +352,12 @@ const Content = (props) => {
 
 
       {isTaskOpen && (
-        <div className={s.modal}>
+        <div className={s.modal} ref={modalRef}>
           <div className={s.modalcontent}>
             <select style={
               {color: "#000"}
             } value={selectedCategoryId} onChange={handleCategoryChange}>
-              <option value="">Выберите категорию</option>
+              <option disabled value="">Выберите категорию</option>
               {categories.map((category) => (
                 <option style={{ backgroundColor: category.color }} key={category.id} value={category.id}>
                   {category.name}
@@ -332,29 +380,36 @@ const Content = (props) => {
             />
             <h2>Дата</h2>
             <input className={s.categoryName}
+              style={
+                { color: "#000" }
+              }
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
               placeholder="Дата задачи"
             />
             <h2>Приоритет</h2>
-            <input className={s.categoryName}
-              type="text"
+            <select
+              style={{ color: "#000" }}
               value={taskPriority}
-              onChange={(e) => setTaskPriority(parseInt(e.target.value))}
-              placeholder="Приоритет"
-            />
+              onChange={handlePriorityChange}
+            >
+              <option disabled value="">Выберите приоритет</option>
+              <option value={1}>Высокий</option>
+              <option value={2}>Средний</option>
+              <option value={3}>Низкий</option>
+            </select>
             <input className={s.categoryName}
               type="text"
               disabled
-              value={completed ? "Не активна" : "Активна"}
+              value={completed ? "Не выполнена" : "Выполнена"}
             />
 
             <button className={s.closeModalCategory} onClick={() => changeTask(taskId)}>
               Изменить задачу
             </button>
             <button className={s.closeModalCategory} onClick={() => changeTaskStatus(taskId)}>
-              Изменить статус
+              Изменить статус выполнения
             </button>
             <button className={s.closeModalCategory} onClick={() => deleteTask(taskId)}>
               удалить задачу
@@ -366,7 +421,7 @@ const Content = (props) => {
 
       
       {isModalCategoryOpen&& (
-        <div className={s.modal}>
+        <div className={s.modal} ref={modalRef}>
           <div className={s.modalcontent}>
             <input
               type="color"
@@ -389,7 +444,7 @@ const Content = (props) => {
       )}
 
       {isEditCategoryOpen && (
-        <div className={s.modal}>
+        <div className={s.modal} ref={modalRef}>
           <div className={s.modalcontent}>
             <input
               type="color"
@@ -411,7 +466,7 @@ const Content = (props) => {
         </div>
       )}
       
-      <div className={isModalOpen || isModalCategoryOpen || isEditCategoryOpen ? [s.wrapper, s.opacity].join(' ') : s.wrapper}>
+      <div className={isModalOpen || isModalCategoryOpen || isEditCategoryOpen || isTaskOpen || isOpenTaskInfo ? [s.wrapper, s.opacity].join(' ') : s.wrapper}>
         <Header getToken={props.getToken} name={props.userData.name} />
         <Main statusId={statusId} completed={completed} getTaskInfo={getTaskInfo} fetchCategories={fetchCategories} openTaskInfo={openTaskInfo} addTask={props.addTask} tasks = {props.tasks} openModalEditCategory={openModalEditCategory} updateCategories={props.updateCategories} openModalCategory={openModalCategory} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp}/>
         <Footer openModal={openModal} />

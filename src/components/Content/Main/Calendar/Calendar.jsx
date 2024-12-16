@@ -291,6 +291,7 @@ const Calendar = (props) => {
                             }
                             id={ e.task_id }
                             style={{
+                              cursor: 'pointer',
                               borderColor: eventStyles.borderColor,
                               backgroundColor: eventStyles.backgroundColor,
                               color: eventStyles.color,
