@@ -24,8 +24,20 @@ const Content = (props) => {
   const [categoryColor, setCategoryColor] = useState('#ffffff')
   const [categoryId, setcategoryId] = useState(0);
   const openModalCategory = () => setIsModalCategoryOpen(true);
-  const closeIsOpenTaskInfo = () => setOpenTaskInfo(false);
-  const closeIsOpenTask = () => setIsTaskOpen(false)
+  const closeIsOpenTaskInfo = () => {
+    setOpenTaskInfo(false)
+    setTaskName("");
+    setTaskDescription("");
+    setTaskPriority("");
+    setCategoryName("")
+  };
+  const closeIsOpenTask = () => {
+    setIsTaskOpen(false)
+    setTaskName("");
+    setTaskDescription("");
+    setTaskPriority("");
+    setCategoryName("")
+  }
   const [date, setDate] = useState("")
   const [taskId, setTaskId] = useState(0)
   const [taskName, setTaskName] = useState("")
@@ -181,7 +193,11 @@ const Content = (props) => {
         console.log(response.data)
         props.updateTasks()
         closeIsOpenTaskInfo()
-  
+        setDate(taskData.date);
+        setTaskName("");
+        setTaskDescription("");
+        setTaskPriority("");
+        setCategoryName("")
       })
     }
 
