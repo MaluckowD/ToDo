@@ -33,6 +33,7 @@ const Registration = (props) => {
         props.onDataUser({ email, password });
         props.saveToken(response.data.access_token);
         navigate("/Content")
+        window.location.reload()
 
       } else {
         console.error("Ошибка регистрации:", response.status, response.data);
