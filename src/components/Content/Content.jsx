@@ -30,12 +30,31 @@ const Content = (props) => {
   const [taskId, setTaskId] = useState(0)
   const [taskName, setTaskName] = useState("")
   const [taskDescription, setTaskDescription] = useState("")
-  const [completed, setCompleted] = useState(false)
   const [taskPriority, setTaskPriority] = useState(1)
   const [color, setColor] = useState('#ffffff');
   const [selectedCategoryName, setSelectedCategoryName] = useState('');
-  const [statusId, setStatusId] = useState(0)
   const navigate = useNavigate();
+
+  const getInitialStatusId = () => {
+    const storedStatusId = localStorage.getItem('statusId');
+    return storedStatusId ? parseInt(storedStatusId) : 0;
+  };
+
+  const getInitialCompleted = () => {
+    const storedCompleted = localStorage.getItem('completed');
+    return storedCompleted ? JSON.parse(storedCompleted) : false;
+  };
+
+  const [completed, setCompleted] = useState(getInitialCompleted());
+  const [statusId, setStatusId] = useState(getInitialStatusId());
+
+  useEffect(() => {
+    localStorage.setItem('statusId', statusId);
+  }, [statusId]);
+
+  useEffect(() => {
+    localStorage.setItem('completed', JSON.stringify(completed));
+  }, [completed]);
 
 
   const closeModalEditCat = () => {
