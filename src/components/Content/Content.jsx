@@ -37,6 +37,7 @@ const Content = (props) => {
   const [statusId, setStatusId] = useState(0)
   const navigate = useNavigate();
 
+
   const closeModalEditCat = () => {
     setIsEditModalCategoryOpen(false);
     setCategoryName("")

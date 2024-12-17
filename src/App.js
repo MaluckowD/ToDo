@@ -22,7 +22,9 @@ function App(props) {
     setuserDatafromRegistration(data);
     console.log(userDatafromRegistration)
   }
-
+  const getToken = () => localStorage.getItem('access_token');
+  const [token, setToken] = useState(() => getToken());
+  console.log("Token = ", token)
   const updateUserDataInApp = (updatedUserData) => {
     setUserData(updatedUserData);
   };
@@ -32,8 +34,6 @@ function App(props) {
     setToken(token); 
   };
 
-  const getToken = () => localStorage.getItem('access_token');
-  const [token, setToken] = useState(getToken());
   useEffect(() => {
     const fetchUserData = async () => {
       setIsLoading(true);
@@ -48,6 +48,7 @@ function App(props) {
         setTasks(response.data.tasks)
       } catch (error) {
         setError(error);
+        removeToken();
         console.error("Ошибка при загрузке данных пользователя:", error);
       } finally {
         setIsLoading(false);
@@ -107,26 +108,40 @@ function App(props) {
       console.error("Ошибка при обновлении задач:", error);
     }
   };
+  const removeToken = () => {
+    localStorage.removeItem('access_token');
+  }
   const AuthRedirect = () => {
     const navigate = useNavigate();
-    const token = getToken();
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-      if (token) {
-        navigate("/content");
-      } else {
-        navigate("/login");
+      const storedToken = getToken();
+      if (storedToken) {
+        setToken(storedToken);
       }
-    }, [navigate, token]);
+      setLoading(false);
+      console.log("AuthRedirect: token loaded", storedToken);
+    }, [setToken])
+
+    useEffect(() => {
+      if (!loading) {
+        console.log("AuthRedirect: navigating to", token ? "/content" : "/login");
+        if (token) {
+          navigate("/content");
+        } else {
+          navigate("/login");
+        }
+      }
+
+    }, [navigate, token, loading]);
 
     return null;
   };
 
 
 
-  const removeToken = () => {
-    localStorage.removeItem('access_token');
-  }
+  
   console.log(categories)
   useEffect(() => {
     console.log("Текущее состояние userDatafromRegistration:", userDatafromRegistration);
@@ -143,7 +158,7 @@ function App(props) {
             store={props.store}
             element={<Registration onDataUser={handleuserDatafromRegistration} saveToken={saveToken} />}
           />
-          <Route path="/content" element={<Content removeToken={removeToken}
+          <Route path="/content" element={<Content token={token} removeToken={removeToken}
             updateTasks={updateTasks} tasks={tasks} updateCategories={updateCategories} categories={categories}
             userData={userData} getToken={getToken}
             isLoading={isLoading} error={error}
