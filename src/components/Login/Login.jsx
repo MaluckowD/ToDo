@@ -18,7 +18,7 @@ const Login = (props) => {
         props.saveToken(response.data.access_token);
         navigate("/content")
         console.log(email, password)
-
+        window.location.reload()
       })
       .catch(function (error) {
         console.error("Ошибка регистрации:");

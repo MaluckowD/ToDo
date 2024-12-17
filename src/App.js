@@ -14,6 +14,12 @@ function App(props) {
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true); 
   const [error, setError] = useState(null);
+  //console.log("userDatafromRegistration",userDatafromRegistration)
+  //console.log("categories", categories)
+  //console.log("tasks", tasks)
+  //console.log("userData", userData)
+  //console.log("isLoading", isLoading)
+  //console.log("error", error)
   useEffect(() => {
     document.title = "ToDo";
   }, []); 
@@ -24,7 +30,6 @@ function App(props) {
   }
   const getToken = () => localStorage.getItem('access_token');
   const [token, setToken] = useState(() => getToken());
-  console.log("Token = ", token)
   const updateUserDataInApp = (updatedUserData) => {
     setUserData(updatedUserData);
   };
