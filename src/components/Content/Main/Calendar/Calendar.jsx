@@ -200,6 +200,12 @@ const Calendar = (props) => {
 
   };
 
+  const goToCurrentMonth = () => {
+    const currentDate = new Date();
+    setMonth(currentDate.getMonth());
+    setYear(currentDate.getFullYear());
+  };
+
   return (
     <>
       <div className="container mx-auto py-4 px-6">
@@ -213,7 +219,7 @@ const Calendar = (props) => {
               <span className="ml-1 text-lg text-gray-600 font-normal">
                 {year}
               </span>
-              <button className = {s.current_day}>Текущий день</button>
+              <button onClick={goToCurrentMonth} className = {s.current_day}>Текущий день</button>
             </div>
             <div className={s.click}>
               <button onClick={props.openTaskInfo} className={s.addtask}>Добавить задачу</button>
