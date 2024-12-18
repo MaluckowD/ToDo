@@ -1,3 +1,22 @@
+.current_day{
+  color: #000;
+  margin-left: 15px;
+  font-weight: 700;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+.addtask{
+  margin-left: 1100px;
+  color: #000;
+  margin-left: 15px;
+  font-weight: 700;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  margin-right: 10px;
+}
+.click{
+  display: flex;
+}
 
 .item span{
   color: #000;

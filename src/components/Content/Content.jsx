@@ -5,7 +5,7 @@ import s from "./Content.module.css"
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Kirillloh from "../../images/KirillLoh.jpg"
+import Kirillloh from "../../images/Кирилл2.jpg"
 import Ville from "../../images/Vinne.jpg"
 const Content = (props) => {
   const [redirectToLogin, setRedirectToLogin] = useState(false);
@@ -30,6 +30,7 @@ const Content = (props) => {
     setTaskDescription("");
     setTaskPriority("");
     setCategoryName("")
+    setDate("")
   };
   const closeIsOpenTask = () => {
     setIsTaskOpen(false)
@@ -37,7 +38,7 @@ const Content = (props) => {
     setTaskDescription("");
     setTaskPriority("");
     setSelectedCategoryId("")
-    /////////////////////////////
+    setDate("")
   }
   const [date, setDate] = useState("")
   const [taskId, setTaskId] = useState(0)
@@ -68,6 +69,12 @@ const Content = (props) => {
   useEffect(() => {
     localStorage.setItem('completed', JSON.stringify(completed));
   }, [completed]);
+
+  const handleTaskClick = (e) => {
+
+    getTaskInfo(e.task_id);
+
+  };
 
 
   const closeModalEditCat = () => {
@@ -329,7 +336,11 @@ const Content = (props) => {
       const newTasks = props.tasks.filter(task => task.id !== id);
       props.updateTasks()
       setIsTaskOpen(false)
-
+      setTaskName("");
+      setTaskDescription("");
+      setTaskPriority("");
+      setCategoryName("")
+      setDate("")
     })
   }
 
@@ -483,7 +494,7 @@ const Content = (props) => {
             <input className={s.categoryName}
               type="text"
               disabled
-              value={completed ? "Не выполнена" : "Выполнена"}
+              value={completed ? "Выполнена" : "Не выполнена"}
             />
 
             <button className={s.closeModalCategory} onClick={() => changeTask(taskId)}>

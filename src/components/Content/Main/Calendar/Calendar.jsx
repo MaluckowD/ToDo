@@ -73,6 +73,12 @@ const Calendar = (props) => {
     label: `Theme ${index + 1}`, // Простой лейбл, вы можете сделать его более описательным
   }));
 
+  const handleTaskClick = (e) => {
+
+    props.getTaskInfo(e.task_id);
+
+  };
+
   // Функция для обработки нового данных
   const handleNewData = async (incomingData) => {
     if (!Array.isArray(incomingData)) {
@@ -207,27 +213,31 @@ const Calendar = (props) => {
               <span className="ml-1 text-lg text-gray-600 font-normal">
                 {year}
               </span>
+              <button className = {s.current_day}>Текущий день</button>
             </div>
-            <div className="border rounded-lg px-1 pt-1">
-              {/* Previous Month Button */}
-              <button
-                type="button"
-                onClick={() => prevMonth()}
-                disabled={false}
-                className={btnClass(0)}
-              >
-                <ArrowLeftIcon className="h-6 w-6 text-gray-500 inline-flex leading-none" />
-              </button>
-              <div className="border-r inline-flex h-6" />
-              {/* Next Month Button */}
-              <button
-                type="button"
-                onClick={() => nextMonth()}
-                disabled = {false}
-                className={btnClass(11)}
-              >
-                <ArrowRightIcon className="h-6 w-6 text-gray-500 inline-flex leading-none" />
-              </button>
+            <div className={s.click}>
+              <button onClick={props.openTaskInfo} className={s.addtask}>Добавить задачу</button>
+              <div className="border rounded-lg px-1 pt-1">
+                {/* Previous Month Button */}
+                <button
+                  type="button"
+                  onClick={() => prevMonth()}
+                  disabled={false}
+                  className={btnClass(0)}
+                >
+                  <ArrowLeftIcon className="h-6 w-6 text-gray-500 inline-flex leading-none" />
+                </button>
+                <div className="border-r inline-flex h-6" />
+                {/* Next Month Button */}
+                <button
+                  type="button"
+                  onClick={() => nextMonth()}
+                  disabled={false}
+                  className={btnClass(11)}
+                >
+                  <ArrowRightIcon className="h-6 w-6 text-gray-500 inline-flex leading-none" />
+                </button>
+              </div>
             </div>
           </div>
           <div className="-mx-1 -mb-1">
