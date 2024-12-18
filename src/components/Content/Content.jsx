@@ -36,7 +36,8 @@ const Content = (props) => {
     setTaskName("");
     setTaskDescription("");
     setTaskPriority("");
-    setCategoryName("")
+    setSelectedCategoryId("")
+    /////////////////////////////
   }
   const [date, setDate] = useState("")
   const [taskId, setTaskId] = useState(0)
