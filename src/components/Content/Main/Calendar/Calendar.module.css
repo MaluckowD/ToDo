@@ -66,6 +66,7 @@
 
 .content {
   display: flex;
+  justify-content: space-between;
 }
 
 .month input{
@@ -92,6 +93,26 @@
   .adaptive{
     padding-top: 1rem;
   }
+  .addtask, .current_day{
+    font-size: 1.0rem;
+  }
+  .container_adaptive {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 380px) {
+  
+  .addtask,
+  .current_day {
+    font-size: 0.9rem;
+  }
+
+  .content{
+    flex-direction: column;
+    text-align: center;
+  }
+
 }
 
 
