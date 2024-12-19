@@ -83,6 +83,9 @@
   cursor: pointer;
 }
 .adaptive {
+  padding-bottom: 1rem;
+}
+.adaptive {
   padding-top: 0.5rem;
 }
 @media (max-width: 770px) {

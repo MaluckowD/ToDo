@@ -5,6 +5,7 @@ import classNames from "./helper";
 import "./style.css"
 import CalendarMonth from './Calendarmonth';
 import axios from 'axios';
+import { useRef } from 'react';
 
 const monthNames = [
   "January",
@@ -31,12 +32,36 @@ const Calendar = (props) => {
   const [year, setYear] = useState(date.getFullYear());
   const [numOfDays, setNumOfDays] = useState([]);
   const [emptyDays, setEmptyDays] = useState([]);
-
+  const cellRefs = useRef([]);
   const isToday = (date) => {
     const today = new Date();
     const d = new Date(year, month, date);
     return today.toDateString() === d.toDateString();
   };
+  useEffect(() => {
+    // Устанавливаем высоту ячеек после того, как отрендерится календарь
+    if (cellRefs.current) {
+      adjustCellHeights();
+    }
+
+  }, [events, month]); // Зависимость от events для обновления высоты при изменении списка задач
+
+  const adjustCellHeights = () => {
+    cellRefs.current.forEach((cell, index) => {
+      if (cell) {
+        const contentDiv = cell.querySelector('.tasks-container');
+        if (contentDiv) {
+          if (contentDiv.scrollHeight > 0) {
+            cell.style.height = `${32 + (contentDiv.scrollHeight)}px`;
+          } else if (cell.style.height !== '8rem') {
+            cell.style.height = `8rem`; // Default height when scroll isn't active
+          }
+        }
+
+
+      }
+    })
+  }
 
 
 
@@ -269,15 +294,16 @@ const Calendar = (props) => {
               {emptyDays.map((emptyDay) => (
                 <div
                   key={emptyDay}
-                  className="text-center border-r border-b px-4 pt-2 h-32 w-[14.28%]"
+                  className="text-center border-r border-b px-4 pt-2 min-h-[8rem] w-[14.28%]"
                 />
               ))}
               {numOfDays.map((date, index) => (
                 <div
+                  ref={el => cellRefs.current[index] = el}
                   onClick={props.openTaskInfo}
                   key={index}
                   data-date={`${year}-${month + 1}-${date}`}
-                  className={["px-4 pt-2 border-r border-b relative h-32 w-[14.28%]", s.adaptive].join(" ")}
+                  className={["px-4 pt-2 border-r border-b relative w-[14.28%] min-h-[8rem]", s.adaptive].join(" ")}
                 >
                   <div
                     className={classNames(
@@ -290,7 +316,7 @@ const Calendar = (props) => {
                     {date}
                   </div>
 
-                  <div className="overflow-y-auto mt-1 h-20">
+                  <div className=" mt-1">
                     {events
                       .filter(
                         (e) =>
@@ -322,7 +348,7 @@ const Calendar = (props) => {
                               opacity: e.task_id === props.statusId && props.completed ? '50%' : '1'
                             }}
                           >
-                            <p className="text-sm truncate leading-tight">
+                            <p style={{ wordWrap: 'break-word', whiteSpace: 'normal' }} className="text-sm truncate leading-tight">
                               {e.event_title}
                             </p>
                           </div>

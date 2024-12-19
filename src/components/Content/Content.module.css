@@ -2,6 +2,8 @@
 .wrapper{
   background-color: #D4FCEE;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 .opacity{
   opacity: 0.5;

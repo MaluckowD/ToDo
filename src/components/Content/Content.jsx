@@ -206,6 +206,7 @@ const Content = (props) => {
         setTaskDescription("");
         setTaskPriority("");
         setCategoryName("")
+        setSelectedCategoryId("")
       })
     }
 

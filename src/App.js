@@ -153,7 +153,7 @@ function App(props) {
           <Route path="/" element={<AuthRedirect />} />
           <Route path="/login" element={<Login saveToken={saveToken} updateUserDataInApp={updateUserDataInApp} />} />
           <Route
-            path="/registration"ы
+            path="/registration"
             store={props.store}
             element={<Registration onDataUser={handleuserDatafromRegistration} saveToken={saveToken} />}
           />
