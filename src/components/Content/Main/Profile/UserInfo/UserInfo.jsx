@@ -65,16 +65,15 @@ const UserInfo = (props) => {
           />
         </div>
         <div className={s.email}>
-          <input disabled value={props.userData.email} type="text" placeholder="Ваша эл.почта" />
+          <input style = {{opacity: "0.5"}} disabled value={props.userData.email} type="text" placeholder="Ваша эл.почта" />
         </div>
         <div className={s.user_sex}>
-          <input 
-            value={gender} 
-            type="text" 
-            placeholder="Пол"
-            onChange={(e) => setGender(e.target.value)}
-          />
-          <input disabled value={props.userData.short_name} type="text" placeholder="Псевдоним" className={s.user_sex_item} />
+          <select className = {s.user_style} value={gender}
+            onChange={(e) => setGender(e.target.value)}>
+            <option value="male">Мужской</option>
+            <option value="female">Женский</option>
+          </select>
+          <input style={{ opacity: "0.5" }} disabled value={props.userData.short_name} type="text" placeholder="Псевдоним" className={s.user_sex_item} />
         </div>
         <div className={s.save_change}>
           <button onClick = {UpdateUserInfo}>Сохранить изменения</button>
