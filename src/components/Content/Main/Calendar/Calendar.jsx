@@ -21,7 +21,7 @@ const monthNames = [
   "December"
 ];
 
-const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 const Calendar = (props) => {
   const token = props.getToken()
@@ -45,8 +45,14 @@ const Calendar = (props) => {
     let daysInMonth = new Date(year, month + 1, 0).getDate();
     let dayOfWeek = new Date(year, month).getDay();
     let emptyDaysArray = [];
-    for (i = 1; i <= dayOfWeek; i++) {
-      emptyDaysArray.push(i);
+    if (dayOfWeek === 0) {
+      for (i = 1; i <= 6; i++) {
+        emptyDaysArray.push(i);
+      }
+    } else {
+      for (i = 1; i <= dayOfWeek - 1; i++) {
+        emptyDaysArray.push(i);
+      }
     }
     let daysArray = [];
     for (i = 1; i <= daysInMonth; i++) {
@@ -130,7 +136,7 @@ const Calendar = (props) => {
   useEffect(() => {
     handleNewData(props.tasks);
     console.log(props.tasks)
-    
+
   }, [props.tasks]); // Зависимость от props.tasks
 
   useEffect(() => {
@@ -214,12 +220,12 @@ const Calendar = (props) => {
             <div className={s.content}>
               <span className="text-lg font-bold text-gray-800">
                 {monthNames[month]}
-                <CalendarMonth updateMonthAndYear={updateMonthYear} year={year}/>
+                <CalendarMonth updateMonthAndYear={updateMonthYear} year={year} />
               </span>
               <span className="ml-1 text-lg text-gray-600 font-normal">
                 {year}
               </span>
-              <button onClick={goToCurrentMonth} className = {s.current_day}>Текущий день</button>
+              <button onClick={goToCurrentMonth} className={s.current_day}>Текущий день</button>
             </div>
             <div className={s.click}>
               <button onClick={props.openTaskInfo} className={s.addtask}>Добавить задачу</button>
@@ -253,7 +259,7 @@ const Calendar = (props) => {
             >
               {days.map((day) => (
                 <div key={day} className={"px-2 py-2 w-[14.28%]"}>
-                  <div  className="text-gray-600 text-sm uppercase tracking-wide font-bold text-center">
+                  <div className="text-gray-600 text-sm uppercase tracking-wide font-bold text-center">
                     {day}
                   </div>
                 </div>
@@ -268,7 +274,7 @@ const Calendar = (props) => {
               ))}
               {numOfDays.map((date, index) => (
                 <div
-                  onClick = { props.openTaskInfo}
+                  onClick={props.openTaskInfo}
                   key={index}
                   data-date={`${year}-${month + 1}-${date}`}
                   className={["px-4 pt-2 border-r border-b relative h-32 w-[14.28%]", s.adaptive].join(" ")}
@@ -305,7 +311,7 @@ const Calendar = (props) => {
                                 props.getTaskInfo(e.task_id);
                               }
                             }
-                            id={ e.task_id }
+                            id={e.task_id}
                             style={{
                               cursor: 'pointer',
                               borderColor: eventStyles.borderColor,
@@ -316,7 +322,7 @@ const Calendar = (props) => {
                               opacity: e.task_id === props.statusId && props.completed ? '50%' : '1'
                             }}
                           >
-                            <p className="text-sm truncate leading-tight"> 
+                            <p className="text-sm truncate leading-tight">
                               {e.event_title}
                             </p>
                           </div>
