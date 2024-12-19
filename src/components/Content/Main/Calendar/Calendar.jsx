@@ -250,7 +250,7 @@ const Calendar = (props) => {
               <span className="ml-1 text-lg text-gray-600 font-normal">
                 {year}
               </span>
-              <button onClick={goToCurrentMonth} className={s.current_day}>Текущий день</button>
+              <button onClick={goToCurrentMonth} className={s.current_day}>Текущий месяц</button>
             </div>
             <div className={s.click}>
               <button onClick={props.openTaskInfo} className={s.addtask}>Добавить задачу</button>
