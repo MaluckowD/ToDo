@@ -1,18 +1,90 @@
-.current_day{
-  color: #000;
-  margin-left: 15px;
-  font-weight: 700;
-  font-size: 1.125rem;
-  line-height: 1.75rem;
-}
-.addtask{
-  margin-left: 1100px;
+.current_day {
   color: #000;
   margin-left: 15px;
   font-weight: 700;
   font-size: 1.125rem;
   line-height: 1.75rem;
   margin-right: 10px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  margin-right: 15px;
+  z-index: 1;
+  padding-left: 15px;
+  padding-right: 15px;
+  transition: background-color 0.3s ease, padding 0.3s ease;
+  background-color: transparent;
+  width: 180px;
+  height: 39px;
+}
+
+.current_day::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.1);
+  transition: width 0.3s ease, height 0.3s ease;
+  z-index: -1;
+  border-radius: 20px;
+}
+
+.current_day:hover::before {
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 20px;
+  width: 150%;
+
+  height: 150%;
+}
+.addtask {
+  color: #000;
+  margin-left: 15px;
+  font-weight: 700;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  margin-right: 10px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  margin-right: 15px;
+  z-index: 1;
+  padding-left: 15px;
+  padding-right: 15px;
+  transition: background-color 0.3s ease, padding 0.3s ease;
+  background-color: transparent;
+}
+
+.addtask::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.1);
+  transition: width 0.3s ease, height 0.3s ease;
+  z-index: -1;
+  border-radius: 20px;
+}
+
+.addtask:hover::before {
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 20px;
+  width: 150%;
+
+  height: 150%;
+}
+
+.addtask:hover {
+  background-color: #e0e0e0;
 }
 .click{
   display: flex;
@@ -67,6 +139,7 @@
 .content {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .month input{
