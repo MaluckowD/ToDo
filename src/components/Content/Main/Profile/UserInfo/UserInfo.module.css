@@ -116,6 +116,12 @@ input[type="text"] {
   background-color: #CB1C1C;
   color: #fff;
   margin-bottom: 10px;
+  transition: filter 0.3s ease;
+}
+
+.save_change button:hover {
+  filter: brightness(1.2);
+  /* Немного светлее */
 }
 
 @media (max-width: 1200px) {

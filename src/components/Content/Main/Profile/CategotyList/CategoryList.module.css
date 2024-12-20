@@ -24,6 +24,11 @@
   background-color: #CB1C1C;
   color: #fff;
   margin-bottom: 20px;
+  transition: filter 0.3s ease;
+}
+.btn button:hover {
+  filter: brightness(1.2);
+  /* Немного светлее */
 }
 .list{
   background-color: #D9D9D9;

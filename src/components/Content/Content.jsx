@@ -388,10 +388,10 @@ const Content = (props) => {
   return(
     <div className = {s.root}>
       {isModalOpen&& (
-        <div className={s.modal} ref={modalRef}>
+        <div className={[s.modal, s.Kirillloh].join(" ")} ref={modalRef}>
           <div className={s.modalcontent}>
             <img classNane={s.modalcontent_image} src={Kirillloh}></img>
-            <p>КИРИЛЛ ЛОХ</p>
+            <p style = {{color: "#000"}}>КИРИЛЛ ЛОХ</p>
             <button className={s.close} onClick={closeModal}>Выйти</button>
           </div>
         </div>
@@ -527,20 +527,23 @@ const Content = (props) => {
 
       
       {isModalCategoryOpen&& (
-        <div className={s.modal} ref={modalRef}>
+        <div className={[s.modal, s.modal_categoryAdd].join(" ")} ref={modalRef}>
           <div className={s.modalcontent}>
+
+            
+            <input className= {[s.categoryName, s.categoryNamemodificate].join(" ")}
+              type="text"
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
+              placeholder="Введите название категории" 
+            />
+
+            <h2 className={s.description_color}>Выберите цвет</h2>
             <input
               type="color"
               id="colorPicker"
               value={color}
               onChange={handleColorChange}
-            />
-            
-            <input className= {s.categoryName}
-              type="text"
-              value={categoryName}
-              onChange={(e) => setCategoryName(e.target.value)}
-              placeholder="Введите название категории" 
             />
 
             <button className={s.closeModalCategory} onClick={closeModalCategory}>Добавить категорию</button>
@@ -550,19 +553,22 @@ const Content = (props) => {
       )}
 
       {isEditCategoryOpen && (
-        <div className={s.modal} ref={modalRef}>
+        <div className={[s.modal, s.modal_categoryAdd].join(" ")} ref={modalRef}>
           <div className={s.modalcontent}>
+            
+            <input className={[s.categoryName, s.categoryNamemodificate].join(" ")}
+              type="text"
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
+              placeholder="Введите название категории"
+            />
+
+            <h2 className={s.description_color}>Выберите цвет</h2>
             <input
               type="color"
               id="colorPicker"
               value={color}
               onChange={handleColorChange}
-            />
-            <input className={s.categoryName}
-              type="text"
-              value={categoryName}
-              onChange={(e) => setCategoryName(e.target.value)}
-              placeholder="Введите название категории"
             />
 
             
