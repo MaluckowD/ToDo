@@ -400,6 +400,32 @@ const Content = (props) => {
       {isOpenTaskInfo && (
         <div className={s.modal} ref={modalRef}>
           <div className={s.modalcontent}>
+
+            <input className={s.categoryName}
+              type="text"
+              value={taskName}
+              onChange={(e) => setTaskName(e.target.value)}
+              placeholder="Введите название для задачи"
+            />
+
+            <textarea className={s.taskDescription}
+              type="text"
+              value={taskDescription}
+              onChange={(e) => setTaskDescription(e.target.value)}
+              placeholder="Описание"
+            />
+          
+            <input className={s.categoryName}
+              style={
+                { color: "#000" }
+              }
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              placeholder="Дата задачи"
+            />
+            
+
             <select style={
               { color: "#000" }
             } value={selectedCategoryId} onChange={handleCategoryChange}>
@@ -411,27 +437,6 @@ const Content = (props) => {
               ))}
             </select>
 
-            <input className={s.categoryName}
-              type="text"
-              value={taskName}
-              onChange={(e) => setTaskName(e.target.value)}
-              placeholder="Введите название для задачи"
-            />
-            <input className={s.categoryName}
-              type="text"
-              value={taskDescription}
-              onChange={(e) => setTaskDescription(e.target.value)}
-              placeholder="Описание"
-            />
-            <input className={s.categoryName}
-              style={
-                { color: "#000" }
-              }
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              placeholder="Дата задачи"
-            />
             <select
               style={{ color: "#000" }}
               value={taskPriority}
