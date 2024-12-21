@@ -325,6 +325,7 @@ const Calendar = (props) => {
                       )
                       .map((e) => {
                         const eventStyles = eventClass(e.event_theme);
+                        const taskStatus = props.getTaskStatus(e.task_id);
                         return (
                           <div
                             key={e.event_title}
@@ -343,9 +344,9 @@ const Calendar = (props) => {
                               borderColor: eventStyles.borderColor,
                               backgroundColor: eventStyles.backgroundColor,
                               color: eventStyles.color,
-                              textDecoration: e.task_id === props.statusId && props.completed ? 'line-through' : 'none',
-                              textDecorationThickness: e.task_id === props.statusId && props.completed ? '2px' : '0',
-                              opacity: e.task_id === props.statusId && props.completed ? '50%' : '1'
+                              textDecoration: taskStatus.completed && taskStatus.statusId !== 0 ? 'line-through' : 'none',
+                              textDecorationThickness: taskStatus.completed && taskStatus.statusId !== 0 ? '2px' : '0',
+                              opacity: taskStatus.completed && taskStatus.statusId !== 0 ? '50%' : '1'
                             }}
                           >
                             <p style={{ wordWrap: 'break-word', whiteSpace: 'normal' }} className="text-sm truncate leading-tight">

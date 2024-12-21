@@ -2,7 +2,7 @@
 
 .main{
   max-width: 1200px;
-  margin: 0 auto;
+  margin: auto auto;
   flex-grow: 1;
   min-height: 100vh;
 }

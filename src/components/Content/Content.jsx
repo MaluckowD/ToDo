@@ -49,33 +49,35 @@ const Content = (props) => {
   const [selectedCategoryName, setSelectedCategoryName] = useState('');
   const navigate = useNavigate();
 
-  const getInitialStatusId = () => {
-    const storedStatusId = localStorage.getItem('statusId');
-    return storedStatusId ? parseInt(storedStatusId) : 0;
-  };
+  
+  const [completed, setCompleted] = useState("");
+  const [statusId, setStatusId] = useState("");
 
-  const getInitialCompleted = () => {
-    const storedCompleted = localStorage.getItem('completed');
+  const [taskStatuses, setTaskStatuses] = useState({});
+
+  const getInitialCompleted = (taskId) => {
+    const storedCompleted = localStorage.getItem(`completed_${taskId}`);
     return storedCompleted ? JSON.parse(storedCompleted) : false;
   };
 
-  const [completed, setCompleted] = useState(getInitialCompleted());
-  const [statusId, setStatusId] = useState(getInitialStatusId());
-
-  useEffect(() => {
-    localStorage.setItem('statusId', statusId);
-  }, [statusId]);
-
-  useEffect(() => {
-    localStorage.setItem('completed', JSON.stringify(completed));
-  }, [completed]);
-
-  const handleTaskClick = (e) => {
-
-    getTaskInfo(e.task_id);
-
+  const getInitialStatusId = (taskId) => {
+    const storedStatusId = localStorage.getItem(`statusId_${taskId}`);
+    return storedStatusId ? parseInt(storedStatusId) : 0;
   };
 
+  useEffect(() => {
+    if (props.tasks) {
+      const initialTaskStatuses = {};
+      props.tasks.forEach(task => {
+        initialTaskStatuses[task.id] = {
+          completed: getInitialCompleted(task.id),
+          statusId: getInitialStatusId(task.id),
+        }
+      });
+      setTaskStatuses(initialTaskStatuses)
+    }
+
+  }, [props.tasks])
 
   const closeModalEditCat = () => {
     setIsEditModalCategoryOpen(false);
@@ -353,7 +355,7 @@ const Content = (props) => {
     })
   }
 
-  const changeTaskStatus = (id) => {
+  const changeTaskStatus = async (id) => {
     const taskData = {
       name: taskName,
       description: taskDescription,
@@ -361,28 +363,44 @@ const Content = (props) => {
       category_id: parseInt(selectedCategoryId, 10),
       date: date
     }
-    axios.put(`https://api.energy-cerber.ru/tasks/${id}/change_status`, taskData, {
-      headers: {
-        Authorization: `Bearer ${token}`
+    try {
+      const response = await axios.put(`https://api.energy-cerber.ru/tasks/${id}/change_status`, taskData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(response.data);
+      const newTaskStatuses = { ...taskStatuses };
+      if (response.data.completed === true) {
+        newTaskStatuses[id] = {
+          completed: true,
+          statusId: id,
+        }
+        localStorage.setItem(`completed_${id}`, JSON.stringify(true));
+        localStorage.setItem(`statusId_${id}`, id);
+      } else {
+        newTaskStatuses[id] = {
+          completed: false,
+          statusId: id,
+        }
+        localStorage.setItem(`completed_${id}`, JSON.stringify(false));
+        localStorage.setItem(`statusId_${id}`, id);
       }
-    }).then(response => {
-      setStatusId(id)
-      console.log(response.data)
-      if (response.data.completed === true){
-        setCompleted(true)
-        props.updateTasks()
-      }
-      else{
-        setCompleted(false)
-        props.updateTasks()
-      }
-    })
-  }
+      setTaskStatuses(newTaskStatuses);
+      console.log(taskStatuses)
+      props.updateTasks();
+    } catch (error) {
+      console.error('Ошибка при изменении статуса задачи:', error);
+    }
+  };
 
   const handlePriorityChange = (e) => {
     setTaskPriority(parseInt(e.target.value, 10));
   };
 
+  const getTaskStatus = (taskId) => {
+    return taskStatuses[taskId] || { completed: false, statusId: 0 };
+  };
 
 
   return(
@@ -580,7 +598,7 @@ const Content = (props) => {
       
       <div className={isModalOpen || isModalCategoryOpen || isEditCategoryOpen || isTaskOpen || isOpenTaskInfo ? [s.wrapper, s.opacity].join(' ') : [s.wrapper]}>
         <Header removeToken={props.removeToken} getToken={props.getToken} name={props.userData.name} />
-        <Main removeToken={props.removeToken} statusId={statusId} completed={completed} getTaskInfo={getTaskInfo} fetchCategories={fetchCategories} openTaskInfo={openTaskInfo} addTask={props.addTask} tasks = {props.tasks} openModalEditCategory={openModalEditCategory} updateCategories={props.updateCategories} openModalCategory={openModalCategory} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp}/>
+        <Main getTaskStatus={getTaskStatus} taskStatuses={taskStatuses} removeToken={props.removeToken} statusId={statusId} completed={completed} getTaskInfo={getTaskInfo} fetchCategories={fetchCategories} openTaskInfo={openTaskInfo} addTask={props.addTask} tasks = {props.tasks} openModalEditCategory={openModalEditCategory} updateCategories={props.updateCategories} openModalCategory={openModalCategory} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp}/>
         <Footer openModal={openModal} />
       </div>
     </div>
