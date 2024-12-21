@@ -50,8 +50,23 @@ const Content = (props) => {
   const navigate = useNavigate();
 
   
-  const [completed, setCompleted] = useState("");
-  const [statusId, setStatusId] = useState("");
+  const getInitialStatusId1 = () => {
+    const storedStatusId = localStorage.getItem('statusId');
+    return storedStatusId ? parseInt(storedStatusId) : 0;
+  };
+  const getInitialCompleted1 = () => {
+    const storedCompleted = localStorage.getItem('completed');
+    return storedCompleted ? JSON.parse(storedCompleted) : false;
+  };
+  const [completed, setCompleted] = useState(getInitialCompleted1());
+  const [statusId, setStatusId] = useState(getInitialStatusId1());
+  useEffect(() => {
+    localStorage.setItem('statusId', statusId);
+  }, [statusId]);
+  useEffect(() => {
+    localStorage.setItem('completed', JSON.stringify(completed));
+  }, [completed]);
+
 
   const [taskStatuses, setTaskStatuses] = useState({});
 
@@ -372,6 +387,7 @@ const Content = (props) => {
       console.log(response.data);
       const newTaskStatuses = { ...taskStatuses };
       if (response.data.completed === true) {
+        setCompleted(true)
         newTaskStatuses[id] = {
           completed: true,
           statusId: id,
@@ -379,6 +395,7 @@ const Content = (props) => {
         localStorage.setItem(`completed_${id}`, JSON.stringify(true));
         localStorage.setItem(`statusId_${id}`, id);
       } else {
+        setCompleted(false)
         newTaskStatuses[id] = {
           completed: false,
           statusId: id,
