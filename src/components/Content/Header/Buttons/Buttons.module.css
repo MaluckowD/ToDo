@@ -25,6 +25,19 @@ a {
   filter: brightness(1.2);
 }
 
+.link_main,
+.exit {
+  transition: background-color 0.3s ease, color 0.3s ease;
+  /* Добавляем плавный переход */
+}
+.link_main:hover{
+  color: #D9A108;
+}
+
+.exit:hover {
+  filter: brightness(1.2);
+}
+
 @media (max-width: 700px) {
   .exit {
     width: 100px;
