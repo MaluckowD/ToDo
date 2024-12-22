@@ -247,14 +247,14 @@ const Calendar = (props) => {
                 {monthNames[month]}
                 <CalendarMonth updateMonthAndYear={updateMonthYear} year={year} />
               </span>
-              <span className="ml-1 text-lg text-gray-600 font-normal">
+              <span className={["ml-1 text-lg text-gray-600 font-normal",s.year].join(" ")}>
                 {year}
               </span>
               <button onClick={goToCurrentMonth} className={s.current_day}>Текущий месяц</button>
             </div>
             <div className={s.click}>
               <button onClick={props.openTaskInfo} className={s.addtask}>Добавить задачу</button>
-              <div className="border rounded-lg px-1 pt-1">
+              <div className={["border rounded-lg px-1 pt-1",s.arrow].join(" ")}>
                 {/* Previous Month Button */}
                 <button
                   type="button"

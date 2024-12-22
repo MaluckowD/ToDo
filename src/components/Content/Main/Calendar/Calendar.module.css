@@ -171,6 +171,31 @@
   }
   .container_adaptive {
     flex-direction: column;
+    margin: 0 auto;
+    padding-left: 1.5rem;
+  }
+}
+
+@media (max-width: 450px) {
+  
+
+  .container_adaptive {
+    flex-direction: column;
+    width: 300px;
+    margin: 0 auto;
+  }
+  .click{
+    text-align: center;
+    flex-direction: column;
+  }
+  .content{
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .arrow{
+    width: 80px;
+    margin: 0 auto;
   }
 }
 
@@ -181,9 +206,32 @@
     font-size: 0.9rem;
   }
 
-  .content{
+  .container_adaptive{
     flex-direction: column;
     text-align: center;
+    width: 250px;
+  }
+
+}
+
+@media (max-width: 320px) {
+
+
+  .year{
+    font-size: 15px;
+  }
+
+}
+
+@media (max-width: 300px) {
+
+  .addtask,
+  .current_day {
+    font-size: 0.9rem;
+  }
+
+  .container_adaptive {
+    width: 200px;
   }
 
 }
