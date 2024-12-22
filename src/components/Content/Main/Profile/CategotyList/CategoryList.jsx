@@ -28,7 +28,8 @@ const CategoryList = (props) => {
         <div className={s.list_items}>
           {props.categories.map( (item) => (
             <div className={s.list_item}>
-              <textarea disabled style={{ backgroundColor: item.color }} value = {item.name}/>
+              <textarea 
+              disabled style={{ backgroundColor: item.color, minHeight: "30px" }} value = {item.name}/>
               <img onClick={() => props.openModalEditCategory(item.id)} src={image} />
               <img onClick={() => deleteCategory(item.id)} src={close} />
             </div>

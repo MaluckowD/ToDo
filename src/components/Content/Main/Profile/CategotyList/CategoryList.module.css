@@ -1,18 +1,14 @@
 .list_item textarea{
   display: inline-block;
-  resize: vertical;
   white-space: pre-wrap;
   overflow-wrap: break-word;
   resize: none;
   overflow-y: auto;
-  height: 55px;
 }
 
 .list_item::-webkit-scrollbar {
   width: 0px;
-  /* Ширина вертикального скроллбара */
   height: 0px;
-  /* Высота горизонтального скроллбара */
 }
 .list_item textarea{
   text-align: center;
