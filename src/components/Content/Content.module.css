@@ -145,6 +145,13 @@ input[type="date"]:hover{
   filter: brightness(1.2);
   /* Немного светлее */
 }
+.taskinfo{
+  -webkit-appearance: none;
+  /* Для Safari и Chrome */
+  -moz-appearance: none;
+  /* Для Firefox */
+  appearance: none;
+}
 
 .modal {
   position: fixed;
@@ -224,4 +231,21 @@ input[type = "color"]{
 .Kirillloh{
   width: 400px;
   height: 370px;
+}
+
+.taskdate {
+  text-align: center;
+  padding: 0;
+  background-image: none;
+  transition: none;
+}
+.taskdate:hover {
+  filter: none;
+}
+.taskdate::-webkit-calendar-picker-indicator {
+  display: none;
+}
+
+.editTask{
+  height: 560px;
 }

@@ -531,17 +531,6 @@ const Content = (props) => {
       {isTaskInfoOpen && (
         <div className={s.modal} ref={modalRef}>
           <div className={s.modalcontent}>
-            <select disabled style={
-              { color: "#000" }
-            } value={selectedCategoryId} onChange={handleCategoryChange}>
-              <option disabled value="">Выберите категорию</option>
-              {categories.map((category) => (
-                <option style={{ backgroundColor: category.color }} key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
-            <h2>Название задачи</h2>
             <input className={s.categoryName}
               disabled
               type="text"
@@ -549,16 +538,14 @@ const Content = (props) => {
               onChange={(e) => setTaskName(e.target.value)}
               placeholder="Введите название для задачи"
             />
-            <h2>Описание</h2>
-            <input className={s.categoryName}
+            <textarea className={s.taskDescription}
               disabled
               type="text"
               value={taskDescription}
               onChange={(e) => setTaskDescription(e.target.value)}
               placeholder="Описание"
             />
-            <h2>Дата</h2>
-            <input className={s.categoryName}
+            <input className={[s.categoryName, s.taskdate].join(" ")}
               disabled
               style={
                 { color: "#000" }
@@ -568,8 +555,18 @@ const Content = (props) => {
               onChange={(e) => setDate(e.target.value)}
               placeholder="Дата задачи"
             />
-            <h2>Приоритет</h2>
+            <select className={s.taskinfo} disabled style={
+              { color: "#000" }
+            } value={selectedCategoryId} onChange={handleCategoryChange}>
+              <option disabled value="">Выберите категорию</option>
+              {categories.map((category) => (
+                <option style={{ backgroundColor: category.color }} key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
             <select disabled
+              className={s.taskinfo}
               style={{ color: "#000" }}
               value={taskPriority}
               onChange={handlePriorityChange}
@@ -580,6 +577,7 @@ const Content = (props) => {
               <option value={3}>Низкий</option>
             </select>
             <input className={s.categoryName}
+              style={{ textAlign: "center" }}
               type="text"
               disabled
               value={completed ? "Выполнена" : "Не выполнена"}
@@ -591,8 +589,30 @@ const Content = (props) => {
 
 
       {isTaskUpdateOpen && (
-        <div className={s.modal} ref={modalRef}>
+        <div className={[s.modal,s.editTask].join(" ")} ref={modalRef}>
           <div className={s.modalcontent}>
+            
+            <input className={s.categoryName}
+              type="text"
+              value={taskName}
+              onChange={(e) => setTaskName(e.target.value)}
+              placeholder="Введите название для задачи"
+            />
+            <textarea className={s.taskDescription}
+              type="text"
+              value={taskDescription}
+              onChange={(e) => setTaskDescription(e.target.value)}
+              placeholder="Описание"
+            />
+            <input className={s.categoryName}
+              style={
+                { color: "#000" }
+              }
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              placeholder="Дата задачи"
+            />
             <select style={
               { color: "#000" }
             } value={selectedCategoryId} onChange={handleCategoryChange}>
@@ -603,31 +623,6 @@ const Content = (props) => {
                 </option>
               ))}
             </select>
-            <h2>Название задачи</h2>
-            <input className={s.categoryName}
-              type="text"
-              value={taskName}
-              onChange={(e) => setTaskName(e.target.value)}
-              placeholder="Введите название для задачи"
-            />
-            <h2>Описание</h2>
-            <input className={s.categoryName}
-              type="text"
-              value={taskDescription}
-              onChange={(e) => setTaskDescription(e.target.value)}
-              placeholder="Описание"
-            />
-            <h2>Дата</h2>
-            <input className={s.categoryName}
-              style={
-                { color: "#000" }
-              }
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              placeholder="Дата задачи"
-            />
-            <h2>Приоритет</h2>
             <select
               style={{ color: "#000" }}
               value={taskPriority}
@@ -639,6 +634,7 @@ const Content = (props) => {
               <option value={3}>Низкий</option>
             </select>
             <input className={s.categoryName}
+              style={{ textAlign: "center" }}
               type="text"
               disabled
               value={completed ? "Выполнена" : "Не выполнена"}
