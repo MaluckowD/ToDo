@@ -17,6 +17,19 @@ const Content = (props) => {
   const [isEditCategoryOpen, setIsEditModalCategoryOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isTaskOpen, setIsTaskOpen] = useState(false);
+  const [isTaskUpdateOpen, setIsTaskUpdateOpen] = useState(false);
+  const [isTaskInfoOpen, setisTaskInfoOpen] = useState(false);
+  const TaskInfoOpen = () => setisTaskInfoOpen(true)
+  const closeTaskInfoOpen = () => setisTaskInfoOpen(false)
+
+  const TaskUpdateOpen = () => setIsTaskUpdateOpen(true)
+  const closeTaskUpdateOpen = () => setIsTaskUpdateOpen(false)
+
+  const CloseTaskUpdateOpen = () => {
+    closeTaskUpdateOpen()
+    TaskInfoOpen()
+  }
+
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const closeModalCat = () => setIsModalCategoryOpen(false);
@@ -179,6 +192,8 @@ const Content = (props) => {
         closeModalEditCat();
         closeIsOpenTaskInfo();
         closeIsOpenTask();
+        closeTaskInfoOpen()
+        closeTaskUpdateOpen()
       }
     };
 
@@ -197,6 +212,8 @@ const Content = (props) => {
         closeModalEditCat();
         closeIsOpenTaskInfo();
         closeIsOpenTask();
+        closeTaskInfoOpen()
+        closeTaskUpdateOpen()
       }
     };
 
@@ -350,6 +367,8 @@ const Content = (props) => {
     }).then(response => {
       console.log(response.data)
       props.updateTasks()
+      closeTaskUpdateOpen()
+      TaskInfoOpen()
     })
   }
   const deleteTask = (id) => {
@@ -493,10 +512,89 @@ const Content = (props) => {
 
 
       {isTaskOpen && (
+        <div className={[s.modal, s.modal_categoryAdd].join(" ")} ref={modalRef}>
+          <div className={s.modalcontent}>
+            <button className={s.closeModalCategory} onClick={TaskInfoOpen}>
+              Подробная информация
+            </button>
+            <button className={s.closeModalCategory} onClick={TaskUpdateOpen}>
+              Редактировать задачу
+            </button>
+            <button className={s.closeModalCategory} onClick={() => changeTaskStatus(taskId)}>
+              Изменить статус
+            </button>
+            <button className={s.closeModalCategory} onClick={closeIsOpenTask}>Выйти</button>
+          </div>
+        </div>
+      )}
+
+      {isTaskInfoOpen && (
+        <div className={s.modal} ref={modalRef}>
+          <div className={s.modalcontent}>
+            <select disabled style={
+              { color: "#000" }
+            } value={selectedCategoryId} onChange={handleCategoryChange}>
+              <option disabled value="">Выберите категорию</option>
+              {categories.map((category) => (
+                <option style={{ backgroundColor: category.color }} key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+            <h2>Название задачи</h2>
+            <input className={s.categoryName}
+              disabled
+              type="text"
+              value={taskName}
+              onChange={(e) => setTaskName(e.target.value)}
+              placeholder="Введите название для задачи"
+            />
+            <h2>Описание</h2>
+            <input className={s.categoryName}
+              disabled
+              type="text"
+              value={taskDescription}
+              onChange={(e) => setTaskDescription(e.target.value)}
+              placeholder="Описание"
+            />
+            <h2>Дата</h2>
+            <input className={s.categoryName}
+              disabled
+              style={
+                { color: "#000" }
+              }
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              placeholder="Дата задачи"
+            />
+            <h2>Приоритет</h2>
+            <select disabled
+              style={{ color: "#000" }}
+              value={taskPriority}
+              onChange={handlePriorityChange}
+            >
+              <option disabled value="">Выберите приоритет</option>
+              <option value={1}>Высокий</option>
+              <option value={2}>Средний</option>
+              <option value={3}>Низкий</option>
+            </select>
+            <input className={s.categoryName}
+              type="text"
+              disabled
+              value={completed ? "Выполнена" : "Не выполнена"}
+            />
+            <button className={s.closeModalCategory} onClick={closeTaskInfoOpen}>Выйти</button>
+          </div>
+        </div>
+      )}
+
+
+      {isTaskUpdateOpen && (
         <div className={s.modal} ref={modalRef}>
           <div className={s.modalcontent}>
             <select style={
-              {color: "#000"}
+              { color: "#000" }
             } value={selectedCategoryId} onChange={handleCategoryChange}>
               <option disabled value="">Выберите категорию</option>
               {categories.map((category) => (
@@ -545,17 +643,8 @@ const Content = (props) => {
               disabled
               value={completed ? "Выполнена" : "Не выполнена"}
             />
-
-            <button className={s.closeModalCategory} onClick={() => changeTask(taskId)}>
-              Изменить задачу
-            </button>
-            <button className={s.closeModalCategory} onClick={() => changeTaskStatus(taskId)}>
-              Изменить статус выполнения
-            </button>
-            <button className={s.closeModalCategory} onClick={() => deleteTask(taskId)}>
-              удалить задачу
-            </button>
-            <button className={s.closeModalCategory} onClick={closeIsOpenTask}>Выйти</button>
+            <button className={s.closeModalCategory} onClick={() => changeTask(taskId)}>Сохранить изменения</button>
+            <button className={s.closeModalCategory} onClick={CloseTaskUpdateOpen}>Отменить изменения</button>
           </div>
         </div>
       )}
