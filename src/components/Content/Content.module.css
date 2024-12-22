@@ -249,3 +249,32 @@ input[type = "color"]{
 .editTask{
   height: 560px;
 }
+
+
+@media (max-width: 520px) {
+  .modal {
+    width: 400px;
+  }
+}
+
+@media (max-width: 410px) {
+  .modal {
+    width: 350px;
+  }
+}
+
+@media (max-width: 360px) {
+  .modal {
+    width: 300px;
+  }
+  .categoryName,.taskDescription{
+    width:220px;
+  }
+}
+
+@media (max-width: 320px) {
+  .modal {
+    width: 270px;
+  }
+
+}

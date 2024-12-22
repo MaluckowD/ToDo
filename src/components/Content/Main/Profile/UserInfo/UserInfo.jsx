@@ -50,7 +50,8 @@ const UserInfo = (props) => {
       </div>
       <div className={s.user_data}>
         <div className={s.user_name}>
-          <input 
+          <input
+            className = {s.name_adaptive} 
             value={name} 
             type="text" 
             placeholder="Имя" 

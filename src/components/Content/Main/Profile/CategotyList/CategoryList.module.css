@@ -1,4 +1,20 @@
-.list_item input{
+.list_item textarea{
+  display: inline-block;
+  resize: vertical;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  resize: none;
+  overflow-y: auto;
+  height: 55px;
+}
+
+.list_item::-webkit-scrollbar {
+  width: 0px;
+  /* Ширина вертикального скроллбара */
+  height: 0px;
+  /* Высота горизонтального скроллбара */
+}
+.list_item textarea{
   text-align: center;
   font-weight: 500;
   font-size: 18px;
@@ -38,7 +54,7 @@
   height: 275px;
   border-radius: 10px;
 }
-.list input{
+.list textarea{
   background-color: #fff;
   border-radius: 10px;
   border: none;
@@ -78,6 +94,7 @@
     margin-top: 30px;
     margin: 0 auto;
     margin-bottom: 20px;
+    border-radius: 20px;
   }
   .list{
     margin-bottom: 30px;
@@ -96,7 +113,13 @@
     width: 240px;
     
   }
-  .list_item input{
+  .list_item{
+    word-wrap: break-word;
+    white-space: normal;
+  }
+  .list_item textarea{
+    height: 60px;
+    word-wrap: break-word;
     align-items: center;
     width: 120px;
     margin-left: 70px;
