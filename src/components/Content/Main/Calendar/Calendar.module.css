@@ -178,7 +178,9 @@
 
 @media (max-width: 450px) {
   
-
+  .day_container{
+    margin-left: 10px;
+  }
   .container_adaptive {
     flex-direction: column;
     width: 300px;
@@ -216,7 +218,9 @@
 
 @media (max-width: 320px) {
 
-
+  .day_container {
+      margin-left: 0px;
+    }
   .year{
     font-size: 15px;
   }

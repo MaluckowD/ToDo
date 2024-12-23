@@ -309,7 +309,7 @@ const Calendar = (props) => {
                     className={classNames(
                       isToday(date)
                         ? "bg-blue-500 text-white"
-                        : "text-gray-700 hover:bg-blue-200",
+                        : "text-gray-700 hover:bg-blue-200", s.day_container,
                       "inline-flex w-6 h-6 items-center justify-center cursor-pointer text-center leading-none rounded-full transition ease-in-out duration-100"
                     )}
                   >
