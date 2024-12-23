@@ -2,7 +2,7 @@ import Header from "./Header/Header"
 import Main from "./Main/Main"
 import Footer from "./Footer/Footer"
 import s from "./Content.module.css"
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Kirillloh from "../../images/Кирилл2.jpg"
@@ -83,29 +83,45 @@ const Content = (props) => {
 
   const [taskStatuses, setTaskStatuses] = useState({});
 
-  const getInitialCompleted = (taskId) => {
-    const storedCompleted = localStorage.getItem(`completed_${taskId}`);
-    return storedCompleted ? JSON.parse(storedCompleted) : false;
-  };
+  const fetchTaskStatuses = useCallback(async () => {
+    try {
+      if (props.tasks) {
+        const initialTaskStatuses = {};
+        const response = await Promise.all(
+          props.tasks.map(async (task) => {
+            try {
+              const taskResponse = await axios.get(`https://api.energy-cerber.ru/tasks/${task.id}`, {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              })
+              return { taskId: task.id, status: { completed: taskResponse.data.completed, statusId: task.id } }
+            } catch (error) {
+              console.error('Error fetching task:', error);
+              return { taskId: task.id, status: { completed: false, statusId: 0 } }
+            }
+          })
+        );
+        response.forEach(item => {
+          initialTaskStatuses[item.taskId] = item.status;
+        })
+        setTaskStatuses(initialTaskStatuses);
+      }
 
-  const getInitialStatusId = (taskId) => {
-    const storedStatusId = localStorage.getItem(`statusId_${taskId}`);
-    return storedStatusId ? parseInt(storedStatusId) : 0;
-  };
-
-  useEffect(() => {
-    if (props.tasks) {
-      const initialTaskStatuses = {};
-      props.tasks.forEach(task => {
-        initialTaskStatuses[task.id] = {
-          completed: getInitialCompleted(task.id),
-          statusId: getInitialStatusId(task.id),
-        }
-      });
-      setTaskStatuses(initialTaskStatuses)
+    } catch (error) {
+      console.error("Ошибка при загрузке статуса задач:", error);
     }
+  }, [props.tasks, token]);
+  useEffect(() => {
+    fetchTaskStatuses();
+  }, [fetchTaskStatuses]);
 
-  }, [props.tasks])
+
+  const handleTaskClick = (e) => {
+    props.getTaskInfo(e.id);
+  };
+
+  
 
   const closeModalEditCat = () => {
     setIsEditModalCategoryOpen(false);
