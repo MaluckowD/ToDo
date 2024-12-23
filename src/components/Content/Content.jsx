@@ -438,6 +438,7 @@ const Content = (props) => {
     return taskStatuses[taskId] || { completed: false, statusId: 0 };
   };
 
+  console.log(taskStatuses)
 
   return(
     <div className = {s.root}>
@@ -497,9 +498,9 @@ const Content = (props) => {
               onChange={handlePriorityChange}
             >
               <option value="" disabled>Выберите приоритет</option>
-              <option value={1}>Высокий</option>
-              <option value={2}>Средний</option>
-              <option value={3}>Низкий</option>
+              <option style={{ backgroundColor: "#EB0000" }} value={1}>Высокий</option>
+              <option style={{ backgroundColor: "#E8E230" }} value={2}>Средний</option>
+              <option style={{ backgroundColor: "#3FAB30" }}  value={3}>Низкий</option>
             </select>
 
             <button className={s.closeModalCategory} onClick={addTask}>
@@ -572,9 +573,9 @@ const Content = (props) => {
               onChange={handlePriorityChange}
             >
               <option disabled value="">Выберите приоритет</option>
-              <option value={1}>Высокий</option>
-              <option value={2}>Средний</option>
-              <option value={3}>Низкий</option>
+              <option style={{ backgroundColor: "#EB0000" }} value={1}>Высокий</option>
+              <option style={{ backgroundColor: "#E8E230" }} value={2}>Средний</option>
+              <option style={{ backgroundColor: "#3FAB30" }} value={3}>Низкий</option>
             </select>
             <input className={s.categoryName}
               style={{ textAlign: "center" }}
@@ -629,9 +630,9 @@ const Content = (props) => {
               onChange={handlePriorityChange}
             >
               <option disabled value="">Выберите приоритет</option>
-              <option value={1}>Высокий</option>
-              <option value={2}>Средний</option>
-              <option value={3}>Низкий</option>
+              <option style={{ backgroundColor: "#EB0000" }} value={1}>Высокий</option>
+              <option style={{ backgroundColor: "#E8E230" }} value={2}>Средний</option>
+              <option style={{ backgroundColor: "#3FAB30" }} value={3}>Низкий</option>
             </select>
             <input className={s.categoryName}
               style={{ textAlign: "center" }}
