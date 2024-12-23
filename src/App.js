@@ -14,6 +14,7 @@ function App(props) {
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true); 
   const [error, setError] = useState(null);
+  const [taskStatuses, setTaskStatuses] = useState({});
   useEffect(() => {
     document.title = "ToDo";
   }, []); 
@@ -43,11 +44,21 @@ function App(props) {
           }
         });
         setUserData(response.data);
-        setCategories(response.data.categories)
-        setTasks(response.data.tasks)
+        setCategories(response.data.categories);
+        setTasks(response.data.tasks);
+        if (response.data.tasks) {
+          const initialTaskStatuses = {};
+          response.data.tasks.forEach(task => {
+            initialTaskStatuses[task.id] = {
+              completed: task.completed,
+              statusId: task.id,
+            };
+          });
+          setTaskStatuses(initialTaskStatuses)
+        }
       } catch (error) {
         setError(error);
-        removeToken();
+        removeToken()
         console.error("Ошибка при загрузке данных пользователя:", error);
       } finally {
         setIsLoading(false);
@@ -157,7 +168,7 @@ function App(props) {
             store={props.store}
             element={<Registration onDataUser={handleuserDatafromRegistration} saveToken={saveToken} />}
           />
-          <Route path="/content" element={<Content token={token} removeToken={removeToken}
+          <Route path="/content" element={<Content setTaskStatuses={setTaskStatuses} taskStatuses={taskStatuses} token={token} removeToken={removeToken}
             updateTasks={updateTasks} tasks={tasks} updateCategories={updateCategories} categories={categories}
             userData={userData} getToken={getToken}
             isLoading={isLoading} error={error}

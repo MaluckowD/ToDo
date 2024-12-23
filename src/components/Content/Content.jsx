@@ -81,41 +81,6 @@ const Content = (props) => {
   }, [completed]);
 
 
-  const [taskStatuses, setTaskStatuses] = useState({});
-
-  const fetchTaskStatuses = useCallback(async () => {
-    try {
-      if (props.tasks) {
-        const initialTaskStatuses = {};
-        const response = await Promise.all(
-          props.tasks.map(async (task) => {
-            try {
-              const taskResponse = await axios.get(`https://api.energy-cerber.ru/tasks/${task.id}`, {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              })
-              return { taskId: task.id, status: { completed: taskResponse.data.completed, statusId: task.id } }
-            } catch (error) {
-              console.error('Error fetching task:', error);
-              return { taskId: task.id, status: { completed: false, statusId: 0 } }
-            }
-          })
-        );
-        response.forEach(item => {
-          initialTaskStatuses[item.taskId] = item.status;
-        })
-        setTaskStatuses(initialTaskStatuses);
-      }
-
-    } catch (error) {
-      console.error("Ошибка при загрузке статуса задач:", error);
-    }
-  }, [props.tasks, token]);
-  useEffect(() => {
-    fetchTaskStatuses();
-  }, [fetchTaskStatuses]);
-
 
   const handleTaskClick = (e) => {
     props.getTaskInfo(e.id);
@@ -420,7 +385,7 @@ const Content = (props) => {
         },
       });
       console.log(response.data);
-      const newTaskStatuses = { ...taskStatuses };
+      const newTaskStatuses = { ...props.taskStatuses };
       if (response.data.completed === true) {
         setCompleted(true)
         newTaskStatuses[id] = {
@@ -438,8 +403,8 @@ const Content = (props) => {
         localStorage.setItem(`completed_${id}`, JSON.stringify(false));
         localStorage.setItem(`statusId_${id}`, id);
       }
-      setTaskStatuses(newTaskStatuses);
-      console.log(taskStatuses)
+      props.setTaskStatuses(newTaskStatuses);
+      console.log(props.taskStatuses)
       props.updateTasks();
     } catch (error) {
       console.error('Ошибка при изменении статуса задачи:', error);
@@ -451,10 +416,10 @@ const Content = (props) => {
   };
 
   const getTaskStatus = (taskId) => {
-    return taskStatuses[taskId] || { completed: false, statusId: 0 };
+    return props.taskStatuses[taskId] || { completed: false, statusId: 0 };
   };
 
-  console.log(taskStatuses)
+  console.log(props.taskStatuses)
 
   return(
     <div className = {s.root}>
@@ -717,7 +682,7 @@ const Content = (props) => {
       
       <div className={isModalOpen || isModalCategoryOpen || isEditCategoryOpen || isTaskOpen || isOpenTaskInfo ? [s.wrapper, s.opacity].join(' ') : [s.wrapper]}>
         <Header removeToken={props.removeToken} getToken={props.getToken} name={props.userData.name} />
-        <Main getTaskStatus={getTaskStatus} taskStatuses={taskStatuses} removeToken={props.removeToken} statusId={statusId} completed={completed} getTaskInfo={getTaskInfo} fetchCategories={fetchCategories} openTaskInfo={openTaskInfo} addTask={props.addTask} tasks = {props.tasks} openModalEditCategory={openModalEditCategory} updateCategories={props.updateCategories} openModalCategory={openModalCategory} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp}/>
+        <Main getTaskStatus={getTaskStatus} taskStatuses={props.taskStatuses} removeToken={props.removeToken} statusId={statusId} completed={completed} getTaskInfo={getTaskInfo} fetchCategories={fetchCategories} openTaskInfo={openTaskInfo} addTask={props.addTask} tasks = {props.tasks} openModalEditCategory={openModalEditCategory} updateCategories={props.updateCategories} openModalCategory={openModalCategory} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp}/>
         <Footer openModal={openModal} />
       </div>
     </div>
