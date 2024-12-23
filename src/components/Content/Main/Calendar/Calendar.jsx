@@ -211,9 +211,9 @@ const Calendar = (props) => {
 
     if (!rgb) {
       return {
-        borderColor: 'gray',
-        color: 'gray',
-        backgroundColor: 'lightgray',
+        borderColor: '#fff',
+        color: '#000',
+        backgroundColor: '#fff',
         textAlign: 'center',
       };
     }
