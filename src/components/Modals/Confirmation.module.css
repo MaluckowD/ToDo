@@ -1,0 +1,53 @@
+
+.modal {
+  position: fixed;
+  /* Фиксированное положение относительно viewport */
+  top: 50%;
+  /* Позиционируем верхний край блока по середине viewport */
+  left: 50%;
+  /* Позиционируем левый край блока по середине viewport */
+  transform: translate(-50%, -50%);
+  display: block;
+  color: #fff;
+  background-color: #a5cab6;
+  z-index: 10;
+  width: 500px;
+  height: 220px;
+  border-radius: 30px;
+  overflow: auto;
+  color: #000;
+
+
+}
+.container{
+  margin: 0 auto;
+  width: 350px;
+  text-align: center;
+  margin-top: 65px;
+}
+.closeModalCategory{
+  font-weight: 500;
+}
+.modalcontent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  max-width: 200px;
+  margin: 0 auto;
+}
+
+.close {
+  background-color: #CB1C1C;
+  color: #fff;
+  border-radius: 10px;
+  transition: filter 0.3s ease;
+  width: 100px;
+  padding: 5px;
+  margin-left: 30px;
+}
+
+.close:hover,
+.close:focus {
+  filter: brightness(1.2);
+}

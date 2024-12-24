@@ -3,14 +3,19 @@ import user from "../../../../../images/user.png"
 import React, {useState, useEffect} from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Confirnation from "../../../../Modals/Confirmation";
 const UserInfo = (props) => {
 
   const [userData, setUserData] = useState(props.userData);
   const [name, setName] = useState(props.name);
   const [surname, setSurname] = useState(props.surname);
   const [gender, setGender] = useState(props.gender);
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
   const token = props.getToken()
   const navigate = useNavigate()
+
+  const DeleteUserDialog = () => props.setIsDialogOpen(true)
+  
 
 
   const UpdateUserInfo = () => {
@@ -80,7 +85,7 @@ const UserInfo = (props) => {
           <button onClick = {UpdateUserInfo}>Сохранить изменения</button>
         </div>
         <div className={s.save_change}>
-          <button onClick={DeleteUser}>Удалить пользователя</button>
+          <button onClick={DeleteUserDialog}>Удалить пользователя</button>
         </div>
       </div>
 

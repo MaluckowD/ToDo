@@ -3,15 +3,38 @@ import axios from "axios";
 import React, { useEffect, useState } from 'react';
 import UserInfo from "./UserInfo/UserInfo"
 import CategoryList from "./CategotyList/CategoryList"
+import Confirnation from "../../../Modals/Confirmation";
+import { useNavigate } from "react-router-dom";
 const Profile = (props) => {
   const [userData, setUserData] = useState(props.userData);
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
   const token = props.getToken();
+  const exit = () => setIsDialogOpen(false)
+  const navigate = useNavigate()
 
+  const DeleteUser = () => {
+      if (token){
+        axios.delete("https://api.energy-cerber.ru/user/", {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }).then(response => {
+          console.log(response.data)
+          props.removeToken()
+          navigate("/login");
+        })
+      }
+    }
+  
   return (
+
     <div className={s.settings_item}>
       <div className={s.container}>
-        <div className={s.content}>
-          <UserInfo removeToken={props.removeToken} name={props.name} surname={props.surname} gender={props.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp} />
+        {isDialogOpen && (
+          <Confirnation exit={exit} DeleteUser={DeleteUser}/>
+        )}
+        <div className={isDialogOpen ? [s.content, s.block].join(" ") : [s.content]}>
+          <UserInfo setIsDialogOpen={setIsDialogOpen} removeToken={props.removeToken} name={props.name} surname={props.surname} gender={props.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp} />
           <CategoryList fetchCategories={props.fetchCategories} openModalEditCategory={props.openModalEditCategory} updateCategories={props.updateCategories} getToken={props.getToken} openModalCategory={props.openModalCategory} categories={props.categories}/>
         </div>
       </div>

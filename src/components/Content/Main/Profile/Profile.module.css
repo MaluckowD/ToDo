@@ -62,3 +62,16 @@
     margin-bottom: 5px;
   }
 }
+
+.block{
+  pointer-events: none;
+  opacity: 0.5;
+  overflow: hidden;
+}
+html .block {
+  overflow: hidden;
+}
+
+body .block {
+  padding-right: var(--scrollbar-width)
+}
