@@ -56,13 +56,15 @@ const UserInfo = (props) => {
       <div className={s.user_data}>
         <div className={s.user_name}>
           <input
+            maxlength='50'
             className = {s.name_adaptive} 
             value={name} 
             type="text" 
             placeholder="Имя" 
             onChange={(e) => setName(e.target.value)}
           />
-          <input 
+          <input
+            maxlength='50'
             value={surname} 
             type="text" 
             placeholder = "Фамилия" 

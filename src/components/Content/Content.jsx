@@ -438,6 +438,7 @@ const Content = (props) => {
           <div className={s.modalcontent}>
 
             <input className={s.categoryName}
+              maxlength='50'
               type="text"
               value={taskName}
               onChange={(e) => setTaskName(e.target.value)}
@@ -445,6 +446,7 @@ const Content = (props) => {
             />
 
             <textarea className={s.taskDescription}
+              maxlength='500'
               type="text"
               value={taskDescription}
               onChange={(e) => setTaskDescription(e.target.value)}
@@ -517,6 +519,7 @@ const Content = (props) => {
         <div className={s.modal} ref={modalRef}>
           <div className={s.modalcontent}>
             <input className={s.categoryName}
+              maxlength='50'
               disabled
               type="text"
               value={taskName}
@@ -524,6 +527,7 @@ const Content = (props) => {
               placeholder="Введите название для задачи"
             />
             <textarea className={s.taskDescription}
+              maxlength='500'
               disabled
               type="text"
               value={taskDescription}
@@ -578,12 +582,14 @@ const Content = (props) => {
           <div className={s.modalcontent}>
             
             <input className={s.categoryName}
+              maxlength='50'
               type="text"
               value={taskName}
               onChange={(e) => setTaskName(e.target.value)}
               placeholder="Введите название для задачи"
             />
             <textarea className={s.taskDescription}
+              maxlength='500'
               type="text"
               value={taskDescription}
               onChange={(e) => setTaskDescription(e.target.value)}
@@ -637,6 +643,7 @@ const Content = (props) => {
 
             
             <input className= {[s.categoryName, s.categoryNamemodificate].join(" ")}
+              maxlength='50'
               type="text"
               value={categoryName}
               onChange={(e) => setCategoryName(e.target.value)}
@@ -662,6 +669,7 @@ const Content = (props) => {
           <div className={s.modalcontent}>
             
             <input className={[s.categoryName, s.categoryNamemodificate].join(" ")}
+              maxlength='50'
               type="text"
               value={categoryName}
               onChange={(e) => setCategoryName(e.target.value)}

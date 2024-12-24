@@ -48,6 +48,7 @@ const Login = (props) => {
               </label>
               <div className="mt-2">
                 <input
+                  maxlength='100'
                   id="email"
                   name="email"
                   type="email"
@@ -73,6 +74,7 @@ const Login = (props) => {
               </div>
               <div className="mt-2">
                 <input
+                  maxlength='100'
                   id="password"
                   name="password"
                   type="password"
