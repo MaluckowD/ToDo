@@ -505,6 +505,9 @@ const Content = (props) => {
             <button className={s.closeModalCategory} onClick={() => changeTaskStatus(taskId)}>
               Изменить статус
             </button>
+            <button className={s.closeModalCategory} onClick={() => deleteTask(taskId)}>
+              Удалить задачу
+            </button>
             <button className={s.closeModalCategory} onClick={closeIsOpenTask}>Выйти</button>
           </div>
         </div>
