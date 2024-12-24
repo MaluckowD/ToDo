@@ -33,6 +33,8 @@ const Calendar = (props) => {
   const [numOfDays, setNumOfDays] = useState([]);
   const [emptyDays, setEmptyDays] = useState([]);
   const cellRefs = useRef([]);
+  const draggedItem = useRef(null);
+
   const isToday = (date) => {
     const today = new Date();
     const d = new Date(year, month, date);
@@ -237,6 +239,57 @@ const Calendar = (props) => {
     setYear(currentDate.getFullYear());
   };
 
+
+  const handleDragStart = (e, event) => {
+    draggedItem.current = event.task_id;
+    e.dataTransfer.setData("text/plain", event.task_id);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+  const handleDragEnter = (e) => {
+    e.preventDefault()
+    if (e.target.closest(`.${s.adaptive}`)) {
+      e.target.closest(`.${s.adaptive}`).classList.add(s.dragover)
+    }
+  };
+  const handleDragLeave = (e) => {
+    if (e.target.closest(`.${s.adaptive}`)) {
+      e.target.closest(`.${s.adaptive}`).classList.remove(s.dragover)
+    }
+  };
+  const handleDrop = async (e, date) => {
+    if (e.target.closest(`.${s.adaptive}`)) {
+      e.target.closest(`.${s.adaptive}`).classList.remove(s.dragover)
+    }
+    e.preventDefault();
+    const taskId = e.dataTransfer.getData("text/plain");
+    if (draggedItem.current && taskId) {
+      try {
+        const response = await axios.get(`https://api.energy-cerber.ru/tasks/${taskId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const newDate = new Date(year, month, date + 1)
+        const taskData = {
+          ...response.data,
+          date: newDate.toISOString().slice(0, 10)
+        };
+        await axios.put(`https://api.energy-cerber.ru/tasks/${taskId}`, taskData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        props.updateTasks()
+      } catch (error) {
+        console.error('Ошибка при загрузке задачи для перетаскивания:', error);
+      }
+      draggedItem.current = null
+    }
+  };
+
   return (
     <>
       <div className="container mx-auto py-4 px-6">
@@ -302,6 +355,10 @@ const Calendar = (props) => {
               {numOfDays.map((date, index) => (
                 <div
                   ref={el => cellRefs.current[index] = el}
+                  onDragOver={handleDragOver}
+                  onDrop={(e) => handleDrop(e, date)}
+                  onDragEnter={handleDragEnter}
+                  onDragLeave={handleDragLeave}
                   onClick={props.openTaskInfo}
                   key={index}
                   data-date={`${year}-${month + 1}-${date}`}
@@ -332,7 +389,8 @@ const Calendar = (props) => {
                         return (
                           <div
                             key={e.event_title}
-                            
+                            draggable="true"
+                            onDragStart={(event) => handleDragStart(event, e)}
                             className={classNames(
                               "px-2 py-1 rounded-lg mt-1 overflow-hidden border"
                             )}

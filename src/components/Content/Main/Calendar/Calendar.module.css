@@ -170,6 +170,10 @@
 .adaptive {
   padding-top: 0.5rem;
 }
+
+.dragover {
+  background-color: rgb(189 190 190 / 0.6);
+}
 @media (max-width: 770px) {
   .adaptive{
     padding-top: 1rem;
