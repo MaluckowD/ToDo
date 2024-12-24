@@ -98,8 +98,11 @@
 }
 
 @media (max-width: 460px) {
+  .list {
+    width: 320px;
+    }
   .categorylist {
-    width: 350px;
+    width: 330px;
     overflow: hidden;
   }
 }

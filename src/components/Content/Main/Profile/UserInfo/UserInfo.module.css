@@ -172,7 +172,7 @@ input[type="text"] {
 
 @media (max-width: 460px) {
   .userinfo{
-    width: 350px;
+    width: 330px;
     overflow: hidden;
   }
 }

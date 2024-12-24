@@ -241,15 +241,17 @@ const Calendar = (props) => {
     <>
       <div className="container mx-auto py-4 px-6">
         <div className="bg-white rounded-lg shadow overflow-hidden">
-          <div className= {["flex items-center justify-between px-6 py-4 border-b", s.container_adaptive].join(" ")}>
+          <div className= {["flex items-center justify-between px-6 py-4", s.container_adaptive].join(" ")}>
             <div className={s.content}>
-              <span className="text-lg font-bold text-gray-800">
-                {monthNames[month]}
-                <CalendarMonth updateMonthAndYear={updateMonthYear} year={year} />
-              </span>
-              <span className={["ml-1 text-lg text-gray-600 font-normal",s.year].join(" ")}>
-                {year}
-              </span>
+              <div className={s.content_flex}>
+                <span className="text-lg font-bold text-gray-800">
+                  {monthNames[month]}
+                  <CalendarMonth updateMonthAndYear={updateMonthYear} year={year} />
+                </span>
+                <span className={["ml-1 text-lg text-gray-600 font-normal",s.year].join(" ")}>
+                  {year}
+                </span>
+              </div>
               <button onClick={goToCurrentMonth} className={s.current_day}>Текущий месяц</button>
             </div>
             <div className={s.click}>
@@ -279,12 +281,12 @@ const Calendar = (props) => {
           </div>
           <div className="-mx-1 -mb-1">
             <div
-              className="flex flex-wrap -mb-8"
-              style={{ marginBottom: "-30px" }}
+              className="flex flex-wrap -mb-8 border-t"
+              style={{ marginBottom: "-37px" }}
             >
               {days.map((day) => (
                 <div key={day} className={"px-2 py-2 w-[14.28%]"}>
-                  <div className="text-gray-600 text-sm uppercase tracking-wide font-bold text-center">
+                  <div  className="text-gray-600 text-sm uppercase tracking-wide font-bold text-center">
                     {day}
                   </div>
                 </div>
@@ -306,6 +308,7 @@ const Calendar = (props) => {
                   className={["px-4 pt-2 border-r border-b relative w-[14.28%] min-h-[8rem]", s.adaptive].join(" ")}
                 >
                   <div
+                    style={{ marginTop: "18px" }}
                     className={classNames(
                       isToday(date)
                         ? "bg-blue-500 text-white"
@@ -329,6 +332,7 @@ const Calendar = (props) => {
                         return (
                           <div
                             key={e.event_title}
+                            
                             className={classNames(
                               "px-2 py-1 rounded-lg mt-1 overflow-hidden border"
                             )}
@@ -340,6 +344,7 @@ const Calendar = (props) => {
                             }
                             id={e.task_id}
                             style={{
+                              margin: '5px',
                               cursor: 'pointer',
                               borderColor: eventStyles.borderColor,
                               backgroundColor: eventStyles.backgroundColor,

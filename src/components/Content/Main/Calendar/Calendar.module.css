@@ -18,6 +18,7 @@
   height: 39px;
 }
 
+
 .current_day::before {
   content: "";
   position: absolute;
@@ -150,6 +151,13 @@
   margin-left: -20px;
 }
 
+.content span:last-child {
+  width: 50px;
+  font-size: 10px;
+  font-size: 1.125rem;
+  margin-left: 20px;
+}
+
 .ml-1 text-lg text-gray-600 font-normal{
   margin-left: -10px;
 }
@@ -175,6 +183,23 @@
     padding-left: 1.5rem;
   }
 }
+.content_flex{
+  display: flex;
+  text-align: center;
+  justify-content: space-between;
+}
+.year{
+  display: block;
+  margin-left: 15px;
+}
+@media (max-width: 550px) {
+
+  .day_container {
+    margin-left: 10px;
+    margin-top: 10px;
+  }
+
+}
 
 @media (max-width: 450px) {
   
@@ -185,6 +210,7 @@
     flex-direction: column;
     width: 300px;
     margin: 0 auto;
+    padding: 0;
   }
   .click{
     text-align: center;
@@ -196,10 +222,11 @@
     text-align: center;
   }
   .arrow{
-    width: 80px;
     margin: 0 auto;
+    width: 55px;
   }
 }
+
 
 @media (max-width: 380px) {
   

@@ -63,7 +63,7 @@ body{
 @media (max-width: 550px) {
   .px-4 {
       padding: 0px;
-      padding-top: 20px;
+
     }
   
     .pt-1 button {
@@ -71,7 +71,8 @@ body{
     }
   
     .text-gray-600 {
-      font-size: 8px;
+      
+      font-size: 12px;
     }
   
 }
@@ -82,9 +83,7 @@ body{
   }
   .px-4{
   }
-  .-mb-1{
-    padding: 5px 10px;
-  }
+  
 }
 @media (max-width: 318px) {
   
@@ -96,7 +95,7 @@ body{
     width: 20px;
   }
   .text-gray-600 {
-    font-size: 8px;
+    font-size: 9px;
   }
 }
 
