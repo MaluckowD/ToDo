@@ -1,30 +1,34 @@
-import React, { useState } from "react";
-import { NavLink } from "react-router-dom"
-import s from "./Login.module.css"
-import axios from "axios"
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate, NavLink } from 'react-router-dom';
+import s from './Login.module.css'; 
+
 const Login = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate()
-  const LoginCallback = (() => {
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-    axios.post("https://api.energy-cerber.ru/user/login", {
+  const LoginCallback = async () => {
+    setError(null); 
+    try {
+      const response = await axios.post("https://api.energy-cerber.ru/user/login", {
         email,
-        password
-    })
-      .then((response) => {
-        console.log(response);
-        props.saveToken(response.data.access_token);
-        navigate("/content")
-        console.log(email, password)
-        window.location.reload()
-      })
-      .catch(function (error) {
-        console.error("Ошибка регистрации:");
-        console.log(error);
+        password,
       });
-  })
+      console.log(response);
+      props.saveToken(response.data.access_token);
+      navigate("/content");
+      console.log(email, password);
+      window.location.reload();
+    } catch (error) {
+      console.error("Ошибка авторизации:", error);
+      if (error.response) {
+        setError(`Неверный логин или пароль!`)
+      }
+    }
+  };
+
 
   return (
     <>
@@ -48,7 +52,7 @@ const Login = (props) => {
               </label>
               <div className="mt-2">
                 <input
-                  maxlength='100'
+                  maxLength='100'
                   id="email"
                   name="email"
                   type="email"
@@ -74,7 +78,7 @@ const Login = (props) => {
               </div>
               <div className="mt-2">
                 <input
-                  maxlength='100'
+                  maxLength='100'
                   id="password"
                   name="password"
                   type="password"
@@ -86,9 +90,9 @@ const Login = (props) => {
                 />
               </div>
             </div>
+            {error && <p className="text-red-500 text-center">{error}</p>}
 
             <div className={s.send_info}>
-
               <button
                 onClick={LoginCallback}
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -96,21 +100,18 @@ const Login = (props) => {
                 ВОЙТИ
               </button>
 
-
               <NavLink
                 to="/registration"
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 РЕГИСТРАЦИЯ
               </NavLink>
-
             </div>
           </form>
-
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
