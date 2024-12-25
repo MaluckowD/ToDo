@@ -5,18 +5,11 @@ import axios from "axios"
 const CategoryList = (props) => {
   console.log(props.categories)
   const token = props.getToken()
-  const deleteCategory = (id) => {
-    if (token){
-      axios.delete(`https://api.energy-cerber.ru/categories/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }).then(response => {
-        console.log(response.data)
-        props.fetchCategories()
-        props.updateCategories();
-      })
-    }
+  
+
+  const DeleteCategoryDialog = (id) => {
+    props.setIsDialogOpen1(true)
+    props.setCategortId(id)
   }
   
   return (
@@ -31,7 +24,7 @@ const CategoryList = (props) => {
               <textarea 
               disabled style={{ backgroundColor: item.color, minHeight: "30px" }} value = {item.name}/>
               <img onClick={() => props.openModalEditCategory(item.id)} src={image} />
-              <img onClick={() => deleteCategory(item.id)} src={close} />
+              <img onClick={() => DeleteCategoryDialog(item.id)} src={close} />
             </div>
           ))}
           

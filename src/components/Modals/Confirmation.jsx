@@ -5,7 +5,7 @@ const Confirnation = (props) => {
   return (
     <div className={[s.modal].join(" ")} >
       <div className= {s.container}>
-        <p>Вы уверены, что хотите удалить аккаунт?</p>
+        <p>Вы уверены?</p>
         <div className={s.modalcontent}>
           <button className={s.closeModalCategory} onClick={props.exit}>
             Выйти

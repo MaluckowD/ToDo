@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Kirillloh from "../../images/Кирилл2.jpg"
 import Ville from "../../images/Vinne.jpg"
+import Confirnation from "../Modals/Confirmation";
 const Content = (props) => {
   const [redirectToLogin, setRedirectToLogin] = useState(false);
   const [error, setError] = useState(null);
@@ -21,6 +22,15 @@ const Content = (props) => {
   const [isTaskUpdateOpen, setIsTaskUpdateOpen] = useState(false);
   const [isTaskInfoOpen, setisTaskInfoOpen] = useState(false);
   const TaskInfoOpen = () => setisTaskInfoOpen(true)
+  const [isWarningOpen, setIsWarningOpen] = useState(false)
+  const exitWarning = () => {
+    setIsWarningOpen(false)
+  }
+
+  const openWarning = () => {
+    setIsWarningOpen(true)
+    closeIsOpenTask()
+  }
   const closeTaskInfoOpen = () => setisTaskInfoOpen(false)
 
   const TaskUpdateOpen = () => setIsTaskUpdateOpen(true)
@@ -436,6 +446,7 @@ const Content = (props) => {
       setTaskPriority("");
       setCategoryName("")
       setDate("")
+      setIsWarningOpen(false)
     })
   }
 
@@ -576,7 +587,7 @@ const Content = (props) => {
             <button className={s.closeModalCategory} onClick={() => changeTaskStatus(taskId)}>
               Изменить статус
             </button>
-            <button className={s.closeModalCategory} onClick={() => deleteTask(taskId)}>
+            <button className={s.closeModalCategory} onClick={openWarning}>
               Удалить задачу
             </button>
             <button className={s.closeModalCategory} onClick={closeIsOpenTask}>Выйти</button>
@@ -760,8 +771,11 @@ const Content = (props) => {
           </div>
         </div>
       )}
+      {isWarningOpen && (
+        <Confirnation exit={exitWarning} DeleteUser={() => deleteTask(taskId)} />
+      )}
       
-      <div className={isModalOpen || isModalCategoryOpen || isEditCategoryOpen || isTaskOpen || isOpenTaskInfo ? [s.wrapper, s.opacity].join(' ') : [s.wrapper]}>
+      <div className={isWarningOpen || isModalOpen || isModalCategoryOpen || isEditCategoryOpen || isTaskOpen || isOpenTaskInfo ? [s.wrapper, s.opacity].join(' ') : [s.wrapper]}>
         <Header removeToken={props.removeToken} getToken={props.getToken} name={props.userData.name} />
         <Main updateTasks={props.updateTasks} getTaskStatus={getTaskStatus} taskStatuses={props.taskStatuses} removeToken={props.removeToken} statusId={statusId} completed={completed} getTaskInfo={getTaskInfo} fetchCategories={fetchCategories} openTaskInfo={openTaskInfo} addTask={props.addTask} tasks = {props.tasks} openModalEditCategory={openModalEditCategory} updateCategories={props.updateCategories} openModalCategory={openModalCategory} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp}/>
         <Footer openModal={openModal} />
