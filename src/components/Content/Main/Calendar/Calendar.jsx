@@ -365,7 +365,7 @@ const Calendar = (props) => {
                   className={["px-4 pt-2 border-r border-b relative w-[14.28%] min-h-[8rem]", s.adaptive].join(" ")}
                 >
                   <div
-                    style={{ marginTop: "18px" }}
+                    style={{ marginTop: "20px" }}
                     className={classNames(
                       isToday(date)
                         ? "bg-blue-500 text-white"

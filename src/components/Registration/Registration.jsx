@@ -69,14 +69,15 @@ const Registration = (props) => {
           />
         </div>
       </div>
-      <p className={s.name_description1}>Выберите пол</p>
-      <select className={s.male} name="gender" id="pet-select" value={gender} onChange={(e) => setGender(e.target.value)}>
-        <option value="male">Мужской</option>
-        <option value="female">Женский</option>
-      </select>
-
 
       <div className={s.content_wrapper}>
+        <div className={s.box}>
+          <p className={s.name_description}>Выберите пол</p>
+          <select className={s.male} name="gender" id="pet-select" value={gender} onChange={(e) => setGender(e.target.value)}>
+            <option value="male">Мужской</option>
+            <option value="female">Женский</option>
+          </select>
+        </div>
         <div className={s.email}>
           <p className={s.name_description}>Введите ваше короткое имя</p>
           <input
