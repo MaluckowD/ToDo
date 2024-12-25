@@ -139,6 +139,17 @@ input::placeholder{
 }
 
 @media (max-width: 450px){
+  .name {
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 1rem;
+      width: 100%;
+    }
+  
+    .name_item,
+    .name_itemsecond {
+      width: 100%;
+    }
   .content{
     width: 380px;
   }
