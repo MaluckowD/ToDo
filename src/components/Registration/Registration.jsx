@@ -15,7 +15,12 @@ const Registration = (props) => {
   const navigate = useNavigate()
   const [error, setError] = useState(null);
   const Register = async () => {
-    setError(null); 
+    setError(null);
+    if (password !== confirmPassword) {
+      setError("Пароль и подтверждение пароля не совпадают!");
+      return;
+    }
+
     const userData = {
       name: name,
       surname: surname,
@@ -36,16 +41,19 @@ const Registration = (props) => {
         props.saveToken(response.data.access_token);
         navigate("/Content")
         window.location.reload()
-
       } else {
         console.error("Ошибка регистрации:", response.status, response.data);
-
       }
     } catch (error) {
       console.error("Ошибка:", error);
       if (error.response) {
         setError(`Вы ввели не все данные или их длина недостаточна!
-          Длина имени и фамилии от 2 символов, короткого имени от 3, адреса почты от 6 символов, пароля от 8!`)
+                Длина имени и фамилии от 2 символов, короткого имени от 3, адреса почты от 6 символов, пароля от 8!`);
+      } else if (error.request) {
+        setError(`Ошибка сети: ${error.message}`)
+      }
+      else {
+        setError(`Ошибка при создании запроса: ${error.message}`)
       }
     }
   };
