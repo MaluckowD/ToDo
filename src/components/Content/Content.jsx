@@ -29,6 +29,7 @@ const Content = (props) => {
   const CloseTaskUpdateOpen = () => {
     closeTaskUpdateOpen()
     TaskInfoOpen()
+    setError(null); 
   }
 
   const openModal = () => setIsModalOpen(true);
@@ -48,6 +49,7 @@ const Content = (props) => {
     setTaskPriority("");
     setCategoryName("")
     setDate("")
+    setError(null); 
   };
   const closeIsOpenTask = () => {
     setIsTaskOpen(false)
@@ -213,30 +215,44 @@ const Content = (props) => {
     setSelectedCategoryId(event.target.value);
   };
 
-  const addTask = () => {
+  const addTask = async () => {
+    setError(null);
+    try {
       const taskData = {
         name: taskName,
         description: taskDescription,
         priority: taskPriority,
         category_id: parseInt(selectedCategoryId, 10),
-        date: date
-      }
-      axios.post("https://api.energy-cerber.ru/tasks/", taskData, {
-        headers: {
-          Authorization: `Bearer ${token}`
+        date: date,
+      };
+      const response = await axios.post(
+        "https://api.energy-cerber.ru/tasks/",
+        taskData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      }).then(response => {
-        console.log(response.data)
-        props.updateTasks()
-        closeIsOpenTaskInfo()
-        setDate(taskData.date);
-        setTaskName("");
-        setTaskDescription("");
-        setTaskPriority("");
-        setCategoryName("")
-        setSelectedCategoryId("")
-      })
+      );
+      console.log(response.data);
+      await props.updateTasks();
+      closeIsOpenTaskInfo();
+      setDate(taskData.date);
+      setTaskName("");
+      setTaskDescription("");
+      setTaskPriority("");
+      setSelectedCategoryId("");
     }
+    catch (error) {
+      console.error("Ошибка при добавлении задачи:", error);
+      if (error.response) {
+        setError(`Ошибка при добавлении задачи! Проверьте заполненность полей!`);
+      } else if (error.request) {
+        setError(`Ошибка сети`)
+      } else {
+      }
+    }
+  };
 
 
   const closeModalCategory = async () => {
@@ -368,25 +384,43 @@ const Content = (props) => {
     setCategoryColor(event.target.value);
   }
 
-  const changeTask = (id) => {
-    const taskData = {
-      name: taskName,
-      description: taskDescription,
-      priority: taskPriority,
-      category_id: parseInt(selectedCategoryId, 10),
-      date: date
-    }
-    axios.put(`https://api.energy-cerber.ru/tasks/${id}`, taskData, {
-      headers: {
-        Authorization: `Bearer ${token}`
+  const changeTask = async (id) => {
+    setError(null); 
+    try {
+      const taskData = {
+        name: taskName,
+        description: taskDescription,
+        priority: taskPriority,
+        category_id: parseInt(selectedCategoryId, 10),
+        date: date,
+      };
+      const response = await axios.put(
+        `https://api.energy-cerber.ru/tasks/${id}`,
+        taskData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response.data);
+      await props.updateTasks();
+      closeTaskUpdateOpen();
+      TaskInfoOpen();
+    } catch (error) {
+      console.error("Ошибка при изменении задачи:", error);
+      if (error.response) {
+        setError(`Ошибка при изменении задачи! Проверьте заполненность полей!`);
       }
-    }).then(response => {
-      console.log(response.data)
-      props.updateTasks()
-      closeTaskUpdateOpen()
-      TaskInfoOpen()
-    })
-  }
+      else if (error.request) {
+
+        setError(`Ошибка сети`)
+      }
+      else {
+
+      }
+    }
+  };
   const deleteTask = (id) => {
     axios.delete(`https://api.energy-cerber.ru/tasks/${id}`, {
       headers: {
@@ -520,7 +554,7 @@ const Content = (props) => {
               <option style={{ backgroundColor: "#E8E230" }} value={2}>Средний</option>
               <option style={{ backgroundColor: "#3FAB30" }}  value={3}>Низкий</option>
             </select>
-
+            {error && <p style={{ width: "400px", marginBottom: "10px" }} className="text-red-500 text-center">{error}</p>}
             <button className={s.closeModalCategory} onClick={addTask}>
               Добавить задачу
             </button>
@@ -665,6 +699,7 @@ const Content = (props) => {
               disabled
               value={completed ? "Выполнена" : "Не выполнена"}
             />
+            {error && <p style={{ width: "400px", marginBottom: "10px" }} className="text-red-500 text-center">{error}</p>}
             <button className={s.closeModalCategory} onClick={() => changeTask(taskId)}>Сохранить изменения</button>
             <button className={s.closeModalCategory} onClick={CloseTaskUpdateOpen}>Отменить изменения</button>
           </div>

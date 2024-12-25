@@ -166,7 +166,7 @@ input[type="date"]:hover{
   background-color: #a5cab6;
   z-index: 10;
   width: 500px;
-  height: 520px;
+  height: 570px;
   border-radius: 30px;
   overflow: auto;
 
@@ -247,7 +247,7 @@ input[type = "color"]{
 }
 
 .editTask{
-  height: 560px;
+  height: 620px;
 }
 
 
