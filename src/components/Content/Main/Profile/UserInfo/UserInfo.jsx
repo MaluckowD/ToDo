@@ -11,6 +11,7 @@ const UserInfo = (props) => {
   const [surname, setSurname] = useState(props.surname);
   const [gender, setGender] = useState(props.gender);
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [error, setError] = useState(null);
   const token = props.getToken()
   const navigate = useNavigate()
 
@@ -18,34 +19,34 @@ const UserInfo = (props) => {
   
 
 
-  const UpdateUserInfo = () => {
-    if (token){
-      axios.put("https://api.energy-cerber.ru/user/edit", {
-        name, surname, gender
-      }, {
-        headers: {
-        Authorization: `Bearer ${token}`
-      }
-      },).then(response => {
-        console.log(response.data)
-        props.updateUserDataInApp(response.data)
-      })
-    }
-  }
+  const UpdateUserInfo = async () => {
+    setError(null); 
 
-  const DeleteUser = () => {
-    if (token){
-      axios.delete("https://api.energy-cerber.ru/user/", {
-        headers: {
-          Authorization: `Bearer ${token}`
+    if (token) {
+      try {
+        const response = await axios.put(
+          "https://api.energy-cerber.ru/user/edit",
+          { name, surname, gender },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        console.log(response.data);
+        props.updateUserDataInApp(response.data); 
+      }
+      catch (error) {
+        if (error.response) {
+          setError(`Ошибка при обновлении данных пользователя. Длина имени и фамилии от 2 символов!`);
         }
-      }).then(response => {
-        console.log(response.data)
-        props.removeToken()
-        navigate("/login");
-      })
+        else if (error.request) {
+          setError(`Ошибка сети`)
+        }
+        else {
+          
+        }
+      }
     }
-  }
+
+  };
+
   if (!props.userData) return <p>Загрузка данных...</p>;
 
   return (
@@ -83,6 +84,7 @@ const UserInfo = (props) => {
           </select>
           <input style={{ opacity: "0.5" }} disabled value={props.userData.short_name} type="text" placeholder="Псевдоним" className={s.user_sex_item} />
         </div>
+        {error && <p style = {{width: "400px", marginBottom: "10px"}} className="text-red-500 text-center">{error}</p>}
         <div className={s.save_change}>
           <button onClick = {UpdateUserInfo}>Сохранить изменения</button>
         </div>

@@ -13,7 +13,9 @@ const Registration = (props) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate()
+  const [error, setError] = useState(null);
   const Register = async () => {
+    setError(null); 
     const userData = {
       name: name,
       surname: surname,
@@ -41,6 +43,10 @@ const Registration = (props) => {
       }
     } catch (error) {
       console.error("Ошибка:", error);
+      if (error.response) {
+        setError(`Вы ввели не все данные или их длина недостаточна!
+          Длина имени и фамилии от 2 символов, короткого имени от 3, адреса почты от 6 символов, пароля от 8!`)
+      }
     }
   };
 
@@ -119,6 +125,7 @@ const Registration = (props) => {
           />
         </div>
       </div>
+      {error && <p className="text-red-500 text-center">{error}</p>}
       <button onClick={Register} className={s.registration_click}>
         ЗАРЕГИСТРИРОВАТЬСЯ
       </button>

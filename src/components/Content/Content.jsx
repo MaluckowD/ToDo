@@ -9,6 +9,7 @@ import Kirillloh from "../../images/Кирилл2.jpg"
 import Ville from "../../images/Vinne.jpg"
 const Content = (props) => {
   const [redirectToLogin, setRedirectToLogin] = useState(false);
+  const [error, setError] = useState(null);
   const token = props.getToken()
   const [categories, setCategories] = useState([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState('');
@@ -32,7 +33,10 @@ const Content = (props) => {
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-  const closeModalCat = () => setIsModalCategoryOpen(false);
+  const closeModalCat = () => {
+    setIsModalCategoryOpen(false)
+    setError(null); 
+  };
   const [categoryName, setCategoryName] = useState("");
   const [categoryColor, setCategoryColor] = useState('#ffffff')
   const [categoryId, setcategoryId] = useState(0);
@@ -92,6 +96,7 @@ const Content = (props) => {
     setIsEditModalCategoryOpen(false);
     setCategoryName("")
     setColor("#ffffff")
+    setError(null); 
   }
 
 
@@ -234,42 +239,72 @@ const Content = (props) => {
     }
 
 
-  const closeModalCategory = () => {
-    const categoryData = {
-      name: categoryName,
-      color: categoryColor
-    }
-    
-    axios.post("https://api.energy-cerber.ru/categories/", categoryData,{
-      headers: {
-        Authorization: `Bearer ${token}`
+  const closeModalCategory = async () => {
+    setError(null);
+    try {
+      const categoryData = {
+        name: categoryName,
+        color: categoryColor,
+      };
+      const response = await axios.post(
+        "https://api.energy-cerber.ru/categories/",
+        categoryData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response.data);
+      props.updateCategories();
+      await fetchCategories();
+      setCategoryName("");
+      setColor("#ffffff");
+      setIsModalCategoryOpen(false);
+    } catch (error) {
+      console.error("Ошибка при создании категории:", error);
+      if (error.response) {
+        setError("Ошибка при создании категории. Проверьте заполненность полей");
+      } else if (error.request) {
+        setError(`Ошибка сети`)
+      } else {
+        
       }
-      }).then(response => {
-        console.log(response.data)
-        props.updateCategories()
-        fetchCategories()
-        setCategoryName("")
-        setColor("#ffffff")
-        setIsModalCategoryOpen(false)
-      })
-  }
+    }
+  };
 
-  const EditCategory = (id) => {
-    const categoryData = {
-      name: categoryName,
-      color: categoryColor
-    }
-    axios.put(`https://api.energy-cerber.ru/categories/${id}`, categoryData, {
-      headers: {
-        Authorization: `Bearer ${token}`
+  const EditCategory = async (id) => {
+    setError(null);
+    try {
+      const categoryData = {
+        name: categoryName,
+        color: categoryColor,
+      };
+      const response = await axios.put(
+        `https://api.energy-cerber.ru/categories/${id}`,
+        categoryData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response.data);
+      props.updateCategories();
+      await fetchCategories();
+      setIsEditModalCategoryOpen(false);
+    } catch (error) {
+      console.error('Ошибка при редактировании категории:', error);
+      if (error.response) {
+        setError(`Ошибка при редактировании. Проверьте заполнение полей!`);
       }
-    }).then(response => {
-      console.log(response.data)
-      props.updateCategories()
-      fetchCategories()
-      setIsEditModalCategoryOpen(false)
-    })
-  }
+      else if (error.request) {
+        setError(`Ошибка сети`)
+      }
+      else {
+      }
+    }
+  };
 
   const getTaskInfo = async (id) => {
     try {
@@ -657,7 +692,7 @@ const Content = (props) => {
               value={color}
               onChange={handleColorChange}
             />
-
+            {error && <p style={{ width: "400px", marginBottom: "10px" }} className="text-red-500 text-center">{error}</p>}
             <button className={s.closeModalCategory} onClick={closeModalCategory}>Добавить категорию</button>
             <button className={s.closeModalCategory} onClick={closeModalCat}>Выйти</button>
           </div>
@@ -684,7 +719,7 @@ const Content = (props) => {
               onChange={handleColorChange}
             />
 
-            
+            {error && <p style={{ width: "350px", marginBottom: "10px" }} className="text-red-500 text-center">{error}</p>}
             <button className={s.closeModalCategory} onClick={() => EditCategory(categoryId)}>Редактировать</button>
             <button className={s.closeModalCategory} onClick={closeModalEditCat}>Выйти</button>
           </div>
