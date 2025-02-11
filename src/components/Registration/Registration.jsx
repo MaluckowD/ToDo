@@ -34,6 +34,12 @@ const Registration = (props) => {
       return;
     }
 
+    if (userData.name.length < 2 || userData.surname.length < 2 || userData.short_name.length < 3 || userData.email.length < 6 || userData.password.length < 8 ) {
+      setError(`Вы ввели не все данные или их длина недостаточна!
+                Длина имени и фамилии от 2 символов, короткого имени от 3, адреса почты от 6 символов, пароля от 8!`);
+      return <></>
+    }
+    setError(null);
     localStorage.setItem('userData', JSON.stringify(userData));
 
     console.log('Data saved to localStorage:', userData);

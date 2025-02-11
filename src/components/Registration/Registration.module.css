@@ -11,7 +11,7 @@
   background-color: #a5cab6;
   z-index: 10;
   width: 500px;
-  height: 570px;
+  height: 200px;
   border-radius: 30px;
   overflow: auto;
 
@@ -28,7 +28,7 @@
 .modalcontent {
   width: 250px;
   margin: 0 auto;
-  margin-top: 100px;
+  margin-top: 50px;
   text-align: center;
   display: flex;
   flex-direction: column;
