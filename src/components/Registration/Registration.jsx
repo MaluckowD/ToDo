@@ -100,14 +100,19 @@ const Registration = (props) => {
       {isConfirmation && (
         <div className={s.modal}>
           <div className={s.modalcontent}>
-            <label for="code">Введите код подтверждения</label>
-            <input
-              id="code"
-              value={code}
-              onChange={(event) => setCode(event.target.value)}
-            />
-            <button>Зарегистрироваться</button>
-            <button onClick={closeConfirmation}>Закрыть окно</button>
+            <h3>Введите код</h3>
+            <div>
+              <label for="code">Код подтверждения</label>
+              <input
+                id="code"
+                value={code}
+                onChange={(event) => setCode(event.target.value)}
+              />
+            </div>
+            <div>
+              <button className={s.registration}>Зарегистрироваться</button>
+              <button className = {s.close} onClick={closeConfirmation}>Закрыть окно</button>
+            </div>
           </div>
         </div>
       )}
