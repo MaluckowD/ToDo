@@ -19,7 +19,7 @@ const Registration = (props) => {
   const [error, setError] = useState(null);
   const [code, setCode] = useState("");
 
-  const confirmation = () => {
+  const confirmation = async () => {
     const userData = {
       name: name,
       surname: surname,
@@ -34,7 +34,7 @@ const Registration = (props) => {
       return;
     }
 
-    if (userData.name.length < 2 || userData.surname.length < 2 || userData.short_name.length < 3 || userData.email.length < 6 || userData.password.length < 8 ) {
+    if (userData.name.length < 2 || userData.surname.length < 2 || userData.short_name.length < 3 || userData.email.length < 6 || userData.password.length < 8) {
       setError(`Вы ввели не все данные или их длина недостаточна!
                 Длина имени и фамилии от 2 символов, короткого имени от 3, адреса почты от 6 символов, пароля от 8!`);
       return <></>
@@ -45,6 +45,10 @@ const Registration = (props) => {
     console.log('Data saved to localStorage:', userData);
     setIsConfirmation(true)
 
+    const response = await axios.get(
+      `https://api.energy-cerber.ru/user/register/verify_code?email=${userData.email}`,
+    )
+    console.log(response)
   }
 
   const closeConfirmation = () => {
@@ -67,32 +71,47 @@ const Registration = (props) => {
       password: password,
     };
 
-    try {
-      const response = await axios.post(
-        "https://api.energy-cerber.ru/user/register",
-        userData
-      );
-      if (response.status === 200 || response.status === 201) {
-        console.log("Регистрация успешна:", response.data);
-        props.onDataUser({ email, password });
-        props.saveToken(response.data.access_token);
-        navigate("/Content")
-        window.location.reload()
-      } else {
-        console.error("Ошибка регистрации:", response.status, response.data);
+
+
+    const confirmationResponse = await axios.post(
+      `https://api.energy-cerber.ru/user/register/verify_code?email=${userData.email}&code=${code}`
+    )
+
+    if (confirmationResponse.status === 200 || confirmationResponse.status === 201) {
+      console.log("Successful code confirmation!")
+
+      try {
+        const registrationResponse = await axios.post(
+          "https://api.energy-cerber.ru/user/register",
+          userData
+        );
+
+        if (registrationResponse.status === 200 || registrationResponse.status === 201) {
+          console.log("Регистрация успешна:", registrationResponse.data);
+          props.onDataUser({ email, password });
+          props.saveToken(registrationResponse.data.access_token);
+          navigate("/Content")
+          window.location.reload()
+        }
+        else {
+          console.error("Ошибка регистрации:", registrationResponse.status, registrationResponse.data);
+        }
       }
-    } catch (error) {
-      console.error("Ошибка:", error);
-      if (error.response) {
-        setError(`Вы ввели не все данные или их длина недостаточна!
-                Длина имени и фамилии от 2 символов, короткого имени от 3, адреса почты от 6 символов, пароля от 8!`);
-      } else if (error.request) {
-        setError(`Ошибка сети: ${error.message}`)
-      }
-      else {
-        setError(`Ошибка при создании запроса: ${error.message}`)
+
+      catch (error) {
+        console.error("Ошибка:", error);
+        if (error.response) {
+          setError(`Вы ввели не все данные или их длина недостаточна!
+                    Длина имени и фамилии от 2 символов, короткого имени от 3, адреса почты от 6 символов, пароля от 8!`);
+        } else if (error.request) {
+          setError(`Ошибка сети: ${error.message}`)
+        }
+        else {
+          setError(`Ошибка при создании запроса: ${error.message}`)
+        }
       }
     }
+
   };
 
   return (
@@ -110,8 +129,8 @@ const Registration = (props) => {
               />
             </div>
             <div>
-              <button className={s.registration}>Зарегистрироваться</button>
-              <button className = {s.close} onClick={closeConfirmation}>Закрыть окно</button>
+              <button onClick={Register} className={s.registration}>Зарегистрироваться</button>
+              <button className={s.close} onClick={closeConfirmation}>Закрыть окно</button>
             </div>
           </div>
         </div>
