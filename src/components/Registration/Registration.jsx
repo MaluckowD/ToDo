@@ -41,15 +41,33 @@ const Registration = (props) => {
       return <></>
     }
     setError(null);
-    localStorage.setItem('userData', JSON.stringify(userData));
 
-    console.log('Data saved to localStorage:', userData);
-    setIsConfirmation(true)
+    try {
+      const response = await axios.get(
+        `https://api.energy-cerber.ru/user/register/verify_code?email=${userData.email}`,
+      )
+      console.log("Response Object", response)
+      console.log("response Code", response.status)
 
-    const response = await axios.get(
-      `https://api.energy-cerber.ru/user/register/verify_code?email=${userData.email}`,
-    )
-    console.log(response)
+      if (response.status === 200 || response.status === 201) {
+        localStorage.setItem('userData', JSON.stringify(userData));
+        console.log('Data saved to localStorage:', userData);
+
+        setIsConfirmation(true)
+      }
+      else {
+        setError("Данный email или короткое имя пользователя уже существует")
+      }
+    }
+    catch (error) {
+      if (error.status === 400 || error.status === 401 || error.status === 403) {
+        setError("Данный email или короткое имя пользователя уже существует")
+      }
+      else {
+        setError("Ошибка отправки кода подтверждения! Попробуйте зарегистрироваться позже!")
+      }
+    }
+
   }
 
   const closeConfirmation = () => {
@@ -77,7 +95,8 @@ const Registration = (props) => {
 
     try {
       const confirmationResponse = await axios.post(
-        `https://api.energy-cerber.ru/user/register/verify_code?email=${userData.email}&code=${code}`
+        // В продакшене заменить 77777 на code
+        `https://api.energy-cerber.ru/user/register/verify_code?email=${userData.email}&code=${77777}`
       )
 
       if (confirmationResponse.status === 200 || confirmationResponse.status === 201) {
@@ -115,10 +134,10 @@ const Registration = (props) => {
         }
       }
     }
-    catch(error) {
+    catch (error) {
       setErrorCode(`Неверный код подтверждения`);
     }
-      
+
   };
 
   return (
