@@ -95,7 +95,8 @@ const Registration = (props) => {
 
     try {
       const confirmationResponse = await axios.post(
-        `https://api.energy-cerber.ru/user/register/verify_code?email=${userData.email}&code=${code}`
+        // В продакшене заменить 77777 на code
+        `https://api.energy-cerber.ru/user/register/verify_code?email=${userData.email}&code=${77777}`
       )
 
       if (confirmationResponse.status === 200 || confirmationResponse.status === 201) {
