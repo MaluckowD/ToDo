@@ -9,13 +9,15 @@ const Login = (props) => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const LoginCallback = async () => {
+  const LoginCallback = async (e) => {
+    e.preventDefault();
     setError(null); 
     try {
       const response = await axios.post("https://api.energy-cerber.ru/user/login", {
         email,
         password,
       });
+      console.log("HERE")
       console.log(response);
       props.saveToken(response.data.access_token);
       navigate("/content");
