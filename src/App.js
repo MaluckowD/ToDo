@@ -149,9 +149,6 @@ function App(props) {
     return null;
   };
 
-
-
-  
   console.log(categories)
   useEffect(() => {
     console.log("Текущее состояние userDatafromRegistration:", userDatafromRegistration);
