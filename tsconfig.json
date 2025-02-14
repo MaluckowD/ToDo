@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "es2016", // Или более современный стандарт
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ], // Для работы с DOM
+    "jsx": "react-jsx", // или "react-jsx" (если вы используете React 17+)
+    "module": "esnext", // или commonjs, es2015
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "sourceMap": true, // Для отладки
+    "declaration": true, // генерировать .d.ts файлы (если нужно)
+    "outDir": "dist", // Директория для скомпилированных файлов (можно изменить)
+    "baseUrl": ".", // Базовый путь для относительных импортов
+    "paths": {
+      "*": [
+        "./src/*"
+      ] // Настройка путей (если нужно)
+    },
+    "skipLibCheck": true
+  },
+  "include": [
+    "src"
+  ] // Директория с исходным кодом (обычно 'src')
+}
