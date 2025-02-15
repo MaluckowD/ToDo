@@ -41,12 +41,10 @@ const Calendar = (props) => {
     return today.toDateString() === d.toDateString();
   };
   useEffect(() => {
-    // Устанавливаем высоту ячеек после того, как отрендерится календарь
     if (cellRefs.current) {
       adjustCellHeights();
     }
-
-  }, [events, month]); // Зависимость от events для обновления высоты при изменении списка задач
+  }, [events, month]);
 
   const adjustCellHeights = () => {
     cellRefs.current.forEach((cell, index) => {
@@ -56,16 +54,12 @@ const Calendar = (props) => {
           if (contentDiv.scrollHeight > 0) {
             cell.style.height = `${32 + (contentDiv.scrollHeight)}px`;
           } else if (cell.style.height !== '8rem') {
-            cell.style.height = `8rem`; // Default height when scroll isn't active
+            cell.style.height = `8rem`;
           }
         }
-
-
       }
     })
   }
-
-
 
   const getNoOfDays = () => {
     let i;
@@ -94,25 +88,6 @@ const Calendar = (props) => {
     console.log(month, year);
   }, [month]);
 
-  const colors = [
-    "#F44336", "#4CAF50", "#2196F3", "#FFC107", "#FF9800", "#9C27B0",
-    "#E91E63", "#795548", "#9E9E9E", "#212121", "#FFFFFF", "#00BCD4",
-    "#C0CA33", "#009688", "#3F51B5", "#673AB7", "#03A9F4", "#8BC34A",
-    "#EEEEEE", "#FFC107", "#FF5722", "#F48FB1"
-  ];
-
-  const themes = colors.map((color, index) => ({
-    value: color,
-    label: `Theme ${index + 1}`, // Простой лейбл, вы можете сделать его более описательным
-  }));
-
-  const handleTaskClick = (e) => {
-
-    props.getTaskInfo(e.task_id);
-
-  };
-
-  // Функция для обработки нового данных
   const handleNewData = async (incomingData) => {
     if (!Array.isArray(incomingData)) {
       console.error("Ошибка: incomingData не является массивом");
@@ -164,7 +139,7 @@ const Calendar = (props) => {
     handleNewData(props.tasks);
     console.log(props.tasks)
 
-  }, [props.tasks]); // Зависимость от props.tasks
+  }, [props.tasks]);
 
   useEffect(() => {
     console.log(events)
@@ -239,7 +214,6 @@ const Calendar = (props) => {
     setYear(currentDate.getFullYear());
   };
 
-
   const handleDragStart = (e, event) => {
     draggedItem.current = event.task_id;
     e.dataTransfer.setData("text/plain", event.task_id);
@@ -310,7 +284,6 @@ const Calendar = (props) => {
             <div className={s.click}>
               <button onClick={props.openTaskInfo} className={s.addtask}>Добавить задачу</button>
               <div className={["border rounded-lg px-1 pt-1",s.arrow].join(" ")}>
-                {/* Previous Month Button */}
                 <button
                   type="button"
                   onClick={() => prevMonth()}
@@ -320,7 +293,6 @@ const Calendar = (props) => {
                   <ArrowLeftIcon className="h-6 w-6 text-gray-500 inline-flex leading-none" />
                 </button>
                 <div className="border-r inline-flex h-6" />
-                {/* Next Month Button */}
                 <button
                   type="button"
                   onClick={() => nextMonth()}
@@ -335,8 +307,7 @@ const Calendar = (props) => {
           <div className="-mx-1 -mb-1">
             <div
               className="flex flex-wrap -mb-8 border-t"
-              style={{ marginBottom: "-37px" }}
-            >
+              style={{ marginBottom: "-37px" }}>
               {days.map((day) => (
                 <div key={day} className={"px-2 py-2 w-[14.28%]"}>
                   <div  className="text-gray-600 text-sm uppercase tracking-wide font-bold text-center">
@@ -375,7 +346,6 @@ const Calendar = (props) => {
                   >
                     {date}
                   </div>
-
                   <div className=" mt-1">
                     {events
                       .filter(

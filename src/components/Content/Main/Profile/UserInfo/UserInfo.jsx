@@ -1,36 +1,23 @@
 import s from "./UserInfo.module.css"
 import user from "../../../../../images/user.png"
-import React, {useState, useEffect} from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import Confirnation from "../../../../Modals/Confirmation";
-const UserInfo = (props) => {
+import React, {useState} from "react";
+import { UserEditApi } from "../../../../../api/api"
 
-  const [userData, setUserData] = useState(props.userData);
+const UserInfo = (props) => {
   const [name, setName] = useState(props.name);
   const [surname, setSurname] = useState(props.surname);
   const [gender, setGender] = useState(props.gender);
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [error, setError] = useState(null);
   const token = props.getToken()
-  const navigate = useNavigate()
-
   const DeleteUserDialog = () => props.setIsDialogOpen(true)
   
-
-
   const UpdateUserInfo = async () => {
     setError(null); 
 
     if (token) {
       try {
-        const response = await axios.put(
-          "https://api.energy-cerber.ru/user/edit",
-          { name, surname, gender },
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-        console.log(response.data);
-        props.updateUserDataInApp(response.data); 
+        const response = await UserEditApi({ name, surname, gender })
+        props.updateUserDataInApp(response); 
       }
       catch (error) {
         if (error.response) {
@@ -39,12 +26,8 @@ const UserInfo = (props) => {
         else if (error.request) {
           setError(`Ошибка сети`)
         }
-        else {
-          
-        }
       }
     }
-
   };
 
   if (!props.userData) return <p>Загрузка данных...</p>;
@@ -92,7 +75,6 @@ const UserInfo = (props) => {
           <button onClick={DeleteUserDialog}>Удалить пользователя</button>
         </div>
       </div>
-
     </div>
   )
 }

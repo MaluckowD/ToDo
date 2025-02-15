@@ -1,5 +1,5 @@
 import s from "./Profile.module.css"
-import axios from "axios";
+import { deleteUserApi, categorieDeleteApi } from "../../../../api/api"
 import React, { useEffect, useState } from 'react';
 import UserInfo from "./UserInfo/UserInfo"
 import CategoryList from "./CategotyList/CategoryList"
@@ -7,37 +7,27 @@ import Confirnation from "../../../Modals/Confirmation";
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
 const Profile = (props) => {
-  const [userData, setUserData] = useState(props.userData);
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isDialogOpen1, setIsDialogOpen1] = useState(false)
   const [categortId, setCategortId] = useState(-1)
-  const token = props.getToken();
   const exit = () => setIsDialogOpen(false)
   const exit1 = () => setIsDialogOpen1(false)
   const navigate = useNavigate()
   const overlayRef = useRef(null)
+  const token = props.getToken();
+
   const DeleteUser = () => {
-      if (token){
-        axios.delete("https://api.energy-cerber.ru/user/", {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }).then(response => {
-          console.log(response.data)
-          props.removeToken()
-          navigate("/login");
-        })
-      }
+    if (token){
+      deleteUserApi().then( response => {
+        props.removeToken()
+        navigate("/login");
+      })
     }
+  }
   
   const deleteCategory = (id) => {
     if (token) {
-      axios.delete(`https://api.energy-cerber.ru/categories/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }).then(response => {
-        console.log(response.data)
+      categorieDeleteApi(id).then(response => {
         props.fetchCategories()
         props.updateCategories();
         exit1()

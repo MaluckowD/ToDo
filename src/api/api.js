@@ -57,6 +57,12 @@ export const categoriesNobaseApi = () => {
       return responce.data;
     })
 }
+export const categorieDeleteApi = (id) => {
+  return instance.delete(`categories/${id}`)
+    .then(responce => {
+      return responce.data;
+    })
+}
 
 export const addTaskApi = async (taskData) => {
   return instance.post('tasks/', taskData).then(response => {
@@ -94,6 +100,20 @@ export const deleteTaskApi = (id) => {
 
 export const changeTaskStatusApi = (id, taskData) => {
   return instance.put(`tasks/${id}/change_status`, taskData)
+    .then(responce => {
+      return responce.data;
+    })
+}
+
+export const deleteUserApi = () => {
+  return instance.delete(`user/`)
+    .then(responce => {
+      return responce.data;
+    })
+}
+
+export const UserEditApi = (userData) => {
+  return instance.put(`user/edit`, userData)
     .then(responce => {
       return responce.data;
     })

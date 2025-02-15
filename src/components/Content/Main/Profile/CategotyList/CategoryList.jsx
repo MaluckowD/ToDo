@@ -1,12 +1,8 @@
 import s from "./CategoryList.module.css"
 import close from "../../../../../images/close.svg"
 import image from "../../../../../images/image.svg"
-import axios from "axios"
-const CategoryList = (props) => {
-  console.log(props.categories)
-  const token = props.getToken()
-  
 
+const CategoryList = (props) => {
   const DeleteCategoryDialog = (id) => {
     props.setIsDialogOpen1(true)
     props.setCategortId(id)
@@ -27,7 +23,6 @@ const CategoryList = (props) => {
               <img onClick={() => DeleteCategoryDialog(item.id)} src={close} />
             </div>
           ))}
-          
         </div>
       </div>
     </div>
