@@ -1,5 +1,4 @@
-import s from "./TaskVariants.module.css"
-
+import s from "../Modals.module.css"
 const TaskVariants = (props) => {
   return (
     <div className={[s.modal, s.modal_categoryAdd].join(" ")} ref={props.propsmodalRef}>

@@ -1,4 +1,5 @@
-import s from "./EditCategory.module.css"
+import s1 from "./EditCategory.module.css"
+import s from "../Modals.module.css"
 
 const EditCategory = (props) => {
   console.log(props.categoryId)
@@ -6,7 +7,7 @@ const EditCategory = (props) => {
     <div className={[s.modal, s.modal_categoryAdd].join(" ")} ref={props.modalRef}>
       <div className={s.modalcontent}>
 
-        <input className={[s.categoryName, s.categoryNamemodificate].join(" ")}
+        <input className={[s.categoryName, s1.categoryNamemodificate].join(" ")}
           maxlength='50'
           type="text"
           value={props.categoryName}

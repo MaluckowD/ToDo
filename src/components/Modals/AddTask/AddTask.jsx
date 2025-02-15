@@ -1,4 +1,4 @@
-import s from "./AddTask.module.css"
+import s from "../Modals.module.css"
 
 const AddTask = (props) => {
   return (

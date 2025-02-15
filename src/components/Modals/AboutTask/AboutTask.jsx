@@ -1,8 +1,8 @@
-import s from "./AboutTask.module.css"
-
+import s from "../Modals.module.css"
+import s1 from "./AboutTask.module.css"
 const AboutTask = (props) => {
   return (
-    <div className={s.modal} ref={props.propsmodalRef}>
+    <div className={[s.modal, s1.module].join(" ")} ref={props.propsmodalRef}>
       <div className={s.modalcontent}>
         <input className={s.categoryName}
           maxlength='50'

@@ -1,5 +1,4 @@
 import s from "./Confirmation.module.css"
-
 const Confirnation = (props) => {
 
   return (

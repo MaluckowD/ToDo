@@ -46,7 +46,8 @@ const Content = (props) => {
   const openModalCategory = () => setIsModalCategoryOpen(true);
   const token = props.getToken()
   const navigate = useNavigate();
-
+  const modalRef = useRef(null);
+  
   const openWarning = () => {
     setIsWarningOpen(true)
     closeIsOpenTask()
@@ -83,6 +84,45 @@ const Content = (props) => {
     setColor("#ffffff")
     setError(null);
   }
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        closeModalCat();
+        closeModal();
+        closeModalEditCat();
+        closeIsOpenTaskInfo();
+        closeIsOpenTask();
+        closeTaskInfoOpen()
+        closeTaskUpdateOpen()
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        closeModalCat();
+        closeModal();
+        closeModalEditCat();
+        closeIsOpenTaskInfo();
+        closeIsOpenTask();
+        closeTaskInfoOpen()
+        closeTaskUpdateOpen()
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [modalRef]);
 
   const getInitialStatusId1 = () => {
     const storedStatusId = localStorage.getItem('statusId');
@@ -121,13 +161,11 @@ const Content = (props) => {
       const day = String(today.getDate()).padStart(2, '0');
       dateString = `${year}-${month}-${day}`;
     }
-
     const dateObj = new Date(dateString);
     const year = dateObj.getFullYear();
     const month = String(dateObj.getMonth() + 1).padStart(2, '0');
     const day = String(dateObj.getDate()).padStart(2, '0');
     const formattedDate = `${year}-${month}-${day}`;
-
     setDate(formattedDate);
     setOpenTaskInfo(true);
   };
@@ -161,46 +199,6 @@ const Content = (props) => {
       navigate('/login');
     }
   }, [redirectToLogin, navigate])
-  const modalRef = useRef(null);
-
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === 'Escape') {
-        closeModalCat();
-        closeModal();
-        closeModalEditCat();
-        closeIsOpenTaskInfo();
-        closeIsOpenTask();
-        closeTaskInfoOpen()
-        closeTaskUpdateOpen()
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-    
-  }, []);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (modalRef.current && !modalRef.current.contains(event.target)) {
-        closeModalCat();
-        closeModal();
-        closeModalEditCat();
-        closeIsOpenTaskInfo();
-        closeIsOpenTask();
-        closeTaskInfoOpen()
-        closeTaskUpdateOpen()
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [modalRef]);
 
   const addTask = async () => {
     setError(null);

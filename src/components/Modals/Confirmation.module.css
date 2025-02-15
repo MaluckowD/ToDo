@@ -1,11 +1,7 @@
-
 .modal {
   position: fixed;
-  /* Фиксированное положение относительно viewport */
   top: 50%;
-  /* Позиционируем верхний край блока по середине viewport */
   left: 50%;
-  /* Позиционируем левый край блока по середине viewport */
   transform: translate(-50%, -50%);
   display: block;
   color: #fff;
@@ -16,8 +12,6 @@
   border-radius: 30px;
   overflow: auto;
   color: #000;
-
-
 }
 .container{
   margin: 0 auto;
