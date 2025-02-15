@@ -1,8 +1,9 @@
-import s from "./EditTask.module.css"
+import s1 from "./EditTask.module.css"
+import s from "../Modals.module.css"
 
 const EditTask = (props) => {
   return (
-    <div className={[s.modal, s.editTask].join(" ")} ref={props.modalRef}>
+    <div className={[s.modal, s1.editTask].join(" ")} ref={props.modalRef}>
       <div className={s.modalcontent}>
 
         <input className={s.categoryName}
