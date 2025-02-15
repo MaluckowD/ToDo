@@ -110,7 +110,6 @@ const Registration = (props) => {
 
           if (registrationResponse.status === 200 || registrationResponse.status === 201) {
             console.log("Регистрация успешна:", registrationResponse.data);
-            props.onDataUser({ email, password });
             props.saveToken(registrationResponse.data.access_token);
             navigate("/Content")
             window.location.reload()
