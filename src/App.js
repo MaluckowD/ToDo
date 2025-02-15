@@ -128,7 +128,6 @@ function App(props) {
 
   return (
     <div className={s.wrapper}>
-
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<AuthRedirect />} />
