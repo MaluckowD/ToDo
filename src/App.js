@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import s from "./App.module.css";
 import Content from "./components/Content/Content";
@@ -11,7 +11,7 @@ function App(props) {
   const [categories, setCategories] = useState(null);
   const [tasks, setTasks] = useState(null);
   const [userData, setUserData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true); 
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [taskStatuses, setTaskStatuses] = useState({});
   const getToken = () => localStorage.getItem('access_token');
@@ -19,15 +19,15 @@ function App(props) {
 
   useEffect(() => {
     document.title = "ToDo";
-  }, []); 
+  }, []);
 
   const updateUserDataInApp = (updatedUserData) => {
     setUserData(updatedUserData);
   };
-  
+
   const saveToken = (token) => {
     localStorage.setItem('access_token', token);
-    setToken(token); 
+    setToken(token);
   };
 
   const removeToken = () => {
@@ -132,17 +132,12 @@ function App(props) {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<AuthRedirect />} />
-          <Route path="/login" element={<Login saveToken={saveToken} 
-          updateUserDataInApp={updateUserDataInApp} />} />
-          <Route
-            path="/registration" element={<Registration saveToken={saveToken} />}
-          />
-          <Route path="/content" element={<Content setTaskStatuses={setTaskStatuses}    taskStatuses={taskStatuses} token={token} removeToken={removeToken}
-            updateTasks={updateTasks} tasks={tasks} updateCategories={updateCategories} categories={categories}
-            userData={userData} getToken={getToken}
-            isLoading={isLoading} error={error}
-            updateUserDataInApp={updateUserDataInApp}
-          />}>
+          <Route path="/login" element={<Login saveToken={saveToken}
+            updateUserDataInApp={updateUserDataInApp} />} />
+          <Route path="/registration" element={<Registration saveToken={saveToken} />}/>
+          <Route path="/content" element={<Content setTaskStatuses={setTaskStatuses} taskStatuses={taskStatuses} token={token} removeToken={removeToken}
+            updateTasks={updateTasks} tasks={tasks} updateCategories={updateCategories} categories={categories} userData={userData} getToken={getToken}
+            isLoading={isLoading} error={error} updateUserDataInApp={updateUserDataInApp}/>}>
             <Route index element={<Calendar />} />
             <Route path="settings" element={<Profile />} />
           </Route>

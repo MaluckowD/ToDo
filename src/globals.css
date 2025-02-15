@@ -28,7 +28,6 @@ body{
 
 ::-webkit-scrollbar-thumb:hover {
   background: #7c7c7c;
-
 }
 
 @tailwind base;
@@ -62,34 +61,27 @@ body{
 
 @media (max-width: 550px) {
   .px-4 {
-      padding: 0px;
+    padding: 0px;
+  }
+  
+  .pt-1 button {
+    width: 20px;
+  }
 
-    }
-  
-    .pt-1 button {
-      width: 20px;
-    }
-  
-    .text-gray-600 {
-      
-      font-size: 12px;
-    }
-  
+  .text-gray-600 {
+    font-size: 12px;
+  }
 }
 
 @media (max-width: 350px) {
   .text-gray-600 {
     font-size: 11px;
-  }
-  .px-4{
-  }
-  
+  } 
 }
 @media (max-width: 318px) {
-  
   .px-4 {
-      padding: 0px;
-      padding-top: 20px;
+    padding: 0px;
+    padding-top: 20px;
     }
   .pt-1 button{
     width: 20px;
@@ -107,7 +99,6 @@ body{
   .pt-1 button{
     width: 14px;
   }
-
 }
 
 

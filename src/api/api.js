@@ -15,39 +15,6 @@ export const fetchUserName = async () => {
   })
 }
 
-export const categoriesInfo = (id) => {
-  return instance.get(`categories/${id}`)
-    .then(responce => {
-      return responce.data;
-    })
-}
-
-export const fetchCategoriesApi = async ()  => {
-  return instance.get('categories/').then( response => {
-    return response.data
-  })
-}
-
-export const addTaskApi = async (taskData) => {
-  return instance.post('tasks/', taskData).then(response => {
-    return response.data
-  })
-}
-
-export const addCategoryApi = (categoryData) => {
-  return instance.post('categories/', categoryData).then(response => {
-    return response.data
-  })
-}
-
-
-export const editCategoryApi = (id, categoryData) => {
-  return instance.put(`categories/${id}`, categoryData)
-    .then(responce => {
-      return responce.data;
-    })
-}
-
 export const getDataApi = async () => {
   try {
     const response = await instance.get('user/self');
@@ -58,11 +25,43 @@ export const getDataApi = async () => {
   }
 }
 
+export const fetchCategoriesApi = async ()  => {
+  return instance.get('categories/').then( response => {
+    return response.data
+  })
+}
+
+export const categoriesInfo = (id) => {
+  return instance.get(`categories/${id}`)
+    .then(responce => {
+      return responce.data;
+    })
+}
+
+export const addCategoryApi = (categoryData) => {
+  return instance.post('categories/', categoryData).then(response => {
+    return response.data
+  })
+}
+
+export const editCategoryApi = (id, categoryData) => {
+  return instance.put(`categories/${id}`, categoryData)
+    .then(responce => {
+      return responce.data;
+    })
+}
+
 export const categoriesNobaseApi = () => {
   return instance.get(`categories/no_base`)
     .then(responce => {
       return responce.data;
     })
+}
+
+export const addTaskApi = async (taskData) => {
+  return instance.post('tasks/', taskData).then(response => {
+    return response.data
+  })
 }
 
 export const updateTasksApi = () => {
@@ -71,6 +70,37 @@ export const updateTasksApi = () => {
       return responce.data;
     })
 }
+
+export const taskInfoApi = (id) => {
+  return instance.get(`tasks/${id}`)
+    .then(responce => {
+      return responce.data;
+    })
+}
+
+export const editTaskApi = (id, taskData) => {
+  return instance.put(`tasks/${id}`, taskData)
+    .then(responce => {
+      return responce.data;
+    })
+}
+
+export const deleteTaskApi = (id) => {
+  return instance.delete(`tasks/${id}`)
+    .then(responce => {
+      return responce.data;
+    })
+}
+
+export const changeTaskStatusApi = (id, taskData) => {
+  return instance.put(`tasks/${id}/change_status`, taskData)
+    .then(responce => {
+      return responce.data;
+    })
+}
+
+
+
 
 
 
