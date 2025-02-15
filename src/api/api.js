@@ -48,4 +48,29 @@ export const editCategoryApi = (id, categoryData) => {
     })
 }
 
+export const getDataApi = async () => {
+  try {
+    const response = await instance.get('user/self');
+    return response.data;
+  } catch (error) {
+    console.error("Ошибка при получении данных пользователя:", error);
+    throw error;
+  }
+}
+
+export const categoriesNobaseApi = () => {
+  return instance.get(`categories/no_base`)
+    .then(responce => {
+      return responce.data;
+    })
+}
+
+export const updateTasksApi = () => {
+  return instance.get(`tasks/`)
+    .then(responce => {
+      return responce.data;
+    })
+}
+
+
 

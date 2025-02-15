@@ -6,25 +6,21 @@ import Login from "./components/Login/Login";
 import Registration from "./components/Registration/Registration";
 import Calendar from "./components/Content/Main/Calendar/Calendar";
 import Profile from "./components/Content/Main/Profile/Profile";
-import axios from "axios";
+import { getDataApi, categoriesNobaseApi, updateTasksApi } from "./api/api"
 function App(props) {
-  const [userDatafromRegistration, setuserDatafromRegistration] = useState(null);
   const [categories, setCategories] = useState(null);
   const [tasks, setTasks] = useState(null);
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true); 
   const [error, setError] = useState(null);
   const [taskStatuses, setTaskStatuses] = useState({});
+  const getToken = () => localStorage.getItem('access_token');
+  const [token, setToken] = useState(() => getToken());
+
   useEffect(() => {
     document.title = "ToDo";
   }, []); 
 
-  const handleuserDatafromRegistration = (data) => {
-    setuserDatafromRegistration(data);
-    console.log(userDatafromRegistration)
-  }
-  const getToken = () => localStorage.getItem('access_token');
-  const [token, setToken] = useState(() => getToken());
   const updateUserDataInApp = (updatedUserData) => {
     setUserData(updatedUserData);
   };
@@ -34,21 +30,21 @@ function App(props) {
     setToken(token); 
   };
 
+  const removeToken = () => {
+    localStorage.removeItem('access_token');
+  }
+
   useEffect(() => {
     const fetchUserData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get("https://api.energy-cerber.ru/user/self", {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        setUserData(response.data);
-        setCategories(response.data.categories);
-        setTasks(response.data.tasks);
-        if (response.data.tasks) {
+        const response = await getDataApi()
+        setUserData(response);
+        setCategories(response.categories);
+        setTasks(response.tasks);
+        if (response.tasks) {
           const initialTaskStatuses = {};
-          response.data.tasks.forEach(task => {
+          response.tasks.forEach(task => {
             initialTaskStatuses[task.id] = {
               completed: task.completed,
               statusId: task.id,
@@ -73,13 +69,8 @@ function App(props) {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get("https://api.energy-cerber.ru/categories/no_base", {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        console.log(response.data)
-        setCategories(response.data)
+        const response = await categoriesNobaseApi()
+        setCategories(response)
       } catch (error) {
         setError(error);
         console.error("Ошибка при загрузке данных пользователя:", error);
@@ -95,12 +86,8 @@ function App(props) {
 
   const updateCategories = async () => {
     try {
-      const response = await axios.get("https://api.energy-cerber.ru/categories/no_base", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setCategories(response.data);
+      const response = await categoriesNobaseApi()
+      setCategories(response);
     } catch (error) {
       console.error("Ошибка при обновлении категорий:", error);
     }
@@ -108,19 +95,13 @@ function App(props) {
 
   const updateTasks = async () => {
     try {
-      const response = await axios.get("https://api.energy-cerber.ru/tasks/", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setTasks(response.data);
+      const response = await updateTasksApi()
+      setTasks(response);
     } catch (error) {
       console.error("Ошибка при обновлении задач:", error);
     }
   };
-  const removeToken = () => {
-    localStorage.removeItem('access_token');
-  }
+
   const AuthRedirect = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
@@ -131,44 +112,32 @@ function App(props) {
         setToken(storedToken);
       }
       setLoading(false);
-      console.log("AuthRedirect: token loaded", storedToken);
     }, [setToken])
 
     useEffect(() => {
       if (!loading) {
-        console.log("AuthRedirect: navigating to", token ? "/content" : "/login");
         if (token) {
           navigate("/content");
         } else {
           navigate("/login");
         }
       }
-
     }, [navigate, token, loading]);
-
     return null;
   };
 
-
-
-  
-  console.log(categories)
-  useEffect(() => {
-    console.log("Текущее состояние userDatafromRegistration:", userDatafromRegistration);
-  }, [userDatafromRegistration]);
   return (
     <div className={s.wrapper}>
 
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<AuthRedirect />} />
-          <Route path="/login" element={<Login saveToken={saveToken} updateUserDataInApp={updateUserDataInApp} />} />
+          <Route path="/login" element={<Login saveToken={saveToken} 
+          updateUserDataInApp={updateUserDataInApp} />} />
           <Route
-            path="/registration"
-            store={props.store}
-            element={<Registration onDataUser={handleuserDatafromRegistration} saveToken={saveToken} />}
+            path="/registration" element={<Registration saveToken={saveToken} />}
           />
-          <Route path="/content" element={<Content setTaskStatuses={setTaskStatuses} taskStatuses={taskStatuses} token={token} removeToken={removeToken}
+          <Route path="/content" element={<Content setTaskStatuses={setTaskStatuses}    taskStatuses={taskStatuses} token={token} removeToken={removeToken}
             updateTasks={updateTasks} tasks={tasks} updateCategories={updateCategories} categories={categories}
             userData={userData} getToken={getToken}
             isLoading={isLoading} error={error}
