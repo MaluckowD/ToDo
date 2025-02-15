@@ -5,9 +5,13 @@ import Main from "./Main/Main"
 import Footer from "./Footer/Footer"
 import KirillLoh from '../Modals/KirillLoh/KirillLoh';
 import AddTask from '../Modals/AddTask/AddTask';
+import TaskVariants from '../Modals/TaskVariants/TaskVariants';
 import s from "./Content.module.css"
 import { categoriesInfo, fetchCategoriesApi, addTaskApi, addCategoryApi, editCategoryApi, taskInfoApi, editTaskApi, deleteTaskApi, changeTaskStatusApi } from "../../api/api"
 import Confirnation from "../Modals/Confirmation";
+import AboutTask from '../Modals/AboutTask/AboutTask';
+import EditTask from '../Modals/EditTask/EditTask';
+import AddCategory from '../Modals/AddCategory/AddCategory';
 const Content = (props) => {
   const [redirectToLogin, setRedirectToLogin] = useState(false);
   const [error, setError] = useState(null);
@@ -415,173 +419,30 @@ const Content = (props) => {
       )}
 
       {isTaskOpen && (
-        <div className={[s.modal, s.modal_categoryAdd].join(" ")} ref={modalRef}>
-          <div className={s.modalcontent}>
-            <button className={s.closeModalCategory} onClick={TaskInfoOpen}>
-              Подробная информация
-            </button>
-            <button className={s.closeModalCategory} onClick={TaskUpdateOpen}>
-              Редактировать задачу
-            </button>
-            <button className={s.closeModalCategory} onClick={() => changeTaskStatus(taskId)}>
-              Изменить статус
-            </button>
-            <button className={s.closeModalCategory} onClick={openWarning}>
-              Удалить задачу
-            </button>
-            <button className={s.closeModalCategory} onClick={closeIsOpenTask}>Выйти</button>
-          </div>
-        </div>
+        <TaskVariants modalRef = {modalRef} TaskInfoOpen = {TaskInfoOpen} TaskUpdateOpen = {TaskUpdateOpen} changeTaskStatus = {changeTaskStatus} taskId = {taskId}
+        openWarning = {openWarning} closeIsOpenTask = {closeIsOpenTask}/>
       )}
 
       {isTaskInfoOpen && (
-        <div className={s.modal} ref={modalRef}>
-          <div className={s.modalcontent}>
-            <input className={s.categoryName}
-              maxlength='50'
-              disabled
-              type="text"
-              value={taskName}
-              onChange={(e) => setTaskName(e.target.value)}
-              placeholder="Введите название для задачи"
-            />
-            <textarea className={s.taskDescription}
-              maxlength='500'
-              disabled
-              type="text"
-              value={taskDescription}
-              onChange={(e) => setTaskDescription(e.target.value)}
-              placeholder="Описание"
-            />
-            <input className={[s.categoryName, s.taskdate].join(" ")}
-              disabled
-              style={
-                { color: "#000" }
-              }
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              placeholder="Дата задачи"
-            />
-            <select className={s.taskinfo} disabled style={
-              { color: "#000" }
-            } value={selectedCategoryId} onChange={handleCategoryChange}>
-              <option disabled value="">Выберите категорию</option>
-              {categories.map((category) => (
-                <option style={{ backgroundColor: category.color }} key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
-            <select disabled
-              className={s.taskinfo}
-              style={{ color: "#000" }}
-              value={taskPriority}
-              onChange={handlePriorityChange}
-            >
-              <option disabled value="">Выберите приоритет</option>
-              <option style={{ backgroundColor: "#EB0000" }} value={1}>Высокий</option>
-              <option style={{ backgroundColor: "#E8E230" }} value={2}>Средний</option>
-              <option style={{ backgroundColor: "#3FAB30" }} value={3}>Низкий</option>
-            </select>
-            <input className={s.categoryName}
-              style={{ textAlign: "center" }}
-              type="text"
-              disabled
-              value={completed ? "Выполнена" : "Не выполнена"}
-            />
-            <button className={s.closeModalCategory} onClick={closeTaskInfoOpen}>Выйти</button>
-          </div>
-        </div>
+        <AboutTask modalRef = {modalRef} taskName = {taskName} setTaskName = {setTaskName}
+        taskDescription = {taskDescription} setTaskDescription = {setTaskDescription}
+        date = {date} setDate = {setDate} selectedCategoryId = {selectedCategoryId}
+        handleCategoryChange = {handleCategoryChange} taskPriority = {taskPriority}
+        handlePriorityChange = {handlePriorityChange} completed = {completed} 
+          closeTaskInfoOpen={closeTaskInfoOpen} categories={categories}/>
       )}
-
 
       {isTaskUpdateOpen && (
-        <div className={[s.modal,s.editTask].join(" ")} ref={modalRef}>
-          <div className={s.modalcontent}>
-            
-            <input className={s.categoryName}
-              maxlength='50'
-              type="text"
-              value={taskName}
-              onChange={(e) => setTaskName(e.target.value)}
-              placeholder="Введите название для задачи"
-            />
-            <textarea className={s.taskDescription}
-              maxlength='500'
-              type="text"
-              value={taskDescription}
-              onChange={(e) => setTaskDescription(e.target.value)}
-              placeholder="Описание"
-            />
-            <input className={s.categoryName}
-              style={
-                { color: "#000" }
-              }
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              placeholder="Дата задачи"
-            />
-            <select style={
-              { color: "#000" }
-            } value={selectedCategoryId} onChange={handleCategoryChange}>
-              <option disabled value="">Выберите категорию</option>
-              {categories.map((category) => (
-                <option style={{ backgroundColor: category.color }} key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
-            <select
-              style={{ color: "#000" }}
-              value={taskPriority}
-              onChange={handlePriorityChange}
-            >
-              <option disabled value="">Выберите приоритет</option>
-              <option style={{ backgroundColor: "#EB0000" }} value={1}>Высокий</option>
-              <option style={{ backgroundColor: "#E8E230" }} value={2}>Средний</option>
-              <option style={{ backgroundColor: "#3FAB30" }} value={3}>Низкий</option>
-            </select>
-            <input className={s.categoryName}
-              style={{ textAlign: "center" }}
-              type="text"
-              disabled
-              value={completed ? "Выполнена" : "Не выполнена"}
-            />
-            {error && <p style={{ width: "400px", marginBottom: "10px" }} className="text-red-500 text-center">{error}</p>}
-            <button className={s.closeModalCategory} onClick={() => changeTask(taskId)}>Сохранить изменения</button>
-            <button className={s.closeModalCategory} onClick={CloseTaskUpdateOpen}>Отменить изменения</button>
-          </div>
-        </div>
+        <EditTask modalRef = {modalRef} taskName = {taskName} setTaskName = {setTaskName}
+        taskDescription = {taskDescription} setTaskDescription = {setTaskDescription}
+        date = {date} setDate = {setDate} selectedCategoryId = {selectedCategoryId}
+        handleCategoryChange = {handleCategoryChange} categories = {categories}
+        completed = {completed} error = {error} changeTask = {changeTask} taskId = {taskId}
+          CloseTaskUpdateOpen={CloseTaskUpdateOpen}/>
       )}
 
-      
       {isModalCategoryOpen&& (
-        <div className={[s.modal, s.modal_categoryAdd].join(" ")} ref={modalRef}>
-          <div className={s.modalcontent}>
-
-            
-            <input className= {[s.categoryName, s.categoryNamemodificate].join(" ")}
-              maxlength='50'
-              type="text"
-              value={categoryName}
-              onChange={(e) => setCategoryName(e.target.value)}
-              placeholder="Введите название категории" 
-            />
-
-            <h2 className={s.description_color}>Выберите цвет</h2>
-            <input
-              type="color"
-              id="colorPicker"
-              value={color}
-              onChange={handleColorChange}
-            />
-            {error && <p style={{ width: "400px", marginBottom: "10px" }} className="text-red-500 text-center">{error}</p>}
-            <button className={s.closeModalCategory} onClick={closeModalCategory}>Добавить категорию</button>
-            <button className={s.closeModalCategory} onClick={closeModalCat}>Выйти</button>
-          </div>
-        </div>
+        <AddCategory modalRef={modalRef} categoryName={categoryName} setCategoryName={setCategoryName} color={color} handleColorChange={handleColorChange} error = {error} closeModalCategory = {closeModalCategory} closeModalCat = {closeModalCat}/>
       )}
 
       {isEditCategoryOpen && (
