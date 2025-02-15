@@ -2,12 +2,14 @@ import Header from "./Header/Header"
 import Main from "./Main/Main"
 import Footer from "./Footer/Footer"
 import s from "./Content.module.css"
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef} from 'react';
 import { useNavigate } from "react-router-dom";
+import { categoriesInfo, fetchCategoriesApi, addTaskApi, addCategoryApi, editCategoryApi } from "../../api/api"
 import axios from "axios";
 import Kirillloh from "../../images/Кирилл2.jpg"
 import Ville from "../../images/Vinne.jpg"
 import Confirnation from "../Modals/Confirmation";
+
 const Content = (props) => {
   const [redirectToLogin, setRedirectToLogin] = useState(false);
   const [error, setError] = useState(null);
@@ -32,7 +34,6 @@ const Content = (props) => {
     closeIsOpenTask()
   }
   const closeTaskInfoOpen = () => setisTaskInfoOpen(false)
-
   const TaskUpdateOpen = () => setIsTaskUpdateOpen(true)
   const closeTaskUpdateOpen = () => setIsTaskUpdateOpen(false)
 
@@ -96,14 +97,6 @@ const Content = (props) => {
     localStorage.setItem('completed', JSON.stringify(completed));
   }, [completed]);
 
-
-
-  const handleTaskClick = (e) => {
-    props.getTaskInfo(e.id);
-  };
-
-  
-
   const closeModalEditCat = () => {
     setIsEditModalCategoryOpen(false);
     setCategoryName("")
@@ -111,27 +104,20 @@ const Content = (props) => {
     setError(null); 
   }
 
-
-  
   const openModalEditCategory = (id) => {
     setcategoryId(id)
     setIsEditModalCategoryOpen(true)
-    axios.get(`https://api.energy-cerber.ru/categories/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      }}
-    ).then( response => {
-      setCategoryName(response.data.name)
-      setColor(response.data.color)
-    })
-
+    categoriesInfo(id).then( response => {
+      setCategoryName(response.name)
+      setColor(response.color)
+    }).catch(error => {
+      console.error("Ошибка при получении информации о категории:", error);
+    });
   };
 
   const openTaskInfo = (e) => {
     let dateString = e?.currentTarget?.getAttribute('data-date');
-
     if (!dateString) {
-      // Если data-date отсутствует, устанавливаем текущую дату
       const today = new Date();
       const year = today.getFullYear();
       const month = String(today.getMonth() + 1).padStart(2, '0');
@@ -152,16 +138,16 @@ const Content = (props) => {
  
   const fetchCategories = async () => {
     try {
-      const response = await axios.get("https://api.energy-cerber.ru/categories/", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setCategories(response.data); // Сохраняем категории
+      fetchCategoriesApi().then(
+        response => {
+          setCategories(response);
+        }
+      )
     } catch (error) {
       console.error("Ошибка при загрузке категорий:", error);
     }
   };
+
   useEffect( () => {
     if (token) {
       fetchCategories()
@@ -169,15 +155,14 @@ const Content = (props) => {
   }, [token])
 
   useEffect(() => {
-    // Проверка токена при монтировании компонента или при изменении токена
     if (!token && !redirectToLogin) {
-      setRedirectToLogin(true); // Инициируем перенаправление
+      setRedirectToLogin(true);
     }
   }, [token, redirectToLogin]);
 
   useEffect(() => {
     if (redirectToLogin) {
-      navigate('/login'); // Выполняем перенаправление только если нужно
+      navigate('/login');
     }
   }, [redirectToLogin, navigate])
   const modalRef = useRef(null);
@@ -235,16 +220,8 @@ const Content = (props) => {
         category_id: parseInt(selectedCategoryId, 10),
         date: date,
       };
-      const response = await axios.post(
-        "https://api.energy-cerber.ru/tasks/",
-        taskData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log(response.data);
+      await addTaskApi(taskData)
+      
       await props.updateTasks();
       closeIsOpenTaskInfo();
       setDate(taskData.date);
@@ -259,11 +236,9 @@ const Content = (props) => {
         setError(`Ошибка при добавлении задачи! Проверьте заполненность полей!`);
       } else if (error.request) {
         setError(`Ошибка сети`)
-      } else {
       }
     }
   };
-
 
   const closeModalCategory = async () => {
     setError(null);
@@ -272,16 +247,7 @@ const Content = (props) => {
         name: categoryName,
         color: categoryColor,
       };
-      const response = await axios.post(
-        "https://api.energy-cerber.ru/categories/",
-        categoryData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log(response.data);
+      await addCategoryApi(categoryData)
       props.updateCategories();
       await fetchCategories();
       setCategoryName("");
@@ -293,8 +259,6 @@ const Content = (props) => {
         setError("Ошибка при создании категории. Проверьте заполненность полей");
       } else if (error.request) {
         setError(`Ошибка сети`)
-      } else {
-        
       }
     }
   };
@@ -306,16 +270,7 @@ const Content = (props) => {
         name: categoryName,
         color: categoryColor,
       };
-      const response = await axios.put(
-        `https://api.energy-cerber.ru/categories/${id}`,
-        categoryData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log(response.data);
+      await editCategoryApi(id, categoryData)
       props.updateCategories();
       await fetchCategories();
       setIsEditModalCategoryOpen(false);
@@ -326,8 +281,6 @@ const Content = (props) => {
       }
       else if (error.request) {
         setError(`Ошибка сети`)
-      }
-      else {
       }
     }
   };
@@ -341,7 +294,6 @@ const Content = (props) => {
       });
 
       const taskData = taskResponse.data;
-      console.log(taskData)
       const categoryId = taskData.category_id;
       setTaskId(taskData.id)
       setCompleted(taskData.completed)
@@ -363,13 +315,11 @@ const Content = (props) => {
       setSelectedCategoryId(categoryId);
       setcategoryId(categoryId);
       setSelectedCategoryName(categoryName);
-      console.log(categoryId);
       setIsTaskOpen(true);
     } catch (error) {
       console.error("Ошибка при получении данных задачи:", error);
     }
   };
-  
   
   if (props.isLoading) {
     return <p>Загрузка данных...</p>;
@@ -379,20 +329,10 @@ const Content = (props) => {
     return <p>Ошибка: {props.error.message}</p>;
   }
 
-  const colors = 
-  ["#F44336","#4CAF50","#2196F3","#FFC107","#FF9800","#9C27B0",
-  "#E91E63","#795548","#9E9E9E","#212121","#FFFFFF","#00BCD4",
-  "#C0CA33","#009688","#3F51B5","#673AB7","#03A9F4","#8BC34A",
-  "#EEEEEE","#FFC107","#FF5722","#F48FB1"]
   const handleColorChange = (event) => {
     setColor(event.target.value);
     setCategoryColor(event.target.value);
   };
-  
-  const handleCompletedChange = (event) => {
-    setColor(event.target.value);
-    setCategoryColor(event.target.value);
-  }
 
   const changeTask = async (id) => {
     setError(null); 
@@ -413,7 +353,6 @@ const Content = (props) => {
           },
         }
       );
-      console.log(response.data);
       await props.updateTasks();
       closeTaskUpdateOpen();
       TaskInfoOpen();
@@ -423,11 +362,7 @@ const Content = (props) => {
         setError(`Ошибка при изменении задачи! Проверьте заполненность полей!`);
       }
       else if (error.request) {
-
         setError(`Ошибка сети`)
-      }
-      else {
-
       }
     }
   };
@@ -437,8 +372,6 @@ const Content = (props) => {
         Authorization: `Bearer ${token}`
       }
     }).then(response => {
-      console.log(response.data)
-      const newTasks = props.tasks.filter(task => task.id !== id);
       props.updateTasks()
       setIsTaskOpen(false)
       setTaskName("");
@@ -484,7 +417,6 @@ const Content = (props) => {
         localStorage.setItem(`statusId_${id}`, id);
       }
       props.setTaskStatuses(newTaskStatuses);
-      console.log(props.taskStatuses)
       props.updateTasks();
     } catch (error) {
       console.error('Ошибка при изменении статуса задачи:', error);
@@ -498,8 +430,6 @@ const Content = (props) => {
   const getTaskStatus = (taskId) => {
     return props.taskStatuses[taskId] || { completed: false, statusId: 0 };
   };
-
-  console.log(props.taskStatuses)
 
   return(
     <div className = {s.root}>
