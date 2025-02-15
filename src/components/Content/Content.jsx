@@ -1,15 +1,13 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from "react-router-dom";
 import Header from "./Header/Header"
 import Main from "./Main/Main"
 import Footer from "./Footer/Footer"
 import s from "./Content.module.css"
-import React, { useState, useEffect, useRef} from 'react';
-import { useNavigate } from "react-router-dom";
-import { categoriesInfo, fetchCategoriesApi, addTaskApi, addCategoryApi, editCategoryApi } from "../../api/api"
-import axios from "axios";
+import { categoriesInfo, fetchCategoriesApi, addTaskApi, addCategoryApi, editCategoryApi, taskInfoApi, editTaskApi, deleteTaskApi, changeTaskStatusApi } from "../../api/api"
 import Kirillloh from "../../images/Кирилл2.jpg"
 import Ville from "../../images/Vinne.jpg"
 import Confirnation from "../Modals/Confirmation";
-
 const Content = (props) => {
   const [redirectToLogin, setRedirectToLogin] = useState(false);
   const [error, setError] = useState(null);
@@ -79,14 +77,13 @@ const Content = (props) => {
   const [selectedCategoryName, setSelectedCategoryName] = useState('');
   const navigate = useNavigate();
 
-  
   const getInitialStatusId1 = () => {
     const storedStatusId = localStorage.getItem('statusId');
     return storedStatusId ? parseInt(storedStatusId) : 0;
   };
   const getInitialCompleted1 = () => {
     const storedCompleted = localStorage.getItem('completed');
-    return storedCompleted ? JSON.parse(storedCompleted) : false;
+    console.log(storedCompleted)
   };
   const [completed, setCompleted] = useState(getInitialCompleted1());
   const [statusId, setStatusId] = useState(getInitialStatusId1());
@@ -135,7 +132,6 @@ const Content = (props) => {
     setOpenTaskInfo(true);
   };
 
- 
   const fetchCategories = async () => {
     try {
       fetchCategoriesApi().then(
@@ -221,7 +217,6 @@ const Content = (props) => {
         date: date,
       };
       await addTaskApi(taskData)
-      
       await props.updateTasks();
       closeIsOpenTaskInfo();
       setDate(taskData.date);
@@ -259,7 +254,7 @@ const Content = (props) => {
         setError("Ошибка при создании категории. Проверьте заполненность полей");
       } else if (error.request) {
         setError(`Ошибка сети`)
-      }
+      } 
     }
   };
 
@@ -287,23 +282,14 @@ const Content = (props) => {
 
   const getTaskInfo = async (id) => {
     try {
-      const taskResponse = await axios.get(`https://api.energy-cerber.ru/tasks/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-
-      const taskData = taskResponse.data;
+      const taskResponse = await taskInfoApi(id)
+      const taskData = taskResponse;
       const categoryId = taskData.category_id;
       setTaskId(taskData.id)
       setCompleted(taskData.completed)
       let categoryName = "";
       try {
-        const categoryResponse = await axios.get(`https://api.energy-cerber.ru/categories/${categoryId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
+        const categoryResponse = await categoriesInfo(statusId)
         categoryName = categoryResponse.data.name
       } catch (e) {
         console.error("ошибка при получении имени категории", e)
@@ -344,15 +330,7 @@ const Content = (props) => {
         category_id: parseInt(selectedCategoryId, 10),
         date: date,
       };
-      const response = await axios.put(
-        `https://api.energy-cerber.ru/tasks/${id}`,
-        taskData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await editTaskApi(id, taskData)
       await props.updateTasks();
       closeTaskUpdateOpen();
       TaskInfoOpen();
@@ -366,12 +344,9 @@ const Content = (props) => {
       }
     }
   };
+
   const deleteTask = (id) => {
-    axios.delete(`https://api.energy-cerber.ru/tasks/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }).then(response => {
+    deleteTaskApi(id).then( response => {
       props.updateTasks()
       setIsTaskOpen(false)
       setTaskName("");
@@ -392,14 +367,9 @@ const Content = (props) => {
       date: date
     }
     try {
-      const response = await axios.put(`https://api.energy-cerber.ru/tasks/${id}/change_status`, taskData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log(response.data);
+      const response = await changeTaskStatusApi(id, taskData)
       const newTaskStatuses = { ...props.taskStatuses };
-      if (response.data.completed === true) {
+      if (response.completed === true) {
         setCompleted(true)
         newTaskStatuses[id] = {
           completed: true,
@@ -417,6 +387,7 @@ const Content = (props) => {
         localStorage.setItem(`statusId_${id}`, id);
       }
       props.setTaskStatuses(newTaskStatuses);
+      console.log(props.taskStatuses)
       props.updateTasks();
     } catch (error) {
       console.error('Ошибка при изменении статуса задачи:', error);
