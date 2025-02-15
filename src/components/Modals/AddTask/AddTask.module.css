@@ -1,23 +1,25 @@
-.wrapper {
-  background-color: #D4FCEE;
-  position: relative;
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: block;
+  color: #fff;
+  background-color: #a5cab6;
+  z-index: 10;
+  width: 500px;
+  height: 570px;
+  border-radius: 30px;
+  overflow: auto;
+}
+
+.modalcontent {
+  margin-top: 18px;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-}
-
-
-.opacity {
-  opacity: 0.5;
-  transition: opacity 0.3s ease;
-  filter: blur(2px);
-  pointer-events: none;
-
-}
-
-.modalcontent input {
-  margin-bottom: 20px;
-  padding-left: 0px;
+  align-items: center;
+  padding: 20px;
 }
 
 .categoryName {
@@ -55,8 +57,6 @@
   margin-bottom: 20px;
 }
 
-
-
 .taskDescription::placeholder {
   color: #000;
   font-size: 16px;
@@ -83,14 +83,11 @@ input[type="date"] {
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
-  background-image: url('../../images/calendar.svg');
-  /* Замените на путь к своей иконке */
+  background-image: url('../../../images/calendar.svg');
   background-size: contain;
   background-repeat: no-repeat;
   opacity: 1;
-  /* Установите видимость */
   color: transparent;
-  /* Скрываем стандартную иконку */
   cursor: pointer;
   width: 25px;
   height: 25px;
@@ -103,15 +100,45 @@ input[type="date"]:focus {
 
 input[type="date"]::-webkit-calendar-picker-indicator {
   color: #007bff;
-  /* Цвет иконки календаря */
   cursor: pointer;
 }
 
+.closeModalCategory {
+  background-color: #CB1C1C;
+  color: #fff;
+  width: 200px;
+  height: 40px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  transition: filter 0.3s ease;
+}
 
-.categoryColor {
-  width: 100%;
+input[type="date"]:hover {
+  filter: brightness(1.2);
+}
+
+.closeModalCategory:hover {
+  filter: brightness(1.2);
+}
+
+.close {
+  background-color: #CB1C1C;
+  color: #fff;
+  width: 200px;
+  height: 40px;
+  border-radius: 10px;
+  margin-bottom: 5px;
+  transition: filter 0.3s ease;
+}
+
+.close:hover,
+.close:focus {
+  filter: brightness(1.2);
+}
+
+.modalcontent input {
   margin-bottom: 20px;
-  height: 35px;
+  padding-left: 0px;
 }
 
 .modal select {
@@ -134,128 +161,6 @@ option {
   outline: none;
   border: 1px solid #007bff;
 }
-
-
-.closeModalCategory {
-  background-color: #CB1C1C;
-  color: #fff;
-  width: 200px;
-  height: 40px;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  transition: filter 0.3s ease;
-}
-
-input[type="date"]:hover {
-  filter: brightness(1.2);
-}
-
-.closeModalCategory:hover {
-  filter: brightness(1.2);
-  /* Немного светлее */
-}
-
-.taskinfo {
-  -webkit-appearance: none;
-  /* Для Safari и Chrome */
-  -moz-appearance: none;
-  /* Для Firefox */
-  appearance: none;
-}
-
-.modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: block;
-  color: #fff;
-  background-color: #a5cab6;
-  z-index: 10;
-  width: 500px;
-  height: 570px;
-  border-radius: 30px;
-  overflow: auto;
-}
-
-.modalcontent {
-  margin-top: 18px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-}
-
-.modalcontent img {
-  margin-bottom: 20px;
-  border-radius: 50%;
-  width: 200px;
-  height: 200px;
-}
-
-.modalcontent p {
-  margin-bottom: 20px;
-}
-
-.close {
-  background-color: #CB1C1C;
-  color: #fff;
-  width: 200px;
-  height: 40px;
-  border-radius: 10px;
-  margin-bottom: 5px;
-  transition: filter 0.3s ease;
-}
-
-.close:hover,
-.close:focus {
-  filter: brightness(1.2);
-}
-
-
-
-.modal_categoryAdd {
-
-  width: 400px;
-  height: 360px;
-}
-
-.categoryNamemodificate {
-  text-align: center;
-}
-
-.description_color {
-  color: #000;
-  font-size: 16px;
-  margin-bottom: 20px;
-}
-
-input[type="color"] {
-  width: 50px;
-  height: 25px;
-  cursor: pointer;
-}
-
-
-.taskdate {
-  text-align: center;
-  padding: 0;
-  background-image: none;
-  transition: none;
-}
-
-.taskdate:hover {
-  filter: none;
-}
-
-.taskdate::-webkit-calendar-picker-indicator {
-  display: none;
-}
-
-.editTask {
-  height: 620px;
-}
-
 
 @media (max-width: 520px) {
   .modal {
@@ -284,5 +189,4 @@ input[type="color"] {
   .modal {
     width: 270px;
   }
-
 }

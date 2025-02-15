@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import Header from "./Header/Header"
 import Main from "./Main/Main"
 import Footer from "./Footer/Footer"
+import KirillLoh from '../Modals/KirillLoh/KirillLoh';
+import AddTask from '../Modals/AddTask/AddTask';
 import s from "./Content.module.css"
 import { categoriesInfo, fetchCategoriesApi, addTaskApi, addCategoryApi, editCategoryApi, taskInfoApi, editTaskApi, deleteTaskApi, changeTaskStatusApi } from "../../api/api"
-import Kirillloh from "../../images/Кирилл2.jpg"
-import Ville from "../../images/Vinne.jpg"
 import Confirnation from "../Modals/Confirmation";
 const Content = (props) => {
   const [redirectToLogin, setRedirectToLogin] = useState(false);
@@ -404,77 +404,15 @@ const Content = (props) => {
 
   return(
     <div className = {s.root}>
-      {isModalOpen&& (
-        <div className={[s.modal, s.Kirillloh].join(" ")} ref={modalRef}>
-          <div className={s.modalcontent}>
-            <img classNane={s.modalcontent_image} src={Kirillloh}></img>
-            <p style = {{color: "#000"}}>КИРИЛЛ ЛОХ</p>
-            <button className={s.close} onClick={closeModal}>Выйти</button>
-          </div>
-        </div>
-      )}
+      {isModalOpen && ( <KirillLoh modalRef = {modalRef} closeModal = {closeModal}/> )}
 
       {isOpenTaskInfo && (
-        <div className={s.modal} ref={modalRef}>
-          <div className={s.modalcontent}>
-
-            <input className={s.categoryName}
-              maxlength='50'
-              type="text"
-              value={taskName}
-              onChange={(e) => setTaskName(e.target.value)}
-              placeholder="Введите название для задачи"
-            />
-
-            <textarea className={s.taskDescription}
-              maxlength='500'
-              type="text"
-              value={taskDescription}
-              onChange={(e) => setTaskDescription(e.target.value)}
-              placeholder="Описание"
-            />
-          
-            <input className={s.categoryName}
-              style={
-                { color: "#000" }
-              }
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              placeholder="Дата задачи"
-            />
-            
-
-            <select style={
-              { color: "#000" }
-            } value={selectedCategoryId} onChange={handleCategoryChange}>
-              <option value="" disabled>Выберите категорию</option>
-              {categories.map((category) => (
-                <option style={{ backgroundColor: category.color }} key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
-
-            <select
-              style={{ color: "#000" }}
-              value={taskPriority}
-              onChange={handlePriorityChange}
-            >
-              <option value="" disabled>Выберите приоритет</option>
-              <option style={{ backgroundColor: "#EB0000" }} value={1}>Высокий</option>
-              <option style={{ backgroundColor: "#E8E230" }} value={2}>Средний</option>
-              <option style={{ backgroundColor: "#3FAB30" }}  value={3}>Низкий</option>
-            </select>
-            {error && <p style={{ width: "400px", marginBottom: "10px" }} className="text-red-500 text-center">{error}</p>}
-            <button className={s.closeModalCategory} onClick={addTask}>
-              Добавить задачу
-            </button>
-            <button className={s.closeModalCategory} onClick={closeIsOpenTaskInfo}>Выйти</button>
-          </div>
-        </div>
+        <AddTask modalRef = {modalRef} taskName = {taskName} setTaskName = {setTaskName}
+        taskDescription = {taskDescription} setTaskDescription = {setTaskDescription}
+        date = {date} setDate = {setDate} handleCategoryChange = {handleCategoryChange}
+          categories={categories} taskPriority={taskPriority} handlePriorityChange={handlePriorityChange} error={error} closeIsOpenTaskInfo={closeIsOpenTaskInfo}
+          addTask={addTask} selectedCategoryId={selectedCategoryId}/>
       )}
-
 
       {isTaskOpen && (
         <div className={[s.modal, s.modal_categoryAdd].join(" ")} ref={modalRef}>
