@@ -23,5 +23,4 @@ const CalendarMonth = ({ updateMonthAndYear, year}) => {
   );
 };
 
-
 export default CalendarMonth

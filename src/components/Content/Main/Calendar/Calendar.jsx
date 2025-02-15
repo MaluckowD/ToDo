@@ -4,8 +4,8 @@ import s from "./Calendar.module.css"
 import classNames from "./helper";
 import "./style.css"
 import CalendarMonth from './Calendarmonth';
-import axios from 'axios';
 import { useRef } from 'react';
+import { categoriesInfo, taskInfoApi, editTaskApi } from "../../../../api/api"
 
 const monthNames = [
   "January",
@@ -105,12 +105,8 @@ const Calendar = (props) => {
           const eventDate = new Date(item.date);
           let theme = '';
           try {
-            const response = await axios.get(`https://api.energy-cerber.ru/categories/${item.category_id}`, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            });
-            theme = response.data.color;
+            const response = await categoriesInfo(item.category_id)
+            theme = response.color;
           } catch (categoryError) {
             console.error("Ошибка при получении категории:", categoryError, item);
             theme = '';
@@ -241,21 +237,13 @@ const Calendar = (props) => {
     const taskId = e.dataTransfer.getData("text/plain");
     if (draggedItem.current && taskId) {
       try {
-        const response = await axios.get(`https://api.energy-cerber.ru/tasks/${taskId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await taskInfoApi(taskId)
         const newDate = new Date(year, month, date + 1)
         const taskData = {
-          ...response.data,
+          ...response,
           date: newDate.toISOString().slice(0, 10)
         };
-        await axios.put(`https://api.energy-cerber.ru/tasks/${taskId}`, taskData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
+        await editTaskApi(taskId, taskData)
         props.updateTasks()
       } catch (error) {
         console.error('Ошибка при загрузке задачи для перетаскивания:', error);
