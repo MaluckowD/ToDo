@@ -28,7 +28,6 @@ const Content = (props) => {
   const [isTaskInfoOpen, setisTaskInfoOpen] = useState(false);
   const [isWarningOpen, setIsWarningOpen] = useState(false)
   const [categoryName, setCategoryName] = useState("");
-  const [categoryColor, setCategoryColor] = useState('#ffffff')
   const [categoryId, setcategoryId] = useState(0);
   const [date, setDate] = useState("")
   const [taskId, setTaskId] = useState(0)
@@ -44,7 +43,6 @@ const Content = (props) => {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const openModalCategory = () => setIsModalCategoryOpen(true);
-  const token = props.getToken()
   const navigate = useNavigate();
   const modalRef = useRef(null);
   
@@ -175,6 +173,7 @@ const Content = (props) => {
       fetchCategoriesApi().then(
         response => {
           setCategories(response);
+          console.log(response)
         }
       )
     } catch (error) {
@@ -183,16 +182,16 @@ const Content = (props) => {
   };
 
   useEffect( () => {
-    if (token) {
+    if (props.getToken()) {
       fetchCategories()
     }
-  }, [token])
+  }, [props.getToken()])
 
   useEffect(() => {
-    if (!token && !redirectToLogin) {
+    if (!props.getToken() && !redirectToLogin) {
       setRedirectToLogin(true);
     }
-  }, [token, redirectToLogin]);
+  }, [props.getToken(), redirectToLogin]);
 
   useEffect(() => {
     if (redirectToLogin) {
@@ -234,7 +233,7 @@ const Content = (props) => {
     try {
       const categoryData = {
         name: categoryName,
-        color: categoryColor,
+        color: color,
       };
       await addCategoryApi(categoryData)
       props.updateCategories();
@@ -257,11 +256,13 @@ const Content = (props) => {
     try {
       const categoryData = {
         name: categoryName,
-        color: categoryColor,
+        color: color,
       };
       await editCategoryApi(id, categoryData)
       props.updateCategories();
       await fetchCategories();
+      setCategoryName("");
+      setColor("#ffffff");
       setIsEditModalCategoryOpen(false);
     } catch (error) {
       console.error('Ошибка при редактировании категории:', error);
@@ -308,7 +309,6 @@ const Content = (props) => {
 
   const handleColorChange = (event) => {
     setColor(event.target.value);
-    setCategoryColor(event.target.value);
   };
 
   const changeTask = async (id) => {
@@ -394,7 +394,9 @@ const Content = (props) => {
   const getTaskStatus = (taskId) => {
     return props.taskStatuses[taskId] || { completed: false, statusId: 0 };
   };
-
+  if (!props.userData.name) {
+    return <div>Загрузка данных пользователя...</div>;
+  }
   return(
     <div className = {s.root}>
       {isModalOpen && ( <KirillLoh modalRef = {modalRef} closeModal = {closeModal}/> )}

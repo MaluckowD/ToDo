@@ -1,11 +1,10 @@
 import s from "./Footer.module.css"
 
-type FooterProps = {
-  openModal: (event: React.MouseEvent<HTMLButtonElement>) => void; // Правильный тип для 
+interface FooterProps  {
+  openModal: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const Footer: React.FC<FooterProps> = (props: FooterProps) => {
-
   return (
     <footer className={s.footer}>
       <div className={s.footer_content}>

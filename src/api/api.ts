@@ -47,6 +47,7 @@ export const addCategoryApi = (categoryData) => {
 export const editCategoryApi = (id, categoryData) => {
   return instance.put(`categories/${id}`, categoryData)
     .then(responce => {
+      console.log(categoryData.color)
       return responce.data;
     })
 }
