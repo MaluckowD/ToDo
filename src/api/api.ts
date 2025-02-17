@@ -5,6 +5,7 @@ const getToken = () => localStorage.getItem('access_token');
 const instance = axios.create({
   baseURL: 'https://api.energy-cerber.ru/',
   headers: {
+    ContentType: 'multipart/form-data',
     Authorization: `Bearer ${getToken()}`
   }
 })
@@ -15,6 +16,11 @@ export const fetchUserName = async () => {
   })
 }
 
+export const addAvatarApi = async (formData) => {
+  return instance.post("user/avatar", formData).then( response => {
+    return response.data
+  })
+}
 export const sendCodeApi = async (email:string) => {
   return instance.get(`user/register/verify_code?email=${email}`).then(response => {
     return response;
