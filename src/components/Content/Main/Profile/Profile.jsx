@@ -1,5 +1,5 @@
 import s from "./Profile.module.css"
-import { deleteUserApi, categorieDeleteApi } from "../../../../api/api"
+import { deleteUserApi, categorieDeleteApi } from "../../../../api/api.ts"
 import React, { useEffect, useState } from 'react';
 import UserInfo from "./UserInfo/UserInfo"
 import CategoryList from "./CategotyList/CategoryList"

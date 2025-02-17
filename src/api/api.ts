@@ -15,6 +15,30 @@ export const fetchUserName = async () => {
   })
 }
 
+export const sendCodeApi = async (email:string) => {
+  return instance.get(`user/register/verify_code?email=${email}`).then(response => {
+    return response;
+  })
+}
+
+export const confirmationApi = async (email:string, code:string) => {
+  return instance.post(`user/register/verify_code?email=${email}&code=${code}`).then(response => {
+    return response;
+  })
+}
+
+export const registartionApi = async (userData) => {
+  return instance.post(`user/register`, userData).then(response => {
+    return response;
+  })
+}
+
+export const loginApi = async (data) => {
+  return instance.post(`user/login`, data).then(response => {
+    return response;
+  })
+}
+
 export const getDataApi = async () => {
   try {
     const response = await instance.get('user/self');

@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom"
 import s from "./Buttons.module.css"
-import { fetchUserName } from "../../../../api/api"
+import { fetchUserName } from "../../../../api/api.ts"
 import { useNavigate } from "react-router-dom"
 
 const Buttons = (props) => {
