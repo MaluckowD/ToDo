@@ -2,14 +2,7 @@ import s from "./Header.module.css"
 import Userinfo from "./Userinfo/Userinfo"
 import Buttons from "./Buttons/Buttons"
 
-interface HeaderProps {
-  name: string;
-  avatarId: string;
-  getToken: () => string | null;
-  removeToken: () => void
-}
-
-const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
+const Header = (props) => {
   if (!props.name) {
     return <div>Загрузка данных пользователя...</div>; 
   }
