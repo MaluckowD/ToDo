@@ -1,7 +1,15 @@
 import s from "./Header.module.css"
 import Userinfo from "./Userinfo/Userinfo"
 import Buttons from "./Buttons/Buttons"
-const Header = (props) => {
+
+interface HeaderProps {
+  name: string;
+  avatarId: string;
+  getToken: () => string | null;
+  removeToken: () => void
+}
+
+const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
   if (!props.name) {
     return <div>Загрузка данных пользователя...</div>; 
   }
@@ -14,8 +22,6 @@ const Header = (props) => {
         </div>
       </div>
     </header>
-    
-    
   )
 }
 
