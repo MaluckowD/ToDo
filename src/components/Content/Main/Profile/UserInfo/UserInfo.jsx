@@ -1,5 +1,6 @@
 import s from "./UserInfo.module.css"
 import user from "../../../../../images/user.png"
+import iconChoice from "../../../../../images/choiceIcon.svg"
 import React, {useState} from "react";
 import { UserEditApi } from "../../../../../api/api.ts"
 
@@ -36,6 +37,10 @@ const UserInfo = (props) => {
     <div className={s.userinfo}>
       <div className={s.user_logo}>
         <img className={s.user_img} src={user} alt=""/>
+        <label className={s.labelFile} for="file-input" class="file-upload">
+        </label>
+        <input id= "file-input" className = {s.opacityInputFile} type = "file"/>
+        <img className={s.choice_icon} src={iconChoice} alt=""/>
       </div>
       <div className={s.user_data}>
         <div className={s.user_name}>

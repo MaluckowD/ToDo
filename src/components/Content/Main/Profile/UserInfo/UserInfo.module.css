@@ -10,6 +10,37 @@ input[type="text"] {
   font-weight: bold;
   font-size: 14px;
 }
+.user_logo{
+  position: relative;
+}
+.opacityInputFile{
+  width: 35px;
+  position: absolute;
+  top: 40%;
+  left: 80%;
+  opacity: 0;
+  z-index: 10;
+  cursor: pointer;
+
+}
+.labelFile{
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  top: 40%;
+  left: 80%;
+  cursor: pointer;
+  z-index: 100;
+  opacity: 0;
+}
+.choice_icon{
+  position: absolute;
+  width: 35px;
+  top: 40%;
+  left: 80%;
+  z-index: 1;
+  cursor: pointer;
+}
 
 .user_style{
   color: #000;
