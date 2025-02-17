@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, NavLink } from 'react-router-dom';
 import s from './Login.module.css'; 
-
+import { loginApi } from "../../api/api.ts"
 const Login = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -11,17 +11,12 @@ const Login = (props) => {
 
   const LoginCallback = async (e) => {
     e.preventDefault();
-    setError(null); 
+    setError(null);
+    const data = {email,password}
     try {
-      const response = await axios.post("https://api.energy-cerber.ru/user/login", {
-        email,
-        password,
-      });
-      console.log("HERE")
-      console.log(response);
+      const response = await loginApi(data)
       props.saveToken(response.data.access_token);
       navigate("/content");
-      console.log(email, password);
       window.location.reload();
     } catch (error) {
       console.error("Ошибка авторизации:", error);
@@ -30,7 +25,6 @@ const Login = (props) => {
       }
     }
   };
-
 
   return (
     <>

@@ -2,12 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from "react-router-dom";
 import Header from "./Header/Header"
 import Main from "./Main/Main"
-import Footer from "./Footer/Footer"
+import Footer from "./Footer/Footer.tsx"
 import KirillLoh from '../Modals/KirillLoh/KirillLoh';
 import AddTask from '../Modals/AddTask/AddTask';
 import TaskVariants from '../Modals/TaskVariants/TaskVariants';
 import s from "./Content.module.css"
-import { categoriesInfo, fetchCategoriesApi, addTaskApi, addCategoryApi, editCategoryApi, taskInfoApi, editTaskApi, deleteTaskApi, changeTaskStatusApi } from "../../api/api"
+import { categoriesInfo, fetchCategoriesApi, addTaskApi, addCategoryApi, editCategoryApi, taskInfoApi, editTaskApi, deleteTaskApi, changeTaskStatusApi } from "../../api/api.ts"
 import Confirnation from "../Modals/Confirmation";
 import AboutTask from '../Modals/AboutTask/AboutTask';
 import EditTask from '../Modals/EditTask/EditTask';

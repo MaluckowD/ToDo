@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/solid';
 import s from "./Calendar.module.css"
-import classNames from "./helper";
+import classNames from "./helper.ts";
 import "./style.css"
 import CalendarMonth from './Calendarmonth';
 import { useRef } from 'react';
-import { categoriesInfo, taskInfoApi, editTaskApi } from "../../../../api/api"
+import { categoriesInfo, taskInfoApi, editTaskApi } from "../../../../api/api.ts"
 
 const monthNames = [
   "January",
@@ -130,17 +130,9 @@ const Calendar = (props) => {
     }
   };
 
-
   useEffect(() => {
     handleNewData(props.tasks);
-    console.log(props.tasks)
-
   }, [props.tasks]);
-
-  useEffect(() => {
-    console.log(events)
-  }, [events])
-
 
   const btnClass = (limit) => {
     return "leading-none rounded-lg transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 items-center focus:outline-none";

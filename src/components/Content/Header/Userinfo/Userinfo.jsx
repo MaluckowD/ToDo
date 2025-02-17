@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom"
 import s from "./Userinfo.module.css"
-import { fetchUserName } from "../../../../api/api"
+import { fetchUserName } from "../../../../api/api.ts"
 
 const Userinfo = (props) => {
 

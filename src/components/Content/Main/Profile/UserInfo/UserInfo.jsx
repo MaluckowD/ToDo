@@ -1,7 +1,7 @@
 import s from "./UserInfo.module.css"
 import user from "../../../../../images/user.png"
 import React, {useState} from "react";
-import { UserEditApi } from "../../../../../api/api"
+import { UserEditApi } from "../../../../../api/api.ts"
 
 const UserInfo = (props) => {
   const [name, setName] = useState(props.name);

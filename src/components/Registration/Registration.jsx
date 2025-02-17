@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import s from "./Registration.module.css";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { sendCodeApi, confirmationApi, registartionApi } from "../../api/api.ts"
 
 const Registration = (props) => {
   const [name, setName] = useState("");
@@ -12,13 +12,11 @@ const Registration = (props) => {
   const [gender, setGender] = useState("male");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const navigate = useNavigate()
-
   const [isConfirmation, setIsConfirmation] = useState(false);
-
   const [error, setError] = useState(null);
   const [errorCode, setErrorCode] = useState(null);
   const [code, setCode] = useState("");
+  const navigate = useNavigate()
 
   const confirmation = async () => {
     const userData = {
@@ -43,16 +41,9 @@ const Registration = (props) => {
     setError(null);
 
     try {
-      const response = await axios.get(
-        `https://api.energy-cerber.ru/user/register/verify_code?email=${userData.email}`,
-      )
-      console.log("Response Object", response)
-      console.log("response Code", response.status)
-
+      const response = await sendCodeApi(userData.email)
       if (response.status === 200 || response.status === 201) {
         localStorage.setItem('userData', JSON.stringify(userData));
-        console.log('Data saved to localStorage:', userData);
-
         setIsConfirmation(true)
       }
       else {
@@ -67,7 +58,6 @@ const Registration = (props) => {
         setError("Ошибка отправки кода подтверждения! Попробуйте зарегистрироваться позже!")
       }
     }
-
   }
 
   const closeConfirmation = () => {
@@ -92,24 +82,12 @@ const Registration = (props) => {
       password: password,
     };
 
-
     try {
-      const confirmationResponse = await axios.post(
-        // В продакшене заменить 77777 на code
-        `https://api.energy-cerber.ru/user/register/verify_code?email=${userData.email}&code=${77777}`
-      )
-
+      const confirmationResponse = await confirmationApi(userData.email, 77777)
       if (confirmationResponse.status === 200 || confirmationResponse.status === 201) {
-        console.log("Successful code confirmation!")
-
         try {
-          const registrationResponse = await axios.post(
-            "https://api.energy-cerber.ru/user/register",
-            userData
-          );
-
+          const registrationResponse = await registartionApi(userData)
           if (registrationResponse.status === 200 || registrationResponse.status === 201) {
-            console.log("Регистрация успешна:", registrationResponse.data);
             props.saveToken(registrationResponse.data.access_token);
             navigate("/Content")
             window.location.reload()
@@ -120,7 +98,6 @@ const Registration = (props) => {
         }
 
         catch (error) {
-          console.error("Ошибка:", error);
           if (error.response) {
             setError(`Вы ввели не все данные или их длина недостаточна!
                     Длина имени и фамилии от 2 символов, короткого имени от 3, адреса почты от 6 символов, пароля от 8!`);
@@ -136,7 +113,6 @@ const Registration = (props) => {
     catch (error) {
       setErrorCode(`Неверный код подтверждения`);
     }
-
   };
 
   return (
@@ -186,7 +162,6 @@ const Registration = (props) => {
             />
           </div>
         </div>
-
 
         <div className={s.content_wrapper}>
           <div className={s.box}>
@@ -247,8 +222,6 @@ const Registration = (props) => {
       </div>
 
     </div>
-
-
   )
 }
 

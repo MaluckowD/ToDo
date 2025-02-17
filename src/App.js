@@ -6,7 +6,7 @@ import Login from "./components/Login/Login";
 import Registration from "./components/Registration/Registration";
 import Calendar from "./components/Content/Main/Calendar/Calendar";
 import Profile from "./components/Content/Main/Profile/Profile";
-import { getDataApi, categoriesNobaseApi, updateTasksApi } from "./api/api"
+import { getDataApi, categoriesNobaseApi, updateTasksApi } from "./api/api.ts"
 function App(props) {
   const [categories, setCategories] = useState(null);
   const [tasks, setTasks] = useState(null);
@@ -73,7 +73,7 @@ function App(props) {
         setCategories(response)
       } catch (error) {
         setError(error);
-        console.error("Ошибка при загрузке данных пользователя:", error);
+        console.error("Ошибка при загрузке данных пользователя:", error); //////////
       } finally {
         setIsLoading(false);
       }
