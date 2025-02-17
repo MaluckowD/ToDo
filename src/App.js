@@ -16,7 +16,7 @@ function App(props) {
   const [taskStatuses, setTaskStatuses] = useState({});
   const getToken = () => localStorage.getItem('access_token');
   const [token, setToken] = useState(() => getToken());
-
+  
   useEffect(() => {
     document.title = "ToDo";
   }, []);

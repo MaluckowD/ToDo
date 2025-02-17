@@ -12,13 +12,6 @@ const UserInfo = (props) => {
   const token = props.getToken()
   const DeleteUserDialog = () => props.setIsDialogOpen(true)
 
-  useEffect(() => {
-    const storedAvatarId = localStorage.getItem('avatarId');
-    if (storedAvatarId) {
-      props.updateAvatarId(storedAvatarId);
-    }
-  }, [props.updateAvatarId]);
-
   const getAvatarUrl = () => {
     if (props.avatarId !== '') {
       return `https://api.energy-cerber.ru/static/avatars/${props.avatarId}.webp?${Date.now()}`;
