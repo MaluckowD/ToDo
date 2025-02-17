@@ -89,6 +89,13 @@ const Content = (props) => {
   };
 
   useEffect(() => {
+    const storedAvatarId = localStorage.getItem('avatarId');
+    if (storedAvatarId) {
+      updateAvatarId(storedAvatarId);
+    }
+  }, [updateAvatarId]);
+
+  useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === 'Escape') {
         closeModalCat();
