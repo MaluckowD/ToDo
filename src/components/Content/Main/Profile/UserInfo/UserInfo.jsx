@@ -27,7 +27,8 @@ const UserInfo = (props) => {
       formData.append('avatar', file);
       try {
         const response = await addAvatarApi(formData)
-        props.updateAvatarId(response.id);
+        // props.updateAvatarId(response.id);
+        window.location.reload();
       }
       catch (error) {
         console.log("error_avatar")
