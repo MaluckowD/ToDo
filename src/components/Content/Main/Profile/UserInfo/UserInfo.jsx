@@ -28,6 +28,7 @@ const UserInfo = (props) => {
       try {
         const response = await addAvatarApi(formData)
         props.updateAvatarId(response.id);
+        localStorage.setItem('avatarId', response.id);
       }
       catch (error) {
         console.log("error_avatar")

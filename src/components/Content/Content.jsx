@@ -35,7 +35,7 @@ const Content = (props) => {
   const [taskDescription, setTaskDescription] = useState("")
   const [taskPriority, setTaskPriority] = useState(1)
   const [color, setColor] = useState('#ffffff');
-  const [avatarId, setAvatarId] = useState(props.userData.id);
+  const [avatarId, setAvatarId] = useState('');
   const TaskInfoOpen = () => setisTaskInfoOpen(true)
   const exitWarning = () => setIsWarningOpen(false)
   const closeTaskInfoOpen = () => setisTaskInfoOpen(false)
@@ -87,6 +87,13 @@ const Content = (props) => {
   const updateAvatarId = (newAvatarId) => {
     setAvatarId(newAvatarId);
   };
+
+  useEffect(() => {
+    const storedAvatarId = localStorage.getItem('avatarId');
+    if (storedAvatarId) {
+      updateAvatarId(storedAvatarId);
+    }
+  }, [updateAvatarId]);
 
   useEffect(() => {
     const handleKeyDown = (event) => {

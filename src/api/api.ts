@@ -18,7 +18,7 @@ export const fetchUserName = async () => {
 
 export const addAvatarApi = async (formData) => {
   return instance.post("user/avatar", formData).then( response => {
-    return response.data
+    return response
   })
 }
 export const sendCodeApi = async (email:string) => {
