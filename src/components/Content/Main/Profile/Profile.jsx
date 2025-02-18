@@ -17,14 +17,14 @@ const Profile = (props) => {
   const token = props.getToken();
 
   const DeleteUser = () => {
-    if (token){
-      deleteUserApi().then( response => {
+    if (token) {
+      deleteUserApi().then(response => {
         props.removeToken()
         navigate("/login");
       })
     }
   }
-  
+
   const deleteCategory = (id) => {
     if (token) {
       categorieDeleteApi(id).then(response => {
@@ -34,7 +34,7 @@ const Profile = (props) => {
       })
     }
   }
-  
+
   useEffect(() => {
     const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
     document.documentElement.style.setProperty('--scrollbar-width', `${scrollBarWidth}px`);
@@ -59,20 +59,20 @@ const Profile = (props) => {
       }
     }
   }, [isDialogOpen]);
-  
+
   return (
 
     <div className={s.settings_item}>
       <div className={s.container}>
         {isDialogOpen && (
-          <Confirnation exit={exit} DeleteUser={DeleteUser}/>
+          <Confirnation exit={exit} DeleteUser={DeleteUser} />
         )}
         {isDialogOpen1 && (
           <Confirnation exit={exit1} DeleteUser={() => deleteCategory(categortId)} />
         )}
         <div className={isDialogOpen || isDialogOpen1 ? [s.content, s.block].join(" ") : [s.content]}>
-          <UserInfo updateAvatarId={props.updateAvatarId} avatarId={props.avatarId} setIsDialogOpen={setIsDialogOpen} removeToken={props.removeToken} name={props.name} surname={props.surname} gender={props.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp} />
-          <CategoryList setCategortId={setCategortId} setIsDialogOpen1={setIsDialogOpen1} fetchCategories={props.fetchCategories} openModalEditCategory={props.openModalEditCategory} updateCategories={props.updateCategories} getToken={props.getToken} openModalCategory={props.openModalCategory} categories={props.categories}/>
+          <UserInfo updateAvatarId={props.userData.id} avatarId={props.userData.id} setIsDialogOpen={setIsDialogOpen} removeToken={props.removeToken} name={props.name} surname={props.surname} gender={props.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp} />
+          <CategoryList setCategortId={setCategortId} setIsDialogOpen1={setIsDialogOpen1} fetchCategories={props.fetchCategories} openModalEditCategory={props.openModalEditCategory} updateCategories={props.updateCategories} getToken={props.getToken} openModalCategory={props.openModalCategory} categories={props.categories} />
         </div>
       </div>
     </div>

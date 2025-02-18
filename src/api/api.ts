@@ -17,17 +17,17 @@ export const fetchUserName = async () => {
 }
 
 export const addAvatarApi = async (formData) => {
-  return instance.post("user/avatar", formData).then( response => {
-    return response
+  return instance.post("user/avatar", formData).then(response => {
+    return response.data
   })
 }
-export const sendCodeApi = async (email:string) => {
+export const sendCodeApi = async (email: string) => {
   return instance.get(`user/register/verify_code?email=${email}`).then(response => {
     return response;
   })
 }
 
-export const confirmationApi = async (email:string, code:string) => {
+export const confirmationApi = async (email: string, code: string) => {
   return instance.post(`user/register/verify_code?email=${email}&code=${code}`).then(response => {
     return response;
   })
@@ -55,8 +55,19 @@ export const getDataApi = async () => {
   }
 }
 
-export const fetchCategoriesApi = async ()  => {
-  return instance.get('categories/').then( response => {
+
+export const getAvatarData = async (avatarId) => {
+  try {
+    const response = await instance.get(`static/avatars/${avatarId}.webp`)
+    // console.log("STATUS:", response.status)
+    return true
+  } catch (error) {
+    return false
+  }
+}
+
+export const fetchCategoriesApi = async () => {
+  return instance.get('categories/').then(response => {
     return response.data
   })
 }

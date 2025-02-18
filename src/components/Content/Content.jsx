@@ -35,7 +35,6 @@ const Content = (props) => {
   const [taskDescription, setTaskDescription] = useState("")
   const [taskPriority, setTaskPriority] = useState(1)
   const [color, setColor] = useState('#ffffff');
-  const [avatarId, setAvatarId] = useState('');
   const TaskInfoOpen = () => setisTaskInfoOpen(true)
   const exitWarning = () => setIsWarningOpen(false)
   const closeTaskInfoOpen = () => setisTaskInfoOpen(false)
@@ -46,7 +45,7 @@ const Content = (props) => {
   const openModalCategory = () => setIsModalCategoryOpen(true);
   const navigate = useNavigate();
   const modalRef = useRef(null);
-  
+
   const openWarning = () => {
     setIsWarningOpen(true)
     closeIsOpenTask()
@@ -54,11 +53,11 @@ const Content = (props) => {
   const CloseTaskUpdateOpen = () => {
     closeTaskUpdateOpen()
     TaskInfoOpen()
-    setError(null); 
+    setError(null);
   }
   const closeModalCat = () => {
     setIsModalCategoryOpen(false)
-    setError(null); 
+    setError(null);
   };
   const closeIsOpenTaskInfo = () => {
     setOpenTaskInfo(false)
@@ -67,7 +66,7 @@ const Content = (props) => {
     setTaskPriority("");
     setCategoryName("")
     setDate("")
-    setError(null); 
+    setError(null);
   };
   const closeIsOpenTask = () => {
     setIsTaskOpen(false)
@@ -84,16 +83,9 @@ const Content = (props) => {
     setError(null);
   }
 
-  const updateAvatarId = (newAvatarId) => {
-    setAvatarId(newAvatarId);
-  };
-
-  useEffect(() => {
-    const storedAvatarId = localStorage.getItem('avatarId');
-    if (storedAvatarId) {
-      updateAvatarId(storedAvatarId);
-    }
-  }, [updateAvatarId]);
+  // const updateAvatarId = (newAvatarId) => {
+  //   setAvatarId(newAvatarId);
+  // };
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -154,7 +146,7 @@ const Content = (props) => {
   const openModalEditCategory = (id) => {
     setcategoryId(id)
     setIsEditModalCategoryOpen(true)
-    categoriesInfo(id).then( response => {
+    categoriesInfo(id).then(response => {
       setCategoryName(response.name)
       setColor(response.color)
     }).catch(error => {
@@ -193,7 +185,7 @@ const Content = (props) => {
     }
   };
 
-  useEffect( () => {
+  useEffect(() => {
     if (props.getToken()) {
       fetchCategories()
     }
@@ -259,7 +251,7 @@ const Content = (props) => {
         setError("Ошибка при создании категории. Проверьте заполненность полей");
       } else if (error.request) {
         setError(`Ошибка сети`)
-      } 
+      }
     }
   };
 
@@ -310,7 +302,7 @@ const Content = (props) => {
       console.error("Ошибка при получении данных задачи:", error);
     }
   };
-  
+
   if (props.isLoading) {
     return <p>Загрузка данных...</p>;
   }
@@ -324,7 +316,7 @@ const Content = (props) => {
   };
 
   const changeTask = async (id) => {
-    setError(null); 
+    setError(null);
     try {
       const taskData = {
         name: taskName,
@@ -349,7 +341,7 @@ const Content = (props) => {
   };
 
   const deleteTask = (id) => {
-    deleteTaskApi(id).then( response => {
+    deleteTaskApi(id).then(response => {
       props.updateTasks()
       setIsTaskOpen(false)
       setTaskName("");
@@ -409,56 +401,56 @@ const Content = (props) => {
   if (!props.userData.name) {
     return <div>Загрузка данных пользователя...</div>;
   }
-  return(
-    <div className = {s.root}>
-      {isModalOpen && ( <KirillLoh modalRef = {modalRef} closeModal = {closeModal}/> )}
+  return (
+    <div className={s.root}>
+      {isModalOpen && (<KirillLoh modalRef={modalRef} closeModal={closeModal} />)}
 
       {isOpenTaskInfo && (
-        <AddTask modalRef = {modalRef} taskName = {taskName} setTaskName = {setTaskName}
-        taskDescription = {taskDescription} setTaskDescription = {setTaskDescription}
-        date = {date} setDate = {setDate} handleCategoryChange = {handleCategoryChange}
+        <AddTask modalRef={modalRef} taskName={taskName} setTaskName={setTaskName}
+          taskDescription={taskDescription} setTaskDescription={setTaskDescription}
+          date={date} setDate={setDate} handleCategoryChange={handleCategoryChange}
           categories={categories} taskPriority={taskPriority} handlePriorityChange={handlePriorityChange} error={error} closeIsOpenTaskInfo={closeIsOpenTaskInfo}
-          addTask={addTask} selectedCategoryId={selectedCategoryId}/>
+          addTask={addTask} selectedCategoryId={selectedCategoryId} />
       )}
 
       {isTaskOpen && (
-        <TaskVariants modalRef = {modalRef} TaskInfoOpen = {TaskInfoOpen} TaskUpdateOpen = {TaskUpdateOpen} changeTaskStatus = {changeTaskStatus} taskId = {taskId}
-        openWarning = {openWarning} closeIsOpenTask = {closeIsOpenTask}/>
+        <TaskVariants modalRef={modalRef} TaskInfoOpen={TaskInfoOpen} TaskUpdateOpen={TaskUpdateOpen} changeTaskStatus={changeTaskStatus} taskId={taskId}
+          openWarning={openWarning} closeIsOpenTask={closeIsOpenTask} />
       )}
       {isTaskInfoOpen && (
-        <AboutTask modalRef = {modalRef} taskName = {taskName} setTaskName = {setTaskName}
-        taskDescription = {taskDescription} setTaskDescription = {setTaskDescription}
-        date = {date} setDate = {setDate} selectedCategoryId = {selectedCategoryId}
-        handleCategoryChange = {handleCategoryChange} taskPriority = {taskPriority}
-        handlePriorityChange = {handlePriorityChange} completed = {completed} 
-          closeTaskInfoOpen={closeTaskInfoOpen} categories={categories}/>
+        <AboutTask modalRef={modalRef} taskName={taskName} setTaskName={setTaskName}
+          taskDescription={taskDescription} setTaskDescription={setTaskDescription}
+          date={date} setDate={setDate} selectedCategoryId={selectedCategoryId}
+          handleCategoryChange={handleCategoryChange} taskPriority={taskPriority}
+          handlePriorityChange={handlePriorityChange} completed={completed}
+          closeTaskInfoOpen={closeTaskInfoOpen} categories={categories} />
       )}
 
       {isTaskUpdateOpen && (
-        <EditTask modalRef = {modalRef} taskName = {taskName} setTaskName = {setTaskName}
-        taskDescription = {taskDescription} setTaskDescription = {setTaskDescription}
-        date = {date} setDate = {setDate} selectedCategoryId = {selectedCategoryId}
-        handleCategoryChange = {handleCategoryChange} categories = {categories}
-        completed = {completed} error = {error} changeTask = {changeTask} taskId = {taskId}
-          CloseTaskUpdateOpen={CloseTaskUpdateOpen}/>
+        <EditTask modalRef={modalRef} taskName={taskName} setTaskName={setTaskName}
+          taskDescription={taskDescription} setTaskDescription={setTaskDescription}
+          date={date} setDate={setDate} selectedCategoryId={selectedCategoryId}
+          handleCategoryChange={handleCategoryChange} categories={categories}
+          completed={completed} error={error} changeTask={changeTask} taskId={taskId}
+          CloseTaskUpdateOpen={CloseTaskUpdateOpen} />
       )}
 
-      {isModalCategoryOpen&& (
-        <AddCategory modalRef={modalRef} categoryName={categoryName} setCategoryName={setCategoryName} color={color} handleColorChange={handleColorChange} error = {error} closeModalCategory = {closeModalCategory} closeModalCat = {closeModalCat}/>
+      {isModalCategoryOpen && (
+        <AddCategory modalRef={modalRef} categoryName={categoryName} setCategoryName={setCategoryName} color={color} handleColorChange={handleColorChange} error={error} closeModalCategory={closeModalCategory} closeModalCat={closeModalCat} />
       )}
 
       {isEditCategoryOpen && (
-        <EditCategory modalRef = {modalRef} categoryName = {categoryName} setCategoryName = {setCategoryName} color = {color} handleColorChange = {handleColorChange}
-        error = {error} onEditCategory = {onEditCategory} categoryId = {categoryId} closeModalEditCat = {closeModalEditCat}/>
+        <EditCategory modalRef={modalRef} categoryName={categoryName} setCategoryName={setCategoryName} color={color} handleColorChange={handleColorChange}
+          error={error} onEditCategory={onEditCategory} categoryId={categoryId} closeModalEditCat={closeModalEditCat} />
       )}
 
       {isWarningOpen && (
         <Confirnation exit={exitWarning} DeleteUser={() => deleteTask(taskId)} />
       )}
-      
+
       <div className={isWarningOpen || isModalOpen || isModalCategoryOpen || isEditCategoryOpen || isTaskOpen || isOpenTaskInfo ? [s.wrapper, s.opacity].join(' ') : [s.wrapper]}>
-        <Header avatarId={avatarId} removeToken={props.removeToken} getToken={props.getToken} name={props.userData.name} />
-        <Main updateAvatarId={updateAvatarId} avatarId={avatarId} updateTasks={props.updateTasks} getTaskStatus={getTaskStatus} taskStatuses={props.taskStatuses} removeToken={props.removeToken} statusId={statusId} completed={completed} getTaskInfo={getTaskInfo} fetchCategories={fetchCategories} openTaskInfo={openTaskInfo} addTask={props.addTask} tasks = {props.tasks} openModalEditCategory={openModalEditCategory} updateCategories={props.updateCategories} openModalCategory={openModalCategory} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp}/>
+        <Header avatarId={props.userData.id} removeToken={props.removeToken} getToken={props.getToken} name={props.userData.name} />
+        <Main updateAvatarId={props.userData.id} avatarId={props.userData.id} updateTasks={props.updateTasks} getTaskStatus={getTaskStatus} taskStatuses={props.taskStatuses} removeToken={props.removeToken} statusId={statusId} completed={completed} getTaskInfo={getTaskInfo} fetchCategories={fetchCategories} openTaskInfo={openTaskInfo} addTask={props.addTask} tasks={props.tasks} openModalEditCategory={openModalEditCategory} updateCategories={props.updateCategories} openModalCategory={openModalCategory} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp} />
         <Footer openModal={openModal} />
       </div>
     </div>
