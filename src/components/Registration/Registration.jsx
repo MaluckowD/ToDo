@@ -88,7 +88,8 @@ const Registration = (props) => {
         try {
           const registrationResponse = await registartionApi(userData)
           if (registrationResponse.status === 200 || registrationResponse.status === 201) {
-            props.saveToken(registrationResponse.data.access_token);
+            //props.saveToken(registrationResponse.data.access_token);
+            localStorage.setItem('access_token', response.data.access_token);
             navigate("/Content")
             //window.location.reload()
             window.location.href = "/content"

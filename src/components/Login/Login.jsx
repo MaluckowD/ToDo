@@ -15,7 +15,8 @@ const Login = (props) => {
     const data = {email,password}
     try {
       const response = await loginApi(data)
-      props.saveToken(response.data.access_token);
+      //props.saveToken(response.data.access_token);
+      localStorage.setItem('access_token', response.data.access_token);
       navigate("/content");
       //window.location.reload();
       window.location.href = "/content"
