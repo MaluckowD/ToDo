@@ -2,12 +2,11 @@ import { NavLink } from "react-router-dom"
 import s from "./Buttons.module.css"
 import { fetchUserName } from "../../../../api/api"
 import { useNavigate } from "react-router-dom"
-
+import useStore from "../../../../store/useToDoStore.js";
 const Buttons = (props) => {
   const navigate = useNavigate();
-  
+  const token = useStore((state) => state.token);
   const UpdateCallBack = () => {
-    const token:string = props.getToken();
     if (token) {
       fetchUserName();
     }

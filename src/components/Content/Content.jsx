@@ -14,10 +14,8 @@ import EditTask from '../Modals/EditTask/EditTask';
 import AddCategory from '../Modals/AddCategory/AddCategory';
 import EditCategory from '../Modals/EditCategory/EditCategory';
 import useStore from "../../store/useToDoStore.js";
+
 const Content = (props) => {
-  const userData = useStore((state) => state.userData);
-  const updateTasks = useStore((state) => state.updateTasks)
-  const taskStatuses = useStore((state) => state.taskStatuses);
   const [redirectToLogin, setRedirectToLogin] = useState(false);
   const [error, setError] = useState(null);
   const [categories, setCategories] = useState([]);
@@ -48,7 +46,7 @@ const Content = (props) => {
   const openModalCategory = () => setIsModalCategoryOpen(true);
   const navigate = useNavigate();
   const modalRef = useRef(null);
-
+  const token = useStore((state) => state.token);
   const openWarning = () => {
     setIsWarningOpen(true)
     closeIsOpenTask()
@@ -189,16 +187,16 @@ const Content = (props) => {
   };
 
   useEffect(() => {
-    if (props.getToken()) {
+    if (token) {
       fetchCategories()
     }
-  }, [props.getToken()])
+  }, [token])
 
   useEffect(() => {
-    if (!props.getToken() && !redirectToLogin) {
+    if (!token && !redirectToLogin) {
       setRedirectToLogin(true);
     }
-  }, [props.getToken(), redirectToLogin]);
+  }, [token, redirectToLogin]);
 
   useEffect(() => {
     if (redirectToLogin) {
@@ -217,7 +215,7 @@ const Content = (props) => {
         date: date,
       };
       await addTaskApi(taskData)
-      await updateTasks();
+      await props.updateTasks();
       closeIsOpenTaskInfo();
       setDate(taskData.date);
       setTaskName("");
@@ -329,7 +327,7 @@ const Content = (props) => {
         date: date,
       };
       await editTaskApi(id, taskData)
-      await updateTasks();
+      await props.updateTasks();
       closeTaskUpdateOpen();
       TaskInfoOpen();
     } catch (error) {
@@ -345,7 +343,7 @@ const Content = (props) => {
 
   const deleteTask = (id) => {
     deleteTaskApi(id).then(response => {
-      updateTasks()
+      props.updateTasks()
       setIsTaskOpen(false)
       setTaskName("");
       setTaskDescription("");
@@ -366,7 +364,7 @@ const Content = (props) => {
     }
     try {
       const response = await changeTaskStatusApi(id, taskData)
-      const newTaskStatuses = { ...taskStatuses };
+      const newTaskStatuses = { ...props.taskStatuses };
       if (response.completed === true) {
         setCompleted(true)
         newTaskStatuses[id] = {
@@ -385,7 +383,7 @@ const Content = (props) => {
         localStorage.setItem(`statusId_${id}`, id);
       }
       props.setTaskStatuses(newTaskStatuses);
-      updateTasks();
+      props.updateTasks();
     } catch (error) {
       console.error('Ошибка при изменении статуса задачи:', error);
     }
@@ -399,10 +397,9 @@ const Content = (props) => {
   };
 
   const getTaskStatus = (taskId) => {
-    return taskStatuses[taskId] || { completed: false, statusId: 0 };
+    return props.taskStatuses[taskId] || { completed: false, statusId: 0 };
   };
-  console.log(userData)
-  if (!userData.name) {
+  if (!props.userData.name) {
     return <div>Загрузка данных пользователя...</div>;
   }
   return (
@@ -453,8 +450,8 @@ const Content = (props) => {
       )}
 
       <div className={isWarningOpen || isModalOpen || isModalCategoryOpen || isEditCategoryOpen || isTaskOpen || isOpenTaskInfo ? [s.wrapper, s.opacity].join(' ') : [s.wrapper]}>
-        <Header avatarId={props.userData.id} removeToken={props.removeToken} getToken={props.getToken} name={props.userData.name} />
-        <Main updateAvatarId={props.userData.id} avatarId={props.userData.id} getTaskStatus={getTaskStatus} removeToken={props.removeToken} statusId={statusId} completed={completed} getTaskInfo={getTaskInfo} fetchCategories={fetchCategories} openTaskInfo={openTaskInfo} addTask={props.addTask} openModalEditCategory={openModalEditCategory} updateCategories={props.updateCategories} openModalCategory={openModalCategory} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp} />
+        <Header avatarId={props.userData.id} removeToken={props.removeToken} name={props.userData.name} />
+        <Main updateAvatarId={props.userData.id} avatarId={props.userData.id} updateTasks={props.updateTasks} getTaskStatus={getTaskStatus} taskStatuses={props.taskStatuses} removeToken={props.removeToken} statusId={statusId} completed={completed} getTaskInfo={getTaskInfo} fetchCategories={fetchCategories} openTaskInfo={openTaskInfo} addTask={props.addTask} tasks={props.tasks} openModalEditCategory={openModalEditCategory} updateCategories={props.updateCategories} openModalCategory={openModalCategory} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp} />
         <Footer openModal={openModal} />
       </div>
     </div>

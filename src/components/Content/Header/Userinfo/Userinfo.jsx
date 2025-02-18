@@ -3,12 +3,12 @@ import s from "./Userinfo.module.css"
 import { fetchUserName, getAvatarData } from "../../../../api/api.ts"
 import React, { useState, useEffect } from "react";
 import userAvatar from "../../../../images/user.jpg"
-
+import useStore from "../../../../store/useToDoStore.js";
 
 const Userinfo = (props) => {
-
+  const token = useStore((state) => state.token);
   const UpdateCallBack = () => {
-    const token = props.getToken();
+
     if (token) {
       fetchUserName();
     }

@@ -3,13 +3,15 @@ import userAvatar from "../../../../../images/user.jpg"
 import iconChoice from "../../../../../images/choiceIcon.svg"
 import React, { useState, useEffect } from "react";
 import { UserEditApi, addAvatarApi, getAvatarData } from "../../../../../api/api.ts"
-
+import useStore from "../../../../../store/useToDoStore.js";
 const UserInfo = (props) => {
+  const updateUserDataInApp = useStore((state) => state.updateUserDataInApp);
+  const fetchUserData = useStore((state) => state.fetchUserData);
   const [name, setName] = useState(props.name);
   const [surname, setSurname] = useState(props.surname);
   const [gender, setGender] = useState(props.gender);
   const [error, setError] = useState(null);
-  const token = props.getToken()
+  const token = useStore((state) => state.token);
   const DeleteUserDialog = () => props.setIsDialogOpen(true)
   const [avatarUrl, setAvatarUrl] = useState(userAvatar);
 
@@ -54,7 +56,8 @@ const UserInfo = (props) => {
     if (token) {
       try {
         const response = await UserEditApi({ name, surname, gender })
-        props.updateUserDataInApp(response);
+        fetchUserData()
+        //updateUserDataInApp(response);
       }
       catch (error) {
         if (error.response) {

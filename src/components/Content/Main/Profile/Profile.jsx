@@ -6,6 +6,7 @@ import CategoryList from "./CategotyList/CategoryList"
 import Confirnation from "../../../Modals/Confirmation";
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
+import useStore from "../../../../store//useToDoStore.js";
 const Profile = (props) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isDialogOpen1, setIsDialogOpen1] = useState(false)
@@ -14,7 +15,7 @@ const Profile = (props) => {
   const exit1 = () => setIsDialogOpen1(false)
   const navigate = useNavigate()
   const overlayRef = useRef(null)
-  const token = props.getToken();
+  const token = useStore((state) => state.token);
 
   const DeleteUser = () => {
     if (token) {
@@ -71,8 +72,8 @@ const Profile = (props) => {
           <Confirnation exit={exit1} DeleteUser={() => deleteCategory(categortId)} />
         )}
         <div className={isDialogOpen || isDialogOpen1 ? [s.content, s.block].join(" ") : [s.content]}>
-          <UserInfo updateAvatarId={props.userData.id} avatarId={props.userData.id} setIsDialogOpen={setIsDialogOpen} removeToken={props.removeToken} name={props.name} surname={props.surname} gender={props.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp} />
-          <CategoryList setCategortId={setCategortId} setIsDialogOpen1={setIsDialogOpen1} fetchCategories={props.fetchCategories} openModalEditCategory={props.openModalEditCategory} updateCategories={props.updateCategories} getToken={props.getToken} openModalCategory={props.openModalCategory} categories={props.categories} />
+          <UserInfo updateAvatarId={props.userData.id} avatarId={props.userData.id} setIsDialogOpen={setIsDialogOpen} removeToken={props.removeToken} name={props.name} surname={props.surname} gender={props.gender} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp} />
+          <CategoryList setCategortId={setCategortId} setIsDialogOpen1={setIsDialogOpen1} fetchCategories={props.fetchCategories} openModalEditCategory={props.openModalEditCategory} updateCategories={props.updateCategories} openModalCategory={props.openModalCategory} categories={props.categories} />
         </div>
       </div>
     </div>

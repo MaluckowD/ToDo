@@ -27,7 +27,6 @@ const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const Calendar = (props) => {
   const updateTasks = useStore((state) => state.updateTasks)
   const tasks = useStore((state) => state.tasks)
-  const token = props.getToken()
   const [events, setEvents] = useState([]);
   const date = new Date();
   const [month, setMonth] = useState(date.getMonth());

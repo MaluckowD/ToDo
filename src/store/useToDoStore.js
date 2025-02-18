@@ -8,15 +8,33 @@ const useStore = create((set) => ({
   isLoading: false,
   error: null,
   taskStatuses: {},
+  token: localStorage.getItem('access_token'),
+  setToken: (token) => {
+    set({ token: token });
+    if (token) {
+      localStorage.setItem('access_token', token);
+    } else {
+      localStorage.removeItem('access_token');
+    }
+  },
+  saveToken: (token) => {
+    localStorage.setItem('access_token', token);
+    set({ token: token });
+  },
 
-  updateUserDataInApp: (updatedUserData) => {
+  removeToken: () => {
+    localStorage.removeItem('access_token');
+  },
+
+  updateUserDataInApp: async (updatedUserData) => {
     set({userData: updatedUserData})
   },
 
   fetchUserData: async () => {
     try{
       const response = await getDataApi()
-      set({ categories: response.categories,
+      set({userData: response,
+         categories: response.categories,
           isLoading: true,
           tasks: response.tasks }
       )
