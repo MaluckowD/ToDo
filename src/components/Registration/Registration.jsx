@@ -90,7 +90,8 @@ const Registration = (props) => {
           if (registrationResponse.status === 200 || registrationResponse.status === 201) {
             props.saveToken(registrationResponse.data.access_token);
             navigate("/Content")
-            window.location.reload()
+            //window.location.reload()
+            window.location.href = "/content"
           }
           else {
             console.error("Ошибка регистрации:", registrationResponse.status, registrationResponse.data);
