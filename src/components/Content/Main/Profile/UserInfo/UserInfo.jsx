@@ -1,8 +1,8 @@
 import s from "./UserInfo.module.css"
-import user from "../../../../../images/user.jpg"
+import userAvatar from "../../../../../images/user.jpg"
 import iconChoice from "../../../../../images/choiceIcon.svg"
 import React, { useState, useEffect } from "react";
-import { UserEditApi, addAvatarApi } from "../../../../../api/api.ts"
+import { UserEditApi, addAvatarApi, getAvatarData } from "../../../../../api/api.ts"
 
 const UserInfo = (props) => {
   const [name, setName] = useState(props.name);
@@ -11,14 +11,26 @@ const UserInfo = (props) => {
   const [error, setError] = useState(null);
   const token = props.getToken()
   const DeleteUserDialog = () => props.setIsDialogOpen(true)
+  const [avatarUrl, setAvatarUrl] = useState(userAvatar); 
 
-  const getAvatarUrl = () => {
-    if (props.avatarId !== '') {
-      return `https://api.energy-cerber.ru/static/avatars/${props.avatarId}.webp?${Date.now()}`;
+  const getAvatarUrl = async () => { 
+    const response = await getAvatarData(props.avatarId); 
+    if (response) {
+      return `https://api.energy-cerber.ru/static/avatars/${props.userData.id}.webp`;
     } else {
-      return user;
+      return userAvatar; 
     }
   };
+
+  useEffect(() => {
+    const loadAvatar = async () => {  
+      const url = await getAvatarUrl();
+      setAvatarUrl(url);
+    };
+
+    loadAvatar(); 
+
+  }, [props.avatarId]);
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
@@ -27,7 +39,8 @@ const UserInfo = (props) => {
       formData.append('avatar', file);
       try {
         const response = await addAvatarApi(formData)
-        props.updateAvatarId(response.id);
+        // props.updateAvatarId(response.id);
+        window.location.reload();
       }
       catch (error) {
         console.log("error_avatar")
@@ -59,7 +72,7 @@ const UserInfo = (props) => {
   return (
     <div className={s.userinfo}>
       <div className={s.user_logo}>
-        <img className={s.user_img} src={getAvatarUrl()} alt={user} />
+        <img className={s.user_img} src={avatarUrl} alt={userAvatar} />
         <input onChange={handleFileChange} id="file-input" className={s.opacityInputFile} type="file" />
         <img className={s.choice_icon} src={iconChoice} alt="" />
       </div>
