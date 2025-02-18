@@ -6,14 +6,26 @@ import Login from "./components/Login/Login";
 import Registration from "./components/Registration/Registration";
 import Calendar from "./components/Content/Main/Calendar/Calendar";
 import Profile from "./components/Content/Main/Profile/Profile";
+import useStore from "./store/useToDoStore.js";
 import { getDataApi, categoriesNobaseApi, updateTasksApi } from "./api/api.ts"
 function App(props) {
-  const [categories, setCategories] = useState(null);
-  const [tasks, setTasks] = useState(null);
-  const [userData, setUserData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [taskStatuses, setTaskStatuses] = useState({});
+  const categories = useStore((state) => state.categories);
+  const tasks = useStore((state) => state.tasks);
+  const userData = useStore((state) => state.userData);
+  const isLoading = useStore((state) => state.isLoading);
+  const error = useStore((state) => state.error);
+  const updateUserDataInApp = useStore((state) => state.updateUserDataInApp);
+  const fetchCategories = useStore((state) => state.fetchCategories)
+  const updateCategories = useStore((state) => state.updateCategories)
+  const updateTasks = useStore((state) => state.updateTasks)
+  const taskStatuses = useStore((state) => state.taskStatuses);
+  const fetchUserData = useStore((state) => state.fetchUserData);
+  //const [categories, setCategories] = useState(null);
+  //const [tasks, setTasks] = useState(null);
+  //const [userData, setUserData] = useState(null);
+  //const [isLoading, setIsLoading] = useState(true);
+  //const [error, setError] = useState(null);
+  //const [taskStatuses, setTaskStatuses] = useState({});
   const getToken = () => localStorage.getItem('access_token');
   const [token, setToken] = useState(() => getToken());
   
@@ -21,9 +33,10 @@ function App(props) {
     document.title = "ToDo";
   }, []);
 
-  const updateUserDataInApp = (updatedUserData) => {
-    setUserData(updatedUserData);
-  };
+  //const updateUserDataInApp = (updatedUserData) => {
+  //  setUserData(updatedUserData);
+  //};
+  updateUserDataInApp()
 
   const saveToken = (token) => {
     localStorage.setItem('access_token', token);
@@ -35,72 +48,39 @@ function App(props) {
   }
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      setIsLoading(true);
-      try {
-        const response = await getDataApi()
-        setUserData(response);
-        setCategories(response.categories);
-        setTasks(response.tasks);
-        if (response.tasks) {
-          const initialTaskStatuses = {};
-          response.tasks.forEach(task => {
-            initialTaskStatuses[task.id] = {
-              completed: task.completed,
-              statusId: task.id,
-            };
-          });
-          setTaskStatuses(initialTaskStatuses)
-        }
-      } catch (error) {
-        setError(error);
-        removeToken()
-        console.error("Ошибка при загрузке данных пользователя:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
+    
     if (token) {
       fetchUserData();
     }
   }, [token]);
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await categoriesNobaseApi()
-        setCategories(response)
-      } catch (error) {
-        setError(error);
-        console.error("Ошибка при загрузке данных пользователя:", error); //////////
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
+    
     if (token) {
       fetchCategories();
     }
   }, [token]);
 
-  const updateCategories = async () => {
-    try {
-      const response = await categoriesNobaseApi()
-      setCategories(response);
-    } catch (error) {
-      console.error("Ошибка при обновлении категорий:", error);
-    }
-  };
+  updateCategories()
 
-  const updateTasks = async () => {
-    try {
-      const response = await updateTasksApi()
-      setTasks(response);
-    } catch (error) {
-      console.error("Ошибка при обновлении задач:", error);
-    }
-  };
+  //const updateCategories = async () => {
+  //  try {
+  //   const response = await categoriesNobaseApi()
+  //    setCategories(response);
+  //  } catch (error) {
+  //    console.error("Ошибка при обновлении категорий:", error);
+  //  }
+  //};
+
+  //const updateTasks = async () => {
+  //  try {
+  //    const response = await updateTasksApi()
+  //    setTasks(response);
+  //  } catch (error) {
+  //    console.error("Ошибка при обновлении задач:", error);
+  //  }
+  //};
+  updateTasks()
 
   const AuthRedirect = () => {
     const navigate = useNavigate();
@@ -131,11 +111,10 @@ function App(props) {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<AuthRedirect />} />
-          <Route path="/login" element={<Login saveToken={saveToken}
-            updateUserDataInApp={updateUserDataInApp} />} />
+          <Route path="/login" element={<Login saveToken={saveToken}/>} />
           <Route path="/registration" element={<Registration saveToken={saveToken} />}/>
-          <Route path="/content" element={<Content setTaskStatuses={setTaskStatuses} taskStatuses={taskStatuses} token={token} removeToken={removeToken}
-            updateTasks={updateTasks} tasks={tasks} updateCategories={updateCategories} categories={categories} userData={userData} getToken={getToken}
+          <Route path="/content" element={<Content token={token} removeToken={removeToken}
+            updateCategories={updateCategories} categories={categories} userData={userData} getToken={getToken}
             isLoading={isLoading} error={error} updateUserDataInApp={updateUserDataInApp}/>}>
             <Route index element={<Calendar />} />
             <Route path="settings" element={<Profile />} />

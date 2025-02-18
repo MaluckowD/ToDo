@@ -6,7 +6,7 @@ import "./style.css"
 import CalendarMonth from './Calendarmonth';
 import { useRef } from 'react';
 import { categoriesInfo, taskInfoApi, editTaskApi } from "../../../../api/api.ts"
-
+import useStore from "../../../../store/useToDoStore.js";
 const monthNames = [
   "January",
   "February",
@@ -25,6 +25,8 @@ const monthNames = [
 const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 const Calendar = (props) => {
+  const updateTasks = useStore((state) => state.updateTasks)
+  const tasks = useStore((state) => state.tasks)
   const token = props.getToken()
   const [events, setEvents] = useState([]);
   const date = new Date();
@@ -131,8 +133,8 @@ const Calendar = (props) => {
   };
 
   useEffect(() => {
-    handleNewData(props.tasks);
-  }, [props.tasks]);
+    handleNewData(tasks);
+  }, [tasks]);
 
   const btnClass = (limit) => {
     return "leading-none rounded-lg transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 items-center focus:outline-none";
@@ -236,7 +238,7 @@ const Calendar = (props) => {
           date: newDate.toISOString().slice(0, 10)
         };
         await editTaskApi(taskId, taskData)
-        props.updateTasks()
+        updateTasks()
       } catch (error) {
         console.error('Ошибка при загрузке задачи для перетаскивания:', error);
       }
