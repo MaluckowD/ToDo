@@ -17,7 +17,8 @@ const Login = (props) => {
       const response = await loginApi(data)
       props.saveToken(response.data.access_token);
       navigate("/content");
-      window.location.reload();
+      //window.location.reload();
+      window.location.href = "/content"
     } catch (error) {
       console.error("Ошибка авторизации:", error);
       if (error.response) {

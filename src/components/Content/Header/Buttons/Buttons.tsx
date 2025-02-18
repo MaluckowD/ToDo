@@ -1,13 +1,13 @@
 import { NavLink } from "react-router-dom"
 import s from "./Buttons.module.css"
-import { fetchUserName } from "../../../../api/api.ts"
+import { fetchUserName } from "../../../../api/api"
 import { useNavigate } from "react-router-dom"
 
 const Buttons = (props) => {
   const navigate = useNavigate();
   
   const UpdateCallBack = () => {
-    const token = props.getToken();
+    const token:string = props.getToken();
     if (token) {
       fetchUserName();
     }
