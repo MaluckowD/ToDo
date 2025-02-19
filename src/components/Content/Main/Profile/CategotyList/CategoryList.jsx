@@ -1,8 +1,10 @@
 import s from "./CategoryList.module.css"
 import close from "../../../../../images/close.svg"
 import image from "../../../../../images/image.svg"
-
+import useStore from "../../../../../store/useToDoStore.js";
 const CategoryList = (props) => {
+
+  const openModalCategory = useStore((state) => state.openModalCategory);
   const DeleteCategoryDialog = (id) => {
     props.setIsDialogOpen1(true)
     props.setCategortId(id)
@@ -11,7 +13,7 @@ const CategoryList = (props) => {
   return (
     <div className={s.categorylist}>
       <div className={s.btn}>
-        <button onClick={props.openModalCategory}>Добавить категорию</button>
+        <button onClick={openModalCategory}>Добавить категорию</button>
       </div>
       <div className={s.list}>
         <div className={s.list_items}>

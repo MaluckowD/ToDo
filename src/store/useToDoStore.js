@@ -96,6 +96,13 @@ const useStore = create((set) => ({
   },
   isOpenTaskInfo: false,
   isModalCategoryOpen: false,
+  openModalCategory: () => set({ isModalCategoryOpen: true }),
+  closeModalCat: () => {
+    set({
+      error: null,
+      isModalCategoryOpen: false,
+    });
+  },
   isEditCategoryOpen: false,
   isModalOpen: false,
   openModal: () => set({ isModalOpen: true }),

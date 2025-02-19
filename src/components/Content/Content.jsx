@@ -22,7 +22,6 @@ const Content = (props) => {
   const [error, setError] = useState(null);
   const [categories, setCategories] = useState([]);
 
-  const [isModalCategoryOpen, setIsModalCategoryOpen] = useState(false);
   const [isEditCategoryOpen, setIsEditModalCategoryOpen] = useState(false);
 
   const [isTaskUpdateOpen, setIsTaskUpdateOpen] = useState(false);
@@ -53,24 +52,20 @@ const Content = (props) => {
   const selectedCategoryId = useStore((state) => state.selectedCategoryId);
   const date = useStore((state) => state.date)
   const changeDate = useStore((state) => state.changeDate)
-
+  const isModalCategoryOpen = useStore((state) => state.isModalCategoryOpen)
   const closeIsOpenTaskInfo = useStore((state) => state.closeIsOpenTaskInfo)
   const getTaskInfoState = useStore((state) => state.getTaskInfoState)
-  const openModalCategory = () => setIsModalCategoryOpen(true);
   const navigate = useNavigate();
   const modalRef = useRef(null);
   const token = useStore((state) => state.token);
   const deleteTaskState = useStore((state) => state.deleteTaskState);
-  
+  const closeModalCat = useStore((state) => state.closeModalCat);
+
   const CloseTaskUpdateOpen = () => {
     closeTaskUpdateOpen()
     TaskInfoOpen()
     setError(null);
   }
-  const closeModalCat = () => {
-    setIsModalCategoryOpen(false)
-    setError(null);
-  };
 
   const closeModalEditCat = () => {
     setIsEditModalCategoryOpen(false);
@@ -237,7 +232,7 @@ const Content = (props) => {
       await fetchCategories();
       setCategoryName("");
       setColor("#ffffff");
-      setIsModalCategoryOpen(false);
+      //setIsModalCategoryOpen(false);
     } catch (error) {
       console.error("Ошибка при создании категории:", error);
       if (error.response) {
@@ -415,7 +410,7 @@ const Content = (props) => {
       )}
 
       {isModalCategoryOpen && (
-        <AddCategory modalRef={modalRef} categoryName={categoryName} setCategoryName={setCategoryName} color={color} handleColorChange={handleColorChange} error={error} closeModalCategory={closeModalCategory} closeModalCat={closeModalCat} />
+        <AddCategory modalRef={modalRef} categoryName={categoryName} setCategoryName={setCategoryName} color={color} handleColorChange={handleColorChange} error={error} closeModalCategory={closeModalCategory}/>
       )}
 
       {isEditCategoryOpen && (
@@ -429,7 +424,7 @@ const Content = (props) => {
 
       <div className={isWarningOpen || isModalOpen || isModalCategoryOpen || isEditCategoryOpen || isTaskOpen || isOpenTaskInfo ? [s.wrapper, s.opacity].join(' ') : [s.wrapper]}>
         <Header avatarId={props.userData.id} name={props.userData.name} />
-        <Main updateAvatarId={props.userData.id} avatarId={props.userData.id} updateTasks={props.updateTasks} getTaskStatus={getTaskStatus} taskStatuses={props.taskStatuses} statusId={statusId} completed={completed} getTaskInfo={getTaskInfo} fetchCategories={fetchCategories} openTaskInfo={openTaskInfo} addTask={props.addTask} tasks={props.tasks} openModalEditCategory={openModalEditCategory} updateCategories={props.updateCategories} openModalCategory={openModalCategory} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp} />
+        <Main updateAvatarId={props.userData.id} avatarId={props.userData.id} updateTasks={props.updateTasks} getTaskStatus={getTaskStatus} taskStatuses={props.taskStatuses} statusId={statusId} completed={completed} getTaskInfo={getTaskInfo} fetchCategories={fetchCategories} openTaskInfo={openTaskInfo} addTask={props.addTask} tasks={props.tasks} openModalEditCategory={openModalEditCategory} updateCategories={props.updateCategories} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp} />
         <Footer />
       </div>
     </div>
