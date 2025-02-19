@@ -16,11 +16,12 @@ const Profile = (props) => {
   const navigate = useNavigate()
   const overlayRef = useRef(null)
   const token = useStore((state) => state.token);
+  const removeToken = useStore((state) => state.removeToken);
 
   const DeleteUser = () => {
     if (token) {
       deleteUserApi().then(response => {
-        props.removeToken()
+        removeToken()
         navigate("/login");
       })
     }
@@ -72,7 +73,7 @@ const Profile = (props) => {
           <Confirnation exit={exit1} DeleteUser={() => deleteCategory(categortId)} />
         )}
         <div className={isDialogOpen || isDialogOpen1 ? [s.content, s.block].join(" ") : [s.content]}>
-          <UserInfo updateAvatarId={props.userData.id} avatarId={props.userData.id} setIsDialogOpen={setIsDialogOpen} removeToken={props.removeToken} name={props.name} surname={props.surname} gender={props.gender} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp} />
+          <UserInfo updateAvatarId={props.userData.id} avatarId={props.userData.id} setIsDialogOpen={setIsDialogOpen} name={props.name} surname={props.surname} gender={props.gender} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp} />
           <CategoryList setCategortId={setCategortId} setIsDialogOpen1={setIsDialogOpen1} fetchCategories={props.fetchCategories} openModalEditCategory={props.openModalEditCategory} updateCategories={props.updateCategories} openModalCategory={props.openModalCategory} categories={props.categories} />
         </div>
       </div>

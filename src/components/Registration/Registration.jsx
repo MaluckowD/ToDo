@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import s from "./Registration.module.css";
 import { useNavigate } from "react-router-dom";
 import { sendCodeApi, confirmationApi, registartionApi } from "../../api/api.ts"
-
+import useStore from "../../store/useToDoStore.js";
 const Registration = (props) => {
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
@@ -17,6 +17,7 @@ const Registration = (props) => {
   const [errorCode, setErrorCode] = useState(null);
   const [code, setCode] = useState("");
   const navigate = useNavigate()
+  const saveToken = useStore((state) => state.saveToken);
 
   const confirmation = async () => {
     const userData = {
@@ -88,7 +89,7 @@ const Registration = (props) => {
         try {
           const registrationResponse = await registartionApi(userData)
           if (registrationResponse.status === 200 || registrationResponse.status === 201) {
-            props.saveToken(registrationResponse.data.access_token);
+            saveToken(registrationResponse.data.access_token);
             navigate("/Content")
             //window.location.reload()
             window.location.href = "/content"

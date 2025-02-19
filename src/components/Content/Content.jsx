@@ -20,6 +20,7 @@ const Content = (props) => {
   const [error, setError] = useState(null);
   const [categories, setCategories] = useState([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState('');
+
   const [isOpenTaskInfo, setOpenTaskInfo] = useState(false);
   const [isModalCategoryOpen, setIsModalCategoryOpen] = useState(false);
   const [isEditCategoryOpen, setIsEditModalCategoryOpen] = useState(false);
@@ -28,6 +29,8 @@ const Content = (props) => {
   const [isTaskUpdateOpen, setIsTaskUpdateOpen] = useState(false);
   const [isTaskInfoOpen, setisTaskInfoOpen] = useState(false);
   const [isWarningOpen, setIsWarningOpen] = useState(false)
+
+  
   const [categoryName, setCategoryName] = useState("");
   const [categoryId, setcategoryId] = useState(0);
   const [date, setDate] = useState("")
@@ -450,8 +453,8 @@ const Content = (props) => {
       )}
 
       <div className={isWarningOpen || isModalOpen || isModalCategoryOpen || isEditCategoryOpen || isTaskOpen || isOpenTaskInfo ? [s.wrapper, s.opacity].join(' ') : [s.wrapper]}>
-        <Header avatarId={props.userData.id} removeToken={props.removeToken} name={props.userData.name} />
-        <Main updateAvatarId={props.userData.id} avatarId={props.userData.id} updateTasks={props.updateTasks} getTaskStatus={getTaskStatus} taskStatuses={props.taskStatuses} removeToken={props.removeToken} statusId={statusId} completed={completed} getTaskInfo={getTaskInfo} fetchCategories={fetchCategories} openTaskInfo={openTaskInfo} addTask={props.addTask} tasks={props.tasks} openModalEditCategory={openModalEditCategory} updateCategories={props.updateCategories} openModalCategory={openModalCategory} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp} />
+        <Header avatarId={props.userData.id} name={props.userData.name} />
+        <Main updateAvatarId={props.userData.id} avatarId={props.userData.id} updateTasks={props.updateTasks} getTaskStatus={getTaskStatus} taskStatuses={props.taskStatuses} statusId={statusId} completed={completed} getTaskInfo={getTaskInfo} fetchCategories={fetchCategories} openTaskInfo={openTaskInfo} addTask={props.addTask} tasks={props.tasks} openModalEditCategory={openModalEditCategory} updateCategories={props.updateCategories} openModalCategory={openModalCategory} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp} />
         <Footer openModal={openModal} />
       </div>
     </div>

@@ -17,8 +17,8 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
     <header className={s.header}>
       <div className={s.container}>
         <div className={s.header_inner}>
-          <Userinfo avatarId={props.avatarId} getToken={props.getToken} name={props.name} />
-          <Buttons removeToken={props.removeToken} getToken={props.getToken} />
+          <Userinfo avatarId={props.avatarId} name={props.name} />
+          <Buttons/>
         </div>
       </div>
     </header>

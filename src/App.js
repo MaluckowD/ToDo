@@ -15,18 +15,14 @@ function App(props) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [taskStatuses, setTaskStatuses] = useState({});
+  
   const token = useStore((state) => state.token);
   const setToken = useStore((state) => state.setToken);
   const removeToken = useStore((state) => state.removeToken);
+
   useEffect(() => {
     document.title = "ToDo";
   }, []);
-
-  const saveToken = (token) => {
-    localStorage.setItem('access_token', token);
-    setToken(token);
-  };
-
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -124,11 +120,10 @@ function App(props) {
     <div className={s.wrapper}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<AuthRedirect />} />
-          <Route path="/login" element={<Login saveToken={saveToken}/>} />
-          <Route path="/registration" element={<Registration saveToken={saveToken} />} />
-          <Route path="/content" element={<Content setTaskStatuses={setTaskStatuses} taskStatuses={taskStatuses} removeToken={removeToken}
-            updateTasks={updateTasks} tasks={tasks} updateCategories={updateCategories} categories={categories} userData={userData}
+          <Route path="/" element={<AuthRedirect/>} />
+          <Route path="/login" element={<Login/>} />
+          <Route path="/registration" element={<Registration/>} />
+          <Route path="/content" element={<Content setTaskStatuses={setTaskStatuses} taskStatuses={taskStatuses} updateTasks={updateTasks} tasks={tasks} updateCategories={updateCategories} categories={categories} userData={userData}
             isLoading={isLoading} error={error}  />}>
             <Route index element={<Calendar />} />
             <Route path="settings" element={<Profile />} />

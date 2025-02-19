@@ -6,6 +6,7 @@ import useStore from "../../../../store/useToDoStore.js";
 const Buttons = (props) => {
   const navigate = useNavigate();
   const token = useStore((state) => state.token);
+  const removeToken = useStore((state) => state.removeToken);
   const UpdateCallBack = () => {
     if (token) {
       fetchUserName();
@@ -13,7 +14,7 @@ const Buttons = (props) => {
   }
 
   const handleLogout = () => {
-    props.removeToken(); 
+    removeToken(); 
     navigate("/login");
   };
 

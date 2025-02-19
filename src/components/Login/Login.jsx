@@ -8,6 +8,7 @@ const Login = (props) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const saveToken = useStore((state) => state.saveToken);
 
   const LoginCallback = async (e) => {
     e.preventDefault();
@@ -15,7 +16,7 @@ const Login = (props) => {
     const data = {email,password}
     try {
       const response = await loginApi(data)
-      props.saveToken(response.data.access_token);
+      saveToken(response.data.access_token);
       navigate("/content");
       //window.location.reload();
       window.location.href = "/content"
