@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from "react-router-dom";
 import Header from "./Header/Header"
 import Main from "./Main/Main"
-import Footer from "./Footer/Footer.tsx"
+import Footer from "./Footer/Footer"
 import KirillLoh from '../Modals/KirillLoh/KirillLoh';
 import AddTask from '../Modals/AddTask/AddTask';
 import TaskVariants from '../Modals/TaskVariants/TaskVariants';
@@ -17,43 +17,51 @@ import useStore from "../../store/useToDoStore.js";
 
 const Content = (props) => {
   const [redirectToLogin, setRedirectToLogin] = useState(false);
+
+
   const [error, setError] = useState(null);
   const [categories, setCategories] = useState([]);
-  const [selectedCategoryId, setSelectedCategoryId] = useState('');
 
-  const [isOpenTaskInfo, setOpenTaskInfo] = useState(false);
   const [isModalCategoryOpen, setIsModalCategoryOpen] = useState(false);
   const [isEditCategoryOpen, setIsEditModalCategoryOpen] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isTaskOpen, setIsTaskOpen] = useState(false);
+
   const [isTaskUpdateOpen, setIsTaskUpdateOpen] = useState(false);
   const [isTaskInfoOpen, setisTaskInfoOpen] = useState(false);
-  const [isWarningOpen, setIsWarningOpen] = useState(false)
 
   
   const [categoryName, setCategoryName] = useState("");
   const [categoryId, setcategoryId] = useState(0);
-  const [date, setDate] = useState("")
   const [taskId, setTaskId] = useState(0)
-  const [taskName, setTaskName] = useState("")
-  const [taskDescription, setTaskDescription] = useState("")
-  const [taskPriority, setTaskPriority] = useState(1)
+
+
   const [color, setColor] = useState('#ffffff');
   const TaskInfoOpen = () => setisTaskInfoOpen(true)
-  const exitWarning = () => setIsWarningOpen(false)
   const closeTaskInfoOpen = () => setisTaskInfoOpen(false)
   const TaskUpdateOpen = () => setIsTaskUpdateOpen(true)
   const closeTaskUpdateOpen = () => setIsTaskUpdateOpen(false)
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+
+  const isModalOpen = useStore((state) => state.isModalOpen);
+  const closeModal = useStore((state) => state.closeModal);
+  const isOpenTaskInfo = useStore((state) => state.isOpenTaskInfo);
+  const openTaskInfoState = useStore((state) => state.openTaskInfoState);
+  const isWarningOpen = useStore((state) => state.isWarningOpen);
+  const closeIsOpenTask = useStore((state) => state.closeIsOpenTask);
+  const isTaskOpen = useStore((state) => state.isTaskOpen);
+  const taskName = useStore((state) => state.taskName);
+  const taskDescription = useStore((state) => state.taskDescription);
+  const taskPriority = useStore((state) => state.taskPriority);
+  const selectedCategoryId = useStore((state) => state.selectedCategoryId);
+  const date = useStore((state) => state.date)
+  const changeDate = useStore((state) => state.changeDate)
+
+  const closeIsOpenTaskInfo = useStore((state) => state.closeIsOpenTaskInfo)
+  const getTaskInfoState = useStore((state) => state.getTaskInfoState)
   const openModalCategory = () => setIsModalCategoryOpen(true);
   const navigate = useNavigate();
   const modalRef = useRef(null);
   const token = useStore((state) => state.token);
-  const openWarning = () => {
-    setIsWarningOpen(true)
-    closeIsOpenTask()
-  }
+  const deleteTaskState = useStore((state) => state.deleteTaskState);
+  
   const CloseTaskUpdateOpen = () => {
     closeTaskUpdateOpen()
     TaskInfoOpen()
@@ -63,23 +71,7 @@ const Content = (props) => {
     setIsModalCategoryOpen(false)
     setError(null);
   };
-  const closeIsOpenTaskInfo = () => {
-    setOpenTaskInfo(false)
-    setTaskName("");
-    setTaskDescription("");
-    setTaskPriority("");
-    setCategoryName("")
-    setDate("")
-    setError(null);
-  };
-  const closeIsOpenTask = () => {
-    setIsTaskOpen(false)
-    setTaskName("");
-    setTaskDescription("");
-    setTaskPriority("");
-    setSelectedCategoryId("")
-    setDate("")
-  }
+
   const closeModalEditCat = () => {
     setIsEditModalCategoryOpen(false);
     setCategoryName("")
@@ -172,8 +164,9 @@ const Content = (props) => {
     const month = String(dateObj.getMonth() + 1).padStart(2, '0');
     const day = String(dateObj.getDate()).padStart(2, '0');
     const formattedDate = `${year}-${month}-${day}`;
-    setDate(formattedDate);
-    setOpenTaskInfo(true);
+
+    openTaskInfoState(formattedDate)
+
   };
 
   const fetchCategories = async () => {
@@ -220,11 +213,7 @@ const Content = (props) => {
       await addTaskApi(taskData)
       await props.updateTasks();
       closeIsOpenTaskInfo();
-      setDate(taskData.date);
-      setTaskName("");
-      setTaskDescription("");
-      setTaskPriority("");
-      setSelectedCategoryId("");
+      changeDate(taskData.date)
     }
     catch (error) {
       console.error("Ошибка при добавлении задачи:", error);
@@ -295,13 +284,8 @@ const Content = (props) => {
       } catch (e) {
         console.error("ошибка при получении имени категории", e)
       }
-      setDate(taskData.date);
-      setTaskName(taskData.name);
-      setTaskDescription(taskData.description);
-      setTaskPriority(taskData.priority);
-      setSelectedCategoryId(categoryId);
+      getTaskInfoState(taskData, categoryId)
       setcategoryId(categoryId);
-      setIsTaskOpen(true);
     } catch (error) {
       console.error("Ошибка при получении данных задачи:", error);
     }
@@ -347,13 +331,9 @@ const Content = (props) => {
   const deleteTask = (id) => {
     deleteTaskApi(id).then(response => {
       props.updateTasks()
-      setIsTaskOpen(false)
-      setTaskName("");
-      setTaskDescription("");
-      setTaskPriority("");
+      deleteTaskState()
       setCategoryName("")
-      setDate("")
-      setIsWarningOpen(false)
+      
     })
   }
 
@@ -393,47 +373,42 @@ const Content = (props) => {
   };
 
   const handlePriorityChange = (e) => {
-    setTaskPriority(parseInt(e.target.value, 10));
   };
   const handleCategoryChange = (event) => {
-    setSelectedCategoryId(event.target.value);
   };
 
   const getTaskStatus = (taskId) => {
     return props.taskStatuses[taskId] || { completed: false, statusId: 0 };
   };
+  console.log(props.userData)
   if (!props.userData.name) {
     return <div>Загрузка данных пользователя...</div>;
   }
   return (
     <div className={s.root}>
-      {isModalOpen && (<KirillLoh modalRef={modalRef} closeModal={closeModal} />)}
+      {isModalOpen && (<KirillLoh modalRef={modalRef} />)}
 
       {isOpenTaskInfo && (
-        <AddTask modalRef={modalRef} taskName={taskName} setTaskName={setTaskName}
-          taskDescription={taskDescription} setTaskDescription={setTaskDescription}
-          date={date} setDate={setDate} handleCategoryChange={handleCategoryChange}
-          categories={categories} taskPriority={taskPriority} handlePriorityChange={handlePriorityChange} error={error} closeIsOpenTaskInfo={closeIsOpenTaskInfo}
-          addTask={addTask} selectedCategoryId={selectedCategoryId} />
+        <AddTask modalRef={modalRef} categories={categories} error={error} addTask={addTask}/>
       )}
 
       {isTaskOpen && (
         <TaskVariants modalRef={modalRef} TaskInfoOpen={TaskInfoOpen} TaskUpdateOpen={TaskUpdateOpen} changeTaskStatus={changeTaskStatus} taskId={taskId}
-          openWarning={openWarning} closeIsOpenTask={closeIsOpenTask} />
+           />
       )}
       {isTaskInfoOpen && (
-        <AboutTask modalRef={modalRef} taskName={taskName} setTaskName={setTaskName}
-          taskDescription={taskDescription} setTaskDescription={setTaskDescription}
-          date={date} setDate={setDate} selectedCategoryId={selectedCategoryId}
+        <AboutTask modalRef={modalRef} taskName={taskName}
+          taskDescription={taskDescription} 
+          date={date}  selectedCategoryId={selectedCategoryId}
           handleCategoryChange={handleCategoryChange} taskPriority={taskPriority}
           handlePriorityChange={handlePriorityChange} completed={completed}
           closeTaskInfoOpen={closeTaskInfoOpen} categories={categories} />
       )}
 
       {isTaskUpdateOpen && (
-        <EditTask modalRef={modalRef} taskName={taskName} setTaskName={setTaskName}
-          taskDescription={taskDescription} setTaskDescription={setTaskDescription}
-          date={date} setDate={setDate} selectedCategoryId={selectedCategoryId}
+        <EditTask modalRef={modalRef} taskName={taskName} 
+          taskDescription={taskDescription} 
+          date={date}  selectedCategoryId={selectedCategoryId}
           handleCategoryChange={handleCategoryChange} categories={categories}
           completed={completed} error={error} changeTask={changeTask} taskId={taskId}
           CloseTaskUpdateOpen={CloseTaskUpdateOpen} />
@@ -449,13 +424,13 @@ const Content = (props) => {
       )}
 
       {isWarningOpen && (
-        <Confirnation exit={exitWarning} DeleteUser={() => deleteTask(taskId)} />
+        <Confirnation DeleteUser={() => deleteTask(taskId)} />
       )}
 
       <div className={isWarningOpen || isModalOpen || isModalCategoryOpen || isEditCategoryOpen || isTaskOpen || isOpenTaskInfo ? [s.wrapper, s.opacity].join(' ') : [s.wrapper]}>
         <Header avatarId={props.userData.id} name={props.userData.name} />
         <Main updateAvatarId={props.userData.id} avatarId={props.userData.id} updateTasks={props.updateTasks} getTaskStatus={getTaskStatus} taskStatuses={props.taskStatuses} statusId={statusId} completed={completed} getTaskInfo={getTaskInfo} fetchCategories={fetchCategories} openTaskInfo={openTaskInfo} addTask={props.addTask} tasks={props.tasks} openModalEditCategory={openModalEditCategory} updateCategories={props.updateCategories} openModalCategory={openModalCategory} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp} />
-        <Footer openModal={openModal} />
+        <Footer />
       </div>
     </div>
   )

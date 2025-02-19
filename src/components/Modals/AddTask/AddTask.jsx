@@ -1,32 +1,45 @@
 import s from "../Modals.module.css"
+import useStore from "../../../store/useToDoStore.js";
 
 const AddTask = (props) => {
+  const closeIsOpenTaskInfo = useStore((state) => state.closeIsOpenTaskInfo);
+  const changeTaskName = useStore((state) => state.changeTaskName);
+  const taskName = useStore((state) => state.taskName);
+  const taskDescription = useStore((state) => state.taskDescription);
+  const changeTaskDescription = useStore((state) => state.changeTaskDescription)
+  const date = useStore((state) => state.date)
+  const changeDate = useStore((state) => state.changeDate)
+  const selectedCategoryId = useStore((state) => state.selectedCategoryId);
+  const handleCategoryChange = useStore((state) => state.handleCategoryChange);
+  const taskPriority = useStore((state) => state.taskPriority);
+  const handlePriorityChange = useStore((state) => state.handlePriorityChange)
+  
   return (
     <div className={s.modal} ref={props.modalRef}>
       <div className={s.modalcontent}>
         <input className={s.categoryName}
           maxlength='50'
           type="text"
-          value={props.taskName}
-          onChange={(e) => props.setTaskName(e.target.value)}
+          value={taskName}
+          onChange={(e) => changeTaskName(e.target.value)}
           placeholder="Введите название для задачи"
         />
         <textarea className={s.taskDescription}
           maxlength='500'
           type="text"
-          value={props.taskDescription}
-          onChange={(e) => props.setTaskDescription(e.target.value)}
+          value={taskDescription}
+          onChange={(e) => changeTaskDescription(e.target.value)}
           placeholder="Описание"
         />
         <input className={s.categoryName}
           style={{ color: "#000" }}
           type="date"
-          value={props.date}
-          onChange={(e) => props.setDate(e.target.value)}
+          value={date}
+          onChange={(e) => changeDate(e.target.value)}
           placeholder="Дата задачи"
         />
-        <select style={{ color: "#000" }} value={props.selectedCategoryId} 
-          onChange={props.handleCategoryChange}>
+        <select style={{ color: "#000" }} value={selectedCategoryId} 
+          onChange={(e) => handleCategoryChange(e.target.value)}>
           <option value="" disabled>Выберите категорию</option>
           {props.categories.map((category) => (
             <option style={{ backgroundColor: category.color }} key={category.id} value={category.id}>
@@ -37,8 +50,8 @@ const AddTask = (props) => {
 
         <select
           style={{ color: "#000" }}
-          value={props.taskPriority}
-          onChange={props.handlePriorityChange}
+          value={taskPriority}
+          onChange={(e) => handlePriorityChange(e.target.value)}
         >
           <option value="" disabled>Выберите приоритет</option>
           <option style={{ backgroundColor: "#EB0000" }} value={1}>Высокий</option>
@@ -49,7 +62,7 @@ const AddTask = (props) => {
         <button className={s.closeModalCategory} onClick={props.addTask}>
           Добавить задачу
         </button>
-        <button className={s.closeModalCategory} onClick={props.closeIsOpenTaskInfo}>Выйти</button>
+        <button className={s.closeModalCategory} onClick={closeIsOpenTaskInfo}>Выйти</button>
       </div>
     </div>
   )

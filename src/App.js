@@ -9,20 +9,52 @@ import Profile from "./components/Content/Main/Profile/Profile";
 import { getDataApi, categoriesNobaseApi, updateTasksApi } from "./api/api.ts"
 import useStore from "./store/useToDoStore.js";
 function App(props) {
+  //const [categories, setCategories] = useState(null);
+  //const [tasks, setTasks] = useState(null);
+  //const [userData, setUserData] = useState(null);
+  //const [isLoading, setIsLoading] = useState(true);
+  //const [error, setError] = useState(null);
+  //const [taskStatuses, setTaskStatuses] = useState({});
+  
+  //const removeToken = useStore((state) => state.removeToken);
+  //const fetchUserData = useStore((state) => state.fetchUserData);
+  const fetchCategories = useStore((state) => state.fetchCategories);
+  //const updateCategories = useStore((state) => state.updateCategories);
+  //const updateTasks = useStore((state) => state.updateTasks);
+  //const userData = useStore((state) => state.userData);
+  //const categories = useStore((state) => state.categories);
+  //const tasks = useStore((state) => state.tasks);
+  //const isLoading = useStore((state) => state.isLoading);
+  //const error = useStore((state) => state.error);
+  //const taskStatuses = useStore((state) => state.taskStatuses);
+  //const token = useStore((state) => state.token);
+  //const setToken = useStore((state) => state.setToken);
+  
   const [categories, setCategories] = useState(null);
   const [tasks, setTasks] = useState(null);
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [taskStatuses, setTaskStatuses] = useState({});
-  
-  const token = useStore((state) => state.token);
-  const setToken = useStore((state) => state.setToken);
-  const removeToken = useStore((state) => state.removeToken);
+  const getToken = () => localStorage.getItem('access_token');
+  const [token, setToken] = useState(() => getToken());
 
   useEffect(() => {
     document.title = "ToDo";
   }, []);
+
+  const updateUserDataInApp = (updatedUserData) => {
+    setUserData(updatedUserData);
+  };
+
+  const saveToken = (token) => {
+    localStorage.setItem('access_token', token);
+    setToken(token);
+  };
+
+  const removeToken = () => {
+    localStorage.removeItem('access_token');
+  }
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -97,7 +129,7 @@ function App(props) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-      const storedToken = token;
+      const storedToken = getToken();
       if (storedToken) {
         setToken(storedToken);
       }
@@ -115,7 +147,6 @@ function App(props) {
     }, [navigate, token, loading]);
     return null;
   };
-
   return (
     <div className={s.wrapper}>
       <BrowserRouter>
@@ -123,7 +154,7 @@ function App(props) {
           <Route path="/" element={<AuthRedirect/>} />
           <Route path="/login" element={<Login/>} />
           <Route path="/registration" element={<Registration/>} />
-          <Route path="/content" element={<Content setTaskStatuses={setTaskStatuses} taskStatuses={taskStatuses} updateTasks={updateTasks} tasks={tasks} updateCategories={updateCategories} categories={categories} userData={userData}
+          <Route path="/content" element={<Content taskStatuses={taskStatuses} updateTasks={updateTasks} tasks={tasks} updateCategories={updateCategories} categories={categories} userData={userData}
             isLoading={isLoading} error={error}  />}>
             <Route index element={<Calendar />} />
             <Route path="settings" element={<Profile />} />

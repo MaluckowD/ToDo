@@ -8,6 +8,7 @@ const useStore = create((set) => ({
   isLoading: false,
   error: null,
   taskStatuses: {},
+  getToken: localStorage.getItem('access_token'),
   token: localStorage.getItem('access_token'),
   setToken: (token) => {
     set({ token: token });
@@ -18,6 +19,7 @@ const useStore = create((set) => ({
     }
   },
   saveToken: (token) => {
+    console.log("Setting token:", token);
     localStorage.setItem('access_token', token);
     set({ token: token });
   },
@@ -31,13 +33,13 @@ const useStore = create((set) => ({
   },
 
   fetchUserData: async () => {
-    try{
+    set({ isLoading: true })
+    try {
       const response = await getDataApi()
-      set({userData: response,
-         categories: response.categories,
-          isLoading: true,
-          tasks: response.tasks }
-      )
+      console.log(response)
+      set({ userData: response })
+      set({ categories: response.categories })
+      set({ tasks: response.tasks })
       if (response.tasks) {
         const initialTaskStatuses = {};
         response.tasks.forEach(task => {
@@ -46,14 +48,17 @@ const useStore = create((set) => ({
             statusId: task.id,
           };
         });
-        set({taskStatuses: initialTaskStatuses})
+        set({ taskStatuses: initialTaskStatuses })
       }
-    }
-    catch(error){
-      set({categories: [],
-        tasks: [],
-        isLoading: false,
-        error: "Не удалось получить категории или задачи: Неверный формат ответа",})
+    } catch (error) {
+      set({error: error})
+      set({ userData: [] })
+      set({ categories: []})
+      set({ tasks: [] })
+      localStorage.removeItem('access_token');
+      console.error("Ошибка при загрузке данных пользователя:", error);
+    } finally {
+      set({ isLoading: false })
     }
   },
 
@@ -65,10 +70,11 @@ const useStore = create((set) => ({
     catch (error) {
       set({
         error: "Ошибка при загрузке данных пользователя:",
-        categories: [],
-        isLoading: false}
-      );
-    } 
+        categories: [],});
+    }
+    finally {
+      set({isLoading: false});
+    }
   },
 
   updateCategories: async () => {
@@ -76,9 +82,7 @@ const useStore = create((set) => ({
       const response = await categoriesNobaseApi()
       set({ categories: response })
     } catch (error) {
-      set({
-        error: "Ошибка при обновлении категорий:",
-      });
+      console.error("Ошибка при обновлении категорий:", error);
     }
   },
 
@@ -87,11 +91,116 @@ const useStore = create((set) => ({
       const response = await updateTasksApi()
       set({tasks: response});
     } catch (error) {
-      set({
-        error: "Ошибка при обновлении задач:",
-      });
+      console.error("Ошибка при обновлении задач:", error);
     }
   },
+  isOpenTaskInfo: false,
+  isModalCategoryOpen: false,
+  isEditCategoryOpen: false,
+  isModalOpen: false,
+  openModal: () => set({ isModalOpen: true }),
+  closeModal: () => set({ isModalOpen: false }),
+  isTaskOpen: false,
+  isTaskUpdateOpen: false,
+  isTaskInfoOpen: false,
+  isWarningOpen: false,
+
+  taskName: "",
+  changeTaskName: (value) => {
+    set({
+      taskName: value
+    })
+  },
+  taskDescription: "",
+  changeTaskDescription: (value) => {
+    set({
+      taskDescription: value
+    })
+  },
+  taskPriority: 1,
+  categoryName: "",
+  date: "",
+  changeDate: (value) => {
+    set({
+      date: value
+    })
+  },
+  selectedCategoryId: "",
+  handleCategoryChange: (value) => {
+    set({
+      selectedCategoryId: value
+    })
+  },
+  error: null,
+  openTaskInfoState: (formattedDate) => {
+    set({
+      date: formattedDate,
+      isOpenTaskInfo: true
+    })
+  },
+  taskPriority: 1,
+  handlePriorityChange: (value) => {
+    set({
+      taskPriority: parseInt(value, 10)
+    })
+  },
+
+  closeIsOpenTaskInfo: () => {
+    set({ isOpenTaskInfo: false, 
+      taskName: "",
+      taskDescription: "",
+      taskPriority: "",
+      categoryName: "",
+      date: "",
+      error: null
+    })
+  },
+
+  openWarning: () => {
+    set({
+      isWarningOpen: true,
+      isTaskOpen: false,
+      taskName: "",
+      taskDescription: "",
+      selectedCategoryId: "",
+      date: ""
+    })
+  },
+  exitWarning: () => {
+    set({
+      isWarningOpen: false,
+    })
+  },
+  closeIsOpenTask: () => {
+    set({
+      isTaskOpen: false,
+      taskName: "",
+      taskDescription: "",
+      selectedCategoryId: "",
+      date: ""
+    })
+  },
+  getTaskInfoState: (taskData, categoryId) => {
+    set({
+      isTaskOpen: false,
+      taskName: taskData.name,
+      taskPriority: taskData.priority,
+      taskDescription: taskData.description,
+      selectedCategoryId: categoryId,
+      date: taskData.date
+    })
+  },
+  deleteTaskState: () => {
+    set({
+      isTaskOpen: false,
+      taskName: "",
+      taskPriority: "",
+      taskDescription: "",
+      date: "",
+      isWarningOpen: false
+    })
+  }
+  
 }));
 
 export default useStore;
