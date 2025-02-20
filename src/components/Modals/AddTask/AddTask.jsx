@@ -13,6 +13,7 @@ const AddTask = (props) => {
   const handleCategoryChange = useStore((state) => state.handleCategoryChange);
   const taskPriority = useStore((state) => state.taskPriority);
   const handlePriorityChange = useStore((state) => state.handlePriorityChange)
+  const categories = useStore((state) => state.categories)
   
   return (
     <div className={s.modal} ref={props.modalRef}>
@@ -41,7 +42,7 @@ const AddTask = (props) => {
         <select style={{ color: "#000" }} value={selectedCategoryId} 
           onChange={(e) => handleCategoryChange(e.target.value)}>
           <option value="" disabled>Выберите категорию</option>
-          {props.categories.map((category) => (
+          {categories.map((category) => (
             <option style={{ backgroundColor: category.color }} key={category.id} value={category.id}>
               {category.name}
             </option>

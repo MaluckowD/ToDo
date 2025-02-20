@@ -18,22 +18,17 @@ import useStore from "../../store/useToDoStore.js";
 const Content = (props) => {
   const [redirectToLogin, setRedirectToLogin] = useState(false);
 
-
   const [error, setError] = useState(null);
   const [categories, setCategories] = useState([]);
-
-  const [isEditCategoryOpen, setIsEditModalCategoryOpen] = useState(false);
 
   const [isTaskUpdateOpen, setIsTaskUpdateOpen] = useState(false);
   const [isTaskInfoOpen, setisTaskInfoOpen] = useState(false);
 
   
-  const [categoryName, setCategoryName] = useState("");
   const [categoryId, setcategoryId] = useState(0);
   const [taskId, setTaskId] = useState(0)
 
 
-  const [color, setColor] = useState('#ffffff');
   const TaskInfoOpen = () => setisTaskInfoOpen(true)
   const closeTaskInfoOpen = () => setisTaskInfoOpen(false)
   const TaskUpdateOpen = () => setIsTaskUpdateOpen(true)
@@ -60,6 +55,15 @@ const Content = (props) => {
   const token = useStore((state) => state.token);
   const deleteTaskState = useStore((state) => state.deleteTaskState);
   const closeModalCat = useStore((state) => state.closeModalCat);
+  const categoryName = useStore((state) => state.categoryName);
+
+  const changeCategoryNameState = useStore((state) => state.changeCategoryNameState);
+  const isEditCategoryOpen = useStore((state) => state.isEditCategoryOpen);
+
+  const closeModalCategoryState = useStore((state) => state.closeModalCategoryState);
+  const closeModalEditCat = useStore((state) => state.closeModalEditCat);
+  const updateTasks = useStore((state) => state.updateTasks);
+  const color = useStore((state) => state.color);
 
   const CloseTaskUpdateOpen = () => {
     closeTaskUpdateOpen()
@@ -67,16 +71,6 @@ const Content = (props) => {
     setError(null);
   }
 
-  const closeModalEditCat = () => {
-    setIsEditModalCategoryOpen(false);
-    setCategoryName("")
-    setColor("#ffffff")
-    setError(null);
-  }
-
-  // const updateAvatarId = (newAvatarId) => {
-  //   setAvatarId(newAvatarId);
-  // };
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -134,16 +128,6 @@ const Content = (props) => {
     localStorage.setItem('completed', JSON.stringify(completed));
   }, [completed]);
 
-  const openModalEditCategory = (id) => {
-    setcategoryId(id)
-    setIsEditModalCategoryOpen(true)
-    categoriesInfo(id).then(response => {
-      setCategoryName(response.name)
-      setColor(response.color)
-    }).catch(error => {
-      console.error("Ошибка при получении информации о категории:", error);
-    });
-  };
 
   const openTaskInfo = (e) => {
     let dateString = e?.currentTarget?.getAttribute('data-date');
@@ -206,7 +190,7 @@ const Content = (props) => {
         date: date,
       };
       await addTaskApi(taskData)
-      await props.updateTasks();
+      await updateTasks();
       closeIsOpenTaskInfo();
       changeDate(taskData.date)
     }
@@ -230,9 +214,7 @@ const Content = (props) => {
       await addCategoryApi(categoryData)
       props.updateCategories();
       await fetchCategories();
-      setCategoryName("");
-      setColor("#ffffff");
-      //setIsModalCategoryOpen(false);
+      closeModalCategoryState()
     } catch (error) {
       console.error("Ошибка при создании категории:", error);
       if (error.response) {
@@ -253,9 +235,7 @@ const Content = (props) => {
       await editCategoryApi(id, categoryData)
       props.updateCategories();
       await fetchCategories();
-      setCategoryName("");
-      setColor("#ffffff");
-      setIsEditModalCategoryOpen(false);
+      closeModalCategoryState()
     } catch (error) {
       console.error('Ошибка при редактировании категории:', error);
       if (error.response) {
@@ -294,10 +274,6 @@ const Content = (props) => {
     return <p>Ошибка: {props.error.message}</p>;
   }
 
-  const handleColorChange = (event) => {
-    setColor(event.target.value);
-  };
-
   const changeTask = async (id) => {
     setError(null);
     try {
@@ -309,7 +285,7 @@ const Content = (props) => {
         date: date,
       };
       await editTaskApi(id, taskData)
-      await props.updateTasks();
+      await updateTasks();
       closeTaskUpdateOpen();
       TaskInfoOpen();
     } catch (error) {
@@ -325,10 +301,9 @@ const Content = (props) => {
 
   const deleteTask = (id) => {
     deleteTaskApi(id).then(response => {
-      props.updateTasks()
+      updateTasks()
       deleteTaskState()
-      setCategoryName("")
-      
+      changeCategoryNameState("")
     })
   }
 
@@ -361,14 +336,12 @@ const Content = (props) => {
         localStorage.setItem(`statusId_${id}`, id);
       }
       props.setTaskStatuses(newTaskStatuses);
-      props.updateTasks();
+      updateTasks();
     } catch (error) {
       console.error('Ошибка при изменении статуса задачи:', error);
     }
   };
 
-  const handlePriorityChange = (e) => {
-  };
   const handleCategoryChange = (event) => {
   };
 
@@ -383,8 +356,7 @@ const Content = (props) => {
     <div className={s.root}>
       {isModalOpen && (<KirillLoh modalRef={modalRef} />)}
 
-      {isOpenTaskInfo && (
-        <AddTask modalRef={modalRef} categories={categories} error={error} addTask={addTask}/>
+      {isOpenTaskInfo && ( <AddTask modalRef={modalRef} error={error} addTask={addTask}/>
       )}
 
       {isTaskOpen && (
@@ -392,12 +364,8 @@ const Content = (props) => {
            />
       )}
       {isTaskInfoOpen && (
-        <AboutTask modalRef={modalRef} taskName={taskName}
-          taskDescription={taskDescription} 
-          date={date}  selectedCategoryId={selectedCategoryId}
-          handleCategoryChange={handleCategoryChange} taskPriority={taskPriority}
-          handlePriorityChange={handlePriorityChange} completed={completed}
-          closeTaskInfoOpen={closeTaskInfoOpen} categories={categories} />
+        <AboutTask modalRef={modalRef} completed={completed}
+          closeTaskInfoOpen={closeTaskInfoOpen} />
       )}
 
       {isTaskUpdateOpen && (
@@ -410,12 +378,11 @@ const Content = (props) => {
       )}
 
       {isModalCategoryOpen && (
-        <AddCategory modalRef={modalRef} categoryName={categoryName} setCategoryName={setCategoryName} color={color} handleColorChange={handleColorChange} error={error} closeModalCategory={closeModalCategory}/>
+        <AddCategory modalRef={modalRef} error={error} closeModalCategory={closeModalCategory}/>
       )}
 
       {isEditCategoryOpen && (
-        <EditCategory modalRef={modalRef} categoryName={categoryName} setCategoryName={setCategoryName} color={color} handleColorChange={handleColorChange}
-          error={error} onEditCategory={onEditCategory} categoryId={categoryId} closeModalEditCat={closeModalEditCat} />
+        <EditCategory modalRef={modalRef} error={error} onEditCategory={onEditCategory} categoryId={categoryId} />
       )}
 
       {isWarningOpen && (
@@ -424,7 +391,7 @@ const Content = (props) => {
 
       <div className={isWarningOpen || isModalOpen || isModalCategoryOpen || isEditCategoryOpen || isTaskOpen || isOpenTaskInfo ? [s.wrapper, s.opacity].join(' ') : [s.wrapper]}>
         <Header avatarId={props.userData.id} name={props.userData.name} />
-        <Main updateAvatarId={props.userData.id} avatarId={props.userData.id} updateTasks={props.updateTasks} getTaskStatus={getTaskStatus} taskStatuses={props.taskStatuses} statusId={statusId} completed={completed} getTaskInfo={getTaskInfo} fetchCategories={fetchCategories} openTaskInfo={openTaskInfo} addTask={props.addTask} tasks={props.tasks} openModalEditCategory={openModalEditCategory} updateCategories={props.updateCategories} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp} />
+        <Main updateAvatarId={props.userData.id} avatarId={props.userData.id}  getTaskStatus={getTaskStatus} taskStatuses={props.taskStatuses} statusId={statusId} completed={completed} getTaskInfo={getTaskInfo} fetchCategories={fetchCategories} openTaskInfo={openTaskInfo} addTask={props.addTask} tasks={props.tasks} updateCategories={props.updateCategories} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp} />
         <Footer />
       </div>
     </div>

@@ -74,7 +74,7 @@ const Profile = (props) => {
         )}
         <div className={isDialogOpen || isDialogOpen1 ? [s.content, s.block].join(" ") : [s.content]}>
           <UserInfo updateAvatarId={props.userData.id} avatarId={props.userData.id} setIsDialogOpen={setIsDialogOpen} name={props.name} surname={props.surname} gender={props.gender} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp} />
-          <CategoryList setCategortId={setCategortId} setIsDialogOpen1={setIsDialogOpen1} fetchCategories={props.fetchCategories} openModalEditCategory={props.openModalEditCategory} updateCategories={props.updateCategories} categories={props.categories} />
+          <CategoryList setCategortId={setCategortId} setIsDialogOpen1={setIsDialogOpen1} fetchCategories={props.fetchCategories} updateCategories={props.updateCategories} categories={props.categories} />
         </div>
       </div>
     </div>

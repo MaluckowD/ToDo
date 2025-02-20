@@ -1,5 +1,5 @@
 import {create} from 'zustand'
-import { getDataApi, categoriesNobaseApi, updateTasksApi } from '../api/api';
+import { getDataApi, categoriesNobaseApi, updateTasksApi, categoriesInfo } from '../api/api';
 
 const useStore = create((set) => ({
   userData: null,
@@ -94,6 +94,7 @@ const useStore = create((set) => ({
       console.error("Ошибка при обновлении задач:", error);
     }
   },
+
   isOpenTaskInfo: false,
   isModalCategoryOpen: false,
   openModalCategory: () => set({ isModalCategoryOpen: true }),
@@ -162,6 +163,31 @@ const useStore = create((set) => ({
       error: null
     })
   },
+  color: '#ffffff',
+  closeModalEditCat: () => {
+    set({
+      isEditCategoryOpen: false,
+      categoryName: "",
+      color: '#ffffff',
+      error: null
+    })
+
+  },
+  categoryId: 0,
+  openModalEditCategory: (id) => {
+    set({
+      categoryId: id,
+      isEditCategoryOpen: true,
+    })
+    categoriesInfo(id).then(response => {
+      set({
+        categoryName: response.name,
+        color: response.color,
+      })
+    }).catch(error => {
+      console.error("Ошибка при получении информации о категории:", error);
+    });
+  },
 
   openWarning: () => {
     set({
@@ -206,7 +232,25 @@ const useStore = create((set) => ({
       date: "",
       isWarningOpen: false
     })
-  }
+  },
+  changeCategoryNameState: (value) => {
+    set({
+      categoryName: value,
+    })
+  },
+  handleColorChange: (value) => {
+    set({
+      color: value,
+    })
+  },
+  closeModalCategoryState: () => {
+    set({
+      categoryName: "",
+      color: "#ffffff",
+      isModalCategoryOpen: false
+    })
+  },
+  
   
 }));
 

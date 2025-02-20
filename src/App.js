@@ -20,7 +20,7 @@ function App(props) {
   //const fetchUserData = useStore((state) => state.fetchUserData);
   const fetchCategories = useStore((state) => state.fetchCategories);
   //const updateCategories = useStore((state) => state.updateCategories);
-  //const updateTasks = useStore((state) => state.updateTasks);
+
   //const userData = useStore((state) => state.userData);
   //const categories = useStore((state) => state.categories);
   //const tasks = useStore((state) => state.tasks);
@@ -114,7 +114,7 @@ function App(props) {
       console.error("Ошибка при обновлении категорий:", error);
     }
   };
-
+  
   const updateTasks = async () => {
     try {
       const response = await updateTasksApi()
@@ -154,7 +154,7 @@ function App(props) {
           <Route path="/" element={<AuthRedirect/>} />
           <Route path="/login" element={<Login/>} />
           <Route path="/registration" element={<Registration/>} />
-          <Route path="/content" element={<Content taskStatuses={taskStatuses} updateTasks={updateTasks} tasks={tasks} updateCategories={updateCategories} categories={categories} userData={userData}
+          <Route path="/content" element={<Content taskStatuses={taskStatuses}  tasks={tasks} updateCategories={updateCategories} categories={categories} userData={userData}
             isLoading={isLoading} error={error}  />}>
             <Route index element={<Calendar />} />
             <Route path="settings" element={<Profile />} />
