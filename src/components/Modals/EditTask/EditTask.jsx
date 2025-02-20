@@ -1,7 +1,22 @@
 import s1 from "./EditTask.module.css"
 import s from "../Modals.module.css"
+import useStore from "../../../store/useToDoStore.js";
 
 const EditTask = (props) => {
+  const taskName = useStore((state) => state.taskName);
+  const changeTaskName = useStore((state) => state.changeTaskName);
+  const taskDescription = useStore((state) => state.taskDescription);
+  const changeTaskDescription = useStore((state) => state.changeTaskDescription)
+  const date = useStore((state) => state.date)
+  const changeDate = useStore((state) => state.changeDate)
+  const selectedCategoryId = useStore((state) => state.selectedCategoryId);
+  const handleCategoryChange = useStore((state) => state.handleCategoryChange);
+  const taskPriority = useStore((state) => state.taskPriority);
+  const handlePriorityChange = useStore((state) => state.handlePriorityChange)
+  const categories = useStore((state) => state.categories)
+  const closeTaskUpdateOpen = useStore((state) => state.closeTaskUpdateOpen);
+  const error = useStore((state) => state.error);
+  const taskId = useStore((state) => state.taskId);
   return (
     <div className={[s.modal, s1.editTask].join(" ")} ref={props.modalRef}>
       <div className={s.modalcontent}>
@@ -9,15 +24,15 @@ const EditTask = (props) => {
         <input className={s.categoryName}
           maxlength='50'
           type="text"
-          value={props.taskName}
-          onChange={(e) => props.setTaskName(e.target.value)}
+          value={taskName}
+          onChange={(e) => changeTaskName(e.target.value)}
           placeholder="Введите название для задачи"
         />
         <textarea className={s.taskDescription}
           maxlength='500'
           type="text"
-          value={props.taskDescription}
-          onChange={(e) => props.setTaskDescription(e.target.value)}
+          value={taskDescription}
+          onChange={(e) => changeTaskDescription(e.target.value)}
           placeholder="Описание"
         />
         <input className={s.categoryName}
@@ -25,15 +40,15 @@ const EditTask = (props) => {
             { color: "#000" }
           }
           type="date"
-          value={props.date}
-          onChange={(e) => props.setDate(e.target.value)}
+          value={date}
+          onChange={(e) => changeDate(e.target.value)}
           placeholder="Дата задачи"
         />
         <select style={
           { color: "#000" }
-        } value={props.selectedCategoryId} onChange={props.handleCategoryChange}>
+        } value={selectedCategoryId} onChange={(e) => handleCategoryChange(e.target.value)}>
           <option disabled value="">Выберите категорию</option>
-          {props.categories.map((category) => (
+          {categories.map((category) => (
             <option style={{ backgroundColor: category.color }} key={category.id} value={category.id}>
               {category.name}
             </option>
@@ -41,8 +56,8 @@ const EditTask = (props) => {
         </select>
         <select
           style={{ color: "#000" }}
-          value={props.taskPriority}
-          onChange={props.handlePriorityChange}
+          value={taskPriority}
+          onChange={(e) => handlePriorityChange(e.target.value)}
         >
           <option disabled value="">Выберите приоритет</option>
           <option style={{ backgroundColor: "#EB0000" }} value={1}>Высокий</option>
@@ -55,9 +70,9 @@ const EditTask = (props) => {
           disabled
           value={props.completed ? "Выполнена" : "Не выполнена"}
         />
-        {props.error && <p style={{ width: "400px", marginBottom: "10px" }} className="text-red-500 text-center">{props.error}</p>}
-        <button className={s.closeModalCategory} onClick={() => props.changeTask(props.taskId)}>Сохранить изменения</button>
-        <button className={s.closeModalCategory} onClick={props.CloseTaskUpdateOpen}>Отменить изменения</button>
+        {error && <p style={{ width: "400px", marginBottom: "10px" }} className="text-red-500 text-center">{props.error}</p>}
+        <button className={s.closeModalCategory} onClick={() => props.changeTask(taskId)}>Сохранить изменения</button>
+        <button className={s.closeModalCategory} onClick={closeTaskUpdateOpen}>Отменить изменения</button>
       </div>
     </div>
   )

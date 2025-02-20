@@ -8,7 +8,7 @@ const AddCategory = (props) => {
   const categoryName = useStore((state) => state.categoryName);
   const color = useStore((state) => state.color);
   const handleColorChange = useStore((state) => state.handleColorChange);
-  
+  const error = useStore((state) => state.error);
   return (
     <div className={[s.modal, s.modal_categoryAdd].join(" ")} ref={props.modalRef}>
       <div className={s.modalcontent}>
@@ -27,7 +27,7 @@ const AddCategory = (props) => {
           value={color}
           onChange={(e) => handleColorChange(e.target.value)}
         />
-        {props.error && <p style={{ width: "400px", marginBottom: "10px" }} className="text-red-500 text-center">{props.error}</p>}
+        {error && <p style={{ width: "400px", marginBottom: "10px" }} className="text-red-500 text-center">{props.error}</p>}
         <button className={s.closeModalCategory} onClick={props.closeModalCategory}>Добавить категорию</button>
         <button className={s.closeModalCategory} onClick={closeModalCat}>Выйти</button>
       </div>

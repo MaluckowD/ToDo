@@ -3,17 +3,20 @@ import useStore from "../../../store/useToDoStore.js";
 const TaskVariants = (props) => {
   const openWarning = useStore((state) => state.openWarning);
   const closeIsOpenTask = useStore((state) => state.closeIsOpenTask);
+  const TaskInfoOpen = useStore((state) => state.TaskInfoOpen);
+  const TaskUpdateOpen = useStore((state) => state.TaskUpdateOpen);
+  const taskId = useStore((state) => state.taskId);
   return (
     <div className={[s.modal, s.modal_categoryAdd].join(" ")} ref={props.propsmodalRef}>
       <div className={s.modalcontent}>
-        <button className={s.closeModalCategory} onClick={props.TaskInfoOpen}>
+        <button className={s.closeModalCategory} onClick={TaskInfoOpen}>
           Подробная информация
         </button>
-        <button className={s.closeModalCategory} onClick={props.TaskUpdateOpen}>
+        <button className={s.closeModalCategory} onClick={TaskUpdateOpen}>
           Редактировать задачу
         </button>
         <button className={s.closeModalCategory} onClick={() => props.changeTaskStatus(
-          props.taskId)}>
+          taskId)}>
           Изменить статус
         </button>
         <button className={s.closeModalCategory} onClick={openWarning}>

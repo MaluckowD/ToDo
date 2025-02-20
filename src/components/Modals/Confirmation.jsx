@@ -2,6 +2,8 @@ import s from "./Confirmation.module.css"
 import useStore from "../../store/useToDoStore.js";
 const Confirnation = (props) => {
   const exitWarning = useStore((state) => state.exitWarning);
+  const deleteTask = useStore((state) => state.deleteTasks);
+  const taskId = useStore((state) => state.taskId);
   return (
     <div className={[s.modal].join(" ")} >
       <div className= {s.container}>
@@ -10,7 +12,7 @@ const Confirnation = (props) => {
           <button className={s.closeModalCategory} onClick={exitWarning}>
             Выйти
           </button>
-          <button className={s.close} onClick={props.DeleteUser}>
+          <button className={s.close} onClick={() => deleteTask(taskId)}>
             Удалить
           </button>
         </div>

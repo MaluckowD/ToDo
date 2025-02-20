@@ -13,6 +13,7 @@ const AboutTask = (props) => {
   const taskPriority = useStore((state) => state.taskPriority);
   const handlePriorityChange = useStore((state) => state.handlePriorityChange)
   const categories = useStore((state) => state.categories)
+  const closeTaskInfoOpen = useStore((state) => state.closeTaskInfoOpen);
 
   return (
     <div className={[s.modal, s1.module].join(" ")} ref={props.propsmodalRef}>
@@ -70,7 +71,7 @@ const AboutTask = (props) => {
           disabled
           value={props.completed ? "Выполнена" : "Не выполнена"}
         />
-        <button className={s.closeModalCategory} onClick={props.closeTaskInfoOpen}>Выйти</button>
+        <button className={s.closeModalCategory} onClick={closeTaskInfoOpen}>Выйти</button>
       </div>
     </div>
   )

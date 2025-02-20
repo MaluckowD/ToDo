@@ -14,7 +14,8 @@ const AddTask = (props) => {
   const taskPriority = useStore((state) => state.taskPriority);
   const handlePriorityChange = useStore((state) => state.handlePriorityChange)
   const categories = useStore((state) => state.categories)
-  
+  const error = useStore((state) => state.error);
+
   return (
     <div className={s.modal} ref={props.modalRef}>
       <div className={s.modalcontent}>
@@ -59,7 +60,7 @@ const AddTask = (props) => {
           <option style={{ backgroundColor: "#E8E230" }} value={2}>Средний</option>
           <option style={{ backgroundColor: "#3FAB30" }} value={3}>Низкий</option>
         </select>
-        {props.error && <p style={{ width: "400px", marginBottom: "10px" }} className="text-red-500 text-center">{props.error}</p>}
+        {error && <p style={{ width: "400px", marginBottom: "10px" }} className="text-red-500 text-center">{props.error}</p>}
         <button className={s.closeModalCategory} onClick={props.addTask}>
           Добавить задачу
         </button>

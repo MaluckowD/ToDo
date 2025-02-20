@@ -1,12 +1,16 @@
 import {create} from 'zustand'
-import { getDataApi, categoriesNobaseApi, updateTasksApi, categoriesInfo } from '../api/api';
+import { getDataApi, categoriesNobaseApi, updateTasksApi, categoriesInfo, fetchCategoriesApi, deleteTaskApi } from '../api/api';
 
-const useStore = create((set) => ({
+const useStore = create((set, get) => ({
   userData: null,
   categories: [],
   tasks: [],
   isLoading: false,
   error: null,
+  changeError: (value) => {
+    set({ error: value })
+  },
+
   taskStatuses: {},
   getToken: localStorage.getItem('access_token'),
   token: localStorage.getItem('access_token'),
@@ -27,6 +31,18 @@ const useStore = create((set) => ({
   removeToken: () => {
     localStorage.removeItem('access_token');
   },
+
+  fetchCategories: async () => {
+      try {
+        fetchCategoriesApi().then(
+          response => {
+            set({ categories: response })
+          }
+        )
+      } catch (error) {
+        console.error("Ошибка при загрузке категорий:", error);
+      }
+    },
 
   updateUserDataInApp: async (updatedUserData) => {
     set({userData: updatedUserData})
@@ -86,7 +102,7 @@ const useStore = create((set) => ({
     }
   },
 
-  updateTasks: async () => {
+  updateTask: async () => {
     try {
       const response = await updateTasksApi()
       set({tasks: response});
@@ -112,6 +128,29 @@ const useStore = create((set) => ({
   isTaskUpdateOpen: false,
   isTaskInfoOpen: false,
   isWarningOpen: false,
+
+  TaskInfoOpen: () => {
+    set({
+      isTaskInfoOpen: true
+    })
+  },
+
+  closeTaskInfoOpen: () => {
+    set({
+      isTaskInfoOpen: false
+    })
+  },
+
+  TaskUpdateOpen: () => {
+    set({
+      isTaskUpdateOpen: true
+    })
+  },
+  closeTaskUpdateOpen: () => {
+    set({
+      isTaskUpdateOpen: false
+    })
+  },
 
   taskName: "",
   changeTaskName: (value) => {
@@ -213,14 +252,37 @@ const useStore = create((set) => ({
       date: ""
     })
   },
+  taskId: 0,
+  changeTaskId: (id) => {
+    set({
+      taskId: id
+    })
+  },
+  updateTasks: async () => {
+    try {
+      const response = await updateTasksApi()
+      set({tasks: response})
+    } catch (error) {
+      console.error("Ошибка при обновлении задач:", error);
+    }
+  },
+  deleteTask: (id) => {
+    deleteTaskApi(id).then(response => {
+      get().updateTasks()
+      get().deleteTaskState()
+      get().changeCategoryNameState("")
+    })
+  },
+
   getTaskInfoState: (taskData, categoryId) => {
     set({
-      isTaskOpen: false,
+      isTaskOpen: true,
       taskName: taskData.name,
       taskPriority: taskData.priority,
       taskDescription: taskData.description,
       selectedCategoryId: categoryId,
-      date: taskData.date
+      date: taskData.date,
+      categoryId: categoryId
     })
   },
   deleteTaskState: () => {
