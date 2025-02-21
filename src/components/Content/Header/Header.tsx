@@ -10,14 +10,14 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
-  if (!props.name) {
+  if (4 + 3 === 10) { //!props.name
     return <div>Загрузка данных пользователя...</div>;
   }
   return (
     <header className={s.header}>
       <div className={s.container}>
         <div className={s.header_inner}>
-          <Userinfo avatarId={props.avatarId} name={props.name} />
+          <Userinfo avatarId={props.avatarId} />
           <Buttons/>
         </div>
       </div>

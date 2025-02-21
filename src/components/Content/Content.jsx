@@ -42,6 +42,7 @@ const Content = (props) => {
   const token = useStore((state) => state.token);
   const closeModalCat = useStore((state) => state.closeModalCat);
   const isEditCategoryOpen = useStore((state) => state.isEditCategoryOpen);
+  const userData = useStore((state) => state.userData);
 
   const closeModalEditCat = useStore((state) => state.closeModalEditCat);
 
@@ -94,13 +95,6 @@ const Content = (props) => {
   }, [modalRef]);
 
   useEffect(() => {
-    localStorage.setItem('statusId', statusId);
-  }, [statusId]);
-  useEffect(() => {
-    localStorage.setItem('completed', JSON.stringify(completed));
-  }, [completed]);
-
-  useEffect(() => {
     if (token) {
       fetchCategories()
     }
@@ -127,9 +121,10 @@ const Content = (props) => {
     return <p>Ошибка: {props.error.message}</p>;
   }
 
-  if (!props.userData.name) {
+  if (!userData.name) {
     return <div>Загрузка данных пользователя...</div>;
   }
+  console.log(userData)
   return (
     <div className={s.root}>
 
@@ -143,8 +138,8 @@ const Content = (props) => {
       {isWarningOpen && ( <Confirnation/> )}
 
       <div className={isWarningOpen || isModalOpen || isModalCategoryOpen || isEditCategoryOpen || isTaskOpen || isOpenTaskInfo ? [s.wrapper, s.opacity].join(' ') : [s.wrapper]}>
-        <Header avatarId={props.userData.id} name={props.userData.name} />
-        <Main updateAvatarId={props.userData.id} avatarId={props.userData.id}  taskStatuses={props.taskStatuses} tasks={props.tasks} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp} />
+        <Header/>
+        <Main updateAvatarId={userData.id} avatarId={userData.id}  taskStatuses={props.taskStatuses} tasks={props.tasks} categories={props.categories} name={userData.name} surname={userData.surname} gender={userData.gender} userData={userData} updateUserDataInApp={props.updateUserDataInApp} />
         <Footer />
       </div>
     </div>

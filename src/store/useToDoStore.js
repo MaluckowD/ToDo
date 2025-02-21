@@ -1,13 +1,15 @@
 import {create} from 'zustand'
 import { getDataApi, categoriesNobaseApi, updateTasksApi, categoriesInfo, fetchCategoriesApi, deleteTaskApi, addTaskApi, addCategoryApi, editCategoryApi, changeTaskStatusApi, editTaskApi, taskInfoApi } from '../api/api';
 
-const useStore = create((set, get) => ({
-  getInitialStatusId1: () => {
-    const storedStatusId = localStorage.getItem('statusId');
-    return storedStatusId ? parseInt(storedStatusId) : 0;
-  },
-  statusId: 0,  //get().getInitialStatusId1(),
+const getInitialStatusId1 = () => {
+  const storedStatusId = localStorage.getItem('statusId');
+  return storedStatusId ? parseInt(storedStatusId) : 0;
+}
 
+const statusId = getInitialStatusId1
+const useStore = create((set, get) => ({
+  
+  statusId: statusId,  //get().getInitialStatusId1(),
   completed: undefined,
   userData: null,
   categories: [],
@@ -88,6 +90,7 @@ const useStore = create((set, get) => ({
             statusId: task.id,
           };
         });
+        await get().updateTask()
         set({ taskStatuses: initialTaskStatuses })
       }
     } catch (error) {
@@ -139,7 +142,7 @@ const useStore = create((set, get) => ({
         color: get().color,
       };
       await editCategoryApi(id, categoryData)
-      get().updateCategories();
+      await get().updateCategories();
       await get().fetchCategories();
       get().closeModalCategoryState()
     } catch (error) {
@@ -161,7 +164,7 @@ const useStore = create((set, get) => ({
         color: get().color,
       };
       await addCategoryApi(categoryData)
-      get().updateCategories();
+      await get().updateCategories();
       await get().fetchCategories();
       get().closeModalCategoryState()
     } catch (error) {
@@ -389,6 +392,12 @@ const useStore = create((set, get) => ({
     })
     console.log(get().isWarningOpen)
   },
+
+  deleteCategoryDialog: (id) => {
+    set({ isWarningOpen: true, categoryId: id })
+    console.log("Id", get().categoryId)
+
+  },
   exitWarning: () => {
     set({
       isWarningOpen: false
@@ -419,6 +428,7 @@ const useStore = create((set, get) => ({
       console.error("Ошибка при обновлении задач:", error);
     }
   },
+
   addTask: async () => {
     get().changeError(null)
     try {
@@ -445,14 +455,13 @@ const useStore = create((set, get) => ({
     }
   },
   getTaskStatus: (taskId) => {
-    return get().taskStatuses[taskId] || set({ completed: false, statusId: 0 });
+    return get().taskStatuses[taskId] || {completed: false, statusId: 0 };
   },
-  deleteTask: (id) => {
-    deleteTaskApi(id).then(response => {
-      get().updateTasks()
-      get().deleteTaskState()
-      get().changeCategoryNameState("")
-    })
+  deleteTask: async (id) => {
+    await deleteTaskApi(id)
+    await get().updateTasks()
+    get().deleteTaskState()
+    get().changeCategoryNameState("")
   },
 
   getTaskInfoState: (taskData, categoryId) => {

@@ -6,7 +6,7 @@ import Login from "./components/Login/Login";
 import Registration from "./components/Registration/Registration";
 import Calendar from "./components/Content/Main/Calendar/Calendar";
 import Profile from "./components/Content/Main/Profile/Profile";
-import { getDataApi, categoriesNobaseApi } from "./api/api.ts"
+import { categoriesNobaseApi } from "./api/api.ts"
 import useStore from "./store/useToDoStore.js";
 function App(props) {
   //const [categories, setCategories] = useState(null);
@@ -17,7 +17,7 @@ function App(props) {
   //const [taskStatuses, setTaskStatuses] = useState({});
   
   //const removeToken = useStore((state) => state.removeToken);
-  //const fetchUserData = useStore((state) => state.fetchUserData);
+  const fetchUserData = useStore((state) => state.fetchUserData);
   //const fetchCategories = useStore((state) => state.fetchCategories);
   //const updateCategories = useStore((state) => state.updateCategories);
 
@@ -35,9 +35,11 @@ function App(props) {
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [taskStatuses, setTaskStatuses] = useState({});
+  //const [taskStatuses, setTaskStatuses] = useState({});
   const getToken = () => localStorage.getItem('access_token');
   const [token, setToken] = useState(() => getToken());
+  const updateTasks = useStore((state) => state.updateTasks);
+
 
   useEffect(() => {
     document.title = "ToDo";
@@ -57,36 +59,13 @@ function App(props) {
   }
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      setIsLoading(true);
-      try {
-        const response = await getDataApi()
-        setUserData(response);
-        setCategories(response.categories);
-        setTasks(response.tasks);
-        if (response.tasks) {
-          const initialTaskStatuses = {};
-          response.tasks.forEach(task => {
-            initialTaskStatuses[task.id] = {
-              completed: task.completed,
-              statusId: task.id,
-            };
-          });
-          setTaskStatuses(initialTaskStatuses)
-        }
-      } catch (error) {
-        setError(error);
-        removeToken()
-        console.error("Ошибка при загрузке данных пользователя:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
+    
     if (token) {
       fetchUserData();
     }
   }, [token]);
+
+  updateTasks()
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -136,7 +115,7 @@ function App(props) {
           <Route path="/" element={<AuthRedirect/>} />
           <Route path="/login" element={<Login/>} />
           <Route path="/registration" element={<Registration/>} />
-          <Route path="/content" element={<Content taskStatuses={taskStatuses}  tasks={tasks} categories={categories} userData={userData} isLoading={isLoading} error={error}  />}>
+          <Route path="/content" element={<Content tasks={tasks} categories={categories} isLoading={isLoading} error={error}  />}>
             <Route index element={<Calendar />} />
             <Route path="settings" element={<Profile />} />
           </Route>

@@ -7,6 +7,7 @@ import useStore from "../../../../store/useToDoStore.js";
 
 const Userinfo = (props) => {
   const token = useStore((state) => state.token);
+  const userData = useStore((state) => state.userData);
   const UpdateCallBack = () => {
 
     if (token) {
@@ -18,7 +19,7 @@ const Userinfo = (props) => {
   const getAvatarUrl = async () => {
     const response = await getAvatarData(props.avatarId);
     if (response) {
-      return `https://api.energy-cerber.ru/static/avatars/${props.avatarId}.webp`;
+      return `https://api.energy-cerber.ru/static/avatars/${userData.id}.webp`;
     } else {
       return userAvatar;
     }
@@ -39,7 +40,7 @@ const Userinfo = (props) => {
       <NavLink to="settings">
         <img onClick={UpdateCallBack} className={s.photo} src={avatarUrl} alt={userAvatar} />
       </NavLink>
-      <div className={s.username}> {props.name} </div>
+      <div className={s.username}> {userData.name} </div>
     </div>
   )
 }

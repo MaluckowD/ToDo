@@ -6,10 +6,11 @@ const CategoryList = (props) => {
 
   const openModalCategory = useStore((state) => state.openModalCategory);
   const openModalEditCategory = useStore((state) => state.openModalEditCategory);
-  
+  const deleteCategoryDialog = useStore((state) => state.deleteCategoryDialog);
+
   const DeleteCategoryDialog = (id) => {
     props.setIsDialogOpen1(true)
-    props.setCategortId(id)
+    props.setCategoryId(id)
   }
   
   return (
@@ -24,7 +25,7 @@ const CategoryList = (props) => {
               <textarea 
               disabled style={{ backgroundColor: item.color, minHeight: "30px" }} value = {item.name}/>
               <img onClick={() => openModalEditCategory(item.id)} src={image} />
-              <img onClick={() => DeleteCategoryDialog(item.id)} src={close} />
+              <img onClick={() => deleteCategoryDialog(item.id)} src={close} />
             </div>
           ))}
         </div>
