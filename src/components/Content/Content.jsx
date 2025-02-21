@@ -31,7 +31,7 @@ const Content = (props) => {
   const closeModal = useStore((state) => state.closeModal);
   const isOpenTaskInfo = useStore((state) => state.isOpenTaskInfo);
   const isWarningOpen = useStore((state) => state.isWarningOpen);
-  console.log(isWarningOpen)
+
   const closeIsOpenTask = useStore((state) => state.closeIsOpenTask);
   const isTaskOpen = useStore((state) => state.isTaskOpen);
 
@@ -45,9 +45,6 @@ const Content = (props) => {
   const userData = useStore((state) => state.userData);
 
   const closeModalEditCat = useStore((state) => state.closeModalEditCat);
-
-  const completed = useStore((state) => state.completed);
-  const statusId = useStore((state) => state.statusId);
 
   const CloseTaskUpdateOpen = () => {
     closeTaskUpdateOpen()
@@ -124,7 +121,7 @@ const Content = (props) => {
   if (!userData.name) {
     return <div>Загрузка данных пользователя...</div>;
   }
-  console.log(userData)
+
   return (
     <div className={s.root}>
 
@@ -139,8 +136,8 @@ const Content = (props) => {
 
       <div className={isWarningOpen || isModalOpen || isModalCategoryOpen || isEditCategoryOpen || isTaskOpen || isOpenTaskInfo ? [s.wrapper, s.opacity].join(' ') : [s.wrapper]}>
         <Header/>
-        <Main updateAvatarId={userData.id} avatarId={userData.id}  taskStatuses={props.taskStatuses} tasks={props.tasks} categories={props.categories} name={userData.name} surname={userData.surname} gender={userData.gender} userData={userData} updateUserDataInApp={props.updateUserDataInApp} />
-        <Footer />
+        <Main taskStatuses={props.taskStatuses} tasks={props.tasks} categories={props.categories} name={userData.name} surname={userData.surname} gender={userData.gender} updateUserDataInApp={props.updateUserDataInApp} />
+        <Footer/>
       </div>
     </div>
   )

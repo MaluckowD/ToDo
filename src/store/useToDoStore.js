@@ -1,5 +1,8 @@
 import {create} from 'zustand'
-import { getDataApi, categoriesNobaseApi, updateTasksApi, categoriesInfo, fetchCategoriesApi, deleteTaskApi, addTaskApi, addCategoryApi, editCategoryApi, changeTaskStatusApi, editTaskApi, taskInfoApi } from '../api/api';
+import {  getDataApi, categoriesNobaseApi, updateTasksApi, 
+          categoriesInfo, fetchCategoriesApi, deleteTaskApi, 
+          addTaskApi, addCategoryApi, editCategoryApi, 
+          changeTaskStatusApi, editTaskApi, taskInfoApi } from '../api/api';
 
 const getInitialStatusId1 = () => {
   const storedStatusId = localStorage.getItem('statusId');
@@ -7,9 +10,10 @@ const getInitialStatusId1 = () => {
 }
 
 const statusId = getInitialStatusId1
+
 const useStore = create((set, get) => ({
   
-  statusId: statusId,  //get().getInitialStatusId1(),
+  statusId: statusId,
   completed: undefined,
   userData: null,
   categories: [],

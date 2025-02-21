@@ -17,7 +17,7 @@ const Userinfo = (props) => {
   const [avatarUrl, setAvatarUrl] = useState(userAvatar);
 
   const getAvatarUrl = async () => {
-    const response = await getAvatarData(props.avatarId);
+    const response = await getAvatarData(userData.id);
     if (response) {
       return `https://api.energy-cerber.ru/static/avatars/${userData.id}.webp`;
     } else {
@@ -33,7 +33,7 @@ const Userinfo = (props) => {
 
     loadAvatar();
 
-  }, [props.avatarId]);
+  }, [userData.id]);
 
   return (
     <div className={s.header_infouser}>

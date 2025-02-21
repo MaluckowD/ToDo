@@ -7,6 +7,7 @@ import useStore from "../../../../../store/useToDoStore.js";
 const UserInfo = (props) => {
   const updateUserDataInApp = useStore((state) => state.updateUserDataInApp);
   const fetchUserData = useStore((state) => state.fetchUserData);
+  const userData = useStore((state) => state.userData);
   const [name, setName] = useState(props.name);
   const [surname, setSurname] = useState(props.surname);
   const [gender, setGender] = useState(props.gender);
@@ -16,9 +17,9 @@ const UserInfo = (props) => {
   const [avatarUrl, setAvatarUrl] = useState(userAvatar);
 
   const getAvatarUrl = async () => {
-    const response = await getAvatarData(props.avatarId);
+    const response = await getAvatarData(userData.id);
     if (response) {
-      return `https://api.energy-cerber.ru/static/avatars/${props.userData.id}.webp`;
+      return `https://api.energy-cerber.ru/static/avatars/${userData.id}.webp`;
     } else {
       return userAvatar;
     }
@@ -32,7 +33,7 @@ const UserInfo = (props) => {
 
     loadAvatar();
 
-  }, [props.avatarId]);
+  }, [userData.id]);
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
@@ -41,7 +42,6 @@ const UserInfo = (props) => {
       formData.append('avatar', file);
       try {
         const response = await addAvatarApi(formData)
-        // props.updateAvatarId(response.id);
         window.location.reload();
       }
       catch (error) {
@@ -57,7 +57,6 @@ const UserInfo = (props) => {
       try {
         const response = await UserEditApi({ name, surname, gender })
         fetchUserData()
-        //updateUserDataInApp(response);
       }
       catch (error) {
         if (error.response) {
