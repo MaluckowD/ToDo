@@ -1,5 +1,5 @@
 import {create} from 'zustand'
-import { getDataApi, categoriesNobaseApi, updateTasksApi, categoriesInfo, fetchCategoriesApi, deleteTaskApi } from '../api/api';
+import { getDataApi, categoriesNobaseApi, updateTasksApi, categoriesInfo, fetchCategoriesApi, deleteTaskApi, addTaskApi, addCategoryApi, editCategoryApi } from '../api/api';
 
 const useStore = create((set, get) => ({
   userData: null,
@@ -33,16 +33,16 @@ const useStore = create((set, get) => ({
   },
 
   fetchCategories: async () => {
-      try {
-        fetchCategoriesApi().then(
-          response => {
-            set({ categories: response })
-          }
-        )
-      } catch (error) {
-        console.error("Ошибка при загрузке категорий:", error);
-      }
-    },
+    try {
+      fetchCategoriesApi().then(
+        response => {
+          set({ categories: response })
+        }
+      )
+    } catch (error) {
+      console.error("Ошибка при загрузке категорий:", error);
+    }
+  },
 
   updateUserDataInApp: async (updatedUserData) => {
     set({userData: updatedUserData})
@@ -99,6 +99,49 @@ const useStore = create((set, get) => ({
       set({ categories: response })
     } catch (error) {
       console.error("Ошибка при обновлении категорий:", error);
+    }
+  },
+
+  onEditCategory: async (id) => {
+    get().changeError(null)
+    try {
+      const categoryData = {
+        name: get().categoryName,
+        color: get().color,
+      };
+      await editCategoryApi(id, categoryData)
+      get().updateCategories();
+      await get().fetchCategories();
+      get().closeModalCategoryState()
+    } catch (error) {
+      console.error('Ошибка при редактировании категории:', error);
+      if (error.response) {
+        get().changeError(`Ошибка при редактировании. Проверьте заполнение полей!`)
+      }
+      else if (error.request) {
+        get().changeError(`Ошибка сети`)
+      }
+    }
+  },
+
+  closeModalCategory: async () => {
+    get().changeError(null)
+    try {
+      const categoryData = {
+        name: get().categoryName,
+        color: get().color,
+      };
+      await addCategoryApi(categoryData)
+      get().updateCategories();
+      await get().fetchCategories();
+      get().closeModalCategoryState()
+    } catch (error) {
+      console.error("Ошибка при создании категории:", error);
+      if (error.response) {
+        get().changeError("Ошибка при создании категории. Проверьте заполненность полей")
+      } else if (error.request) {
+        get().changeError(`Ошибка сети`)
+      }
     }
   },
 
@@ -264,6 +307,31 @@ const useStore = create((set, get) => ({
       set({tasks: response})
     } catch (error) {
       console.error("Ошибка при обновлении задач:", error);
+    }
+  },
+  addTask: async () => {
+    get().changeError(null)
+    try {
+      const taskData = {
+        name: get().taskName,
+        description: get().taskDescription,
+        priority: get().taskPriority,
+        category_id: parseInt(get().selectedCategoryId, 10),
+        date: get().date,
+      };
+      console.log(taskData)
+      await addTaskApi(taskData)
+      await get().updateTasks();
+      get().closeIsOpenTaskInfo();
+      get().changeDate(taskData.date)
+    }
+    catch (error) {
+      console.error("Ошибка при добавлении задачи:", error);
+      if (error.response) {
+        get().changeError(`Ошибка при добавлении задачи! Проверьте заполненность полей!`)
+      } else if (error.request) {
+        get().changeError(`Ошибка сети`)
+      }
     }
   },
   deleteTask: (id) => {

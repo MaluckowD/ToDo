@@ -7,7 +7,7 @@ import KirillLoh from '../Modals/KirillLoh/KirillLoh';
 import AddTask from '../Modals/AddTask/AddTask';
 import TaskVariants from '../Modals/TaskVariants/TaskVariants';
 import s from "./Content.module.css"
-import { categoriesInfo, addTaskApi, addCategoryApi, editCategoryApi, taskInfoApi, editTaskApi, deleteTaskApi, changeTaskStatusApi } from "../../api/api.ts"
+import { categoriesInfo, taskInfoApi, editTaskApi, changeTaskStatusApi } from "../../api/api.ts"
 import Confirnation from "../Modals/Confirmation";
 import AboutTask from '../Modals/AboutTask/AboutTask';
 import EditTask from '../Modals/EditTask/EditTask';
@@ -24,12 +24,10 @@ const Content = (props) => {
   const isTaskUpdateOpen = useStore((state) => state.isTaskUpdateOpen);
   const isTaskInfoOpen = useStore((state) => state.isTaskInfoOpen);
   
-  const [taskId, setTaskId] = useState(0)
-
   const TaskInfoOpen = useStore((state) => state.TaskInfoOpen);
   const closeTaskInfoOpen = useStore((state) => state.closeTaskInfoOpen);
   const closeTaskUpdateOpen = useStore((state) => state.closeTaskUpdateOpen);
-
+  
   const fetchCategories = useStore((state) => state.fetchCategories);
   const isModalOpen = useStore((state) => state.isModalOpen);
   const closeModal = useStore((state) => state.closeModal);
@@ -43,24 +41,17 @@ const Content = (props) => {
   const taskPriority = useStore((state) => state.taskPriority);
   const selectedCategoryId = useStore((state) => state.selectedCategoryId);
   const date = useStore((state) => state.date)
-  const changeDate = useStore((state) => state.changeDate)
   const isModalCategoryOpen = useStore((state) => state.isModalCategoryOpen)
   const closeIsOpenTaskInfo = useStore((state) => state.closeIsOpenTaskInfo)
   const getTaskInfoState = useStore((state) => state.getTaskInfoState)
   const navigate = useNavigate();
   const modalRef = useRef(null);
   const token = useStore((state) => state.token);
-  const deleteTaskState = useStore((state) => state.deleteTaskState);
   const closeModalCat = useStore((state) => state.closeModalCat);
-  const categoryName = useStore((state) => state.categoryName);
-  const deleteTasks = useStore((state) => state.deleteTasks);
-  const changeCategoryNameState = useStore((state) => state.changeCategoryNameState);
   const isEditCategoryOpen = useStore((state) => state.isEditCategoryOpen);
 
-  const closeModalCategoryState = useStore((state) => state.closeModalCategoryState);
   const closeModalEditCat = useStore((state) => state.closeModalEditCat);
   const updateTasks = useStore((state) => state.updateTasks);
-  const color = useStore((state) => state.color);
 
   const changeTaskId = useStore((state) => state.changeTaskId);
   const CloseTaskUpdateOpen = () => {
@@ -145,7 +136,6 @@ const Content = (props) => {
   };
 
 
-  
   useEffect(() => {
     if (token) {
       fetchCategories()
@@ -163,76 +153,6 @@ const Content = (props) => {
       navigate('/login');
     }
   }, [redirectToLogin, navigate])
-
-  const addTask = async () => {
-    changeError(null)
-    try {
-      const taskData = {
-        name: taskName,
-        description: taskDescription,
-        priority: taskPriority,
-        category_id: parseInt(selectedCategoryId, 10),
-        date: date,
-      };
-      console.log(taskData)
-      await addTaskApi(taskData)
-      await updateTasks();
-      closeIsOpenTaskInfo();
-      changeDate(taskData.date)
-    }
-    catch (error) {
-      console.error("Ошибка при добавлении задачи:", error);
-      if (error.response) {
-        changeError(`Ошибка при добавлении задачи! Проверьте заполненность полей!`)
-      } else if (error.request) {
-        changeError(`Ошибка сети`)
-      }
-    }
-  };
-
-  const closeModalCategory = async () => {
-    changeError(null)
-    try {
-      const categoryData = {
-        name: categoryName,
-        color: color,
-      };
-      await addCategoryApi(categoryData)
-      props.updateCategories();
-      await fetchCategories();
-      closeModalCategoryState()
-    } catch (error) {
-      console.error("Ошибка при создании категории:", error);
-      if (error.response) {
-        changeError("Ошибка при создании категории. Проверьте заполненность полей")
-      } else if (error.request) {
-        changeError(`Ошибка сети`)
-      }
-    }
-  };
-
-  const onEditCategory = async (id) => {
-    changeError(null)
-    try {
-      const categoryData = {
-        name: categoryName,
-        color: color,
-      };
-      console.log(categoryData)
-      await editCategoryApi(id, categoryData)
-      props.updateCategories();
-      await fetchCategories();
-      closeModalCategoryState()
-    } catch (error) {
-      console.error('Ошибка при редактировании категории:', error);
-      if (error.response) {
-        changeError(`Ошибка при редактировании. Проверьте заполнение полей!`)
-      }
-      else if (error.request) {
-        changeError(`Ошибка сети`)
-      }
-    }
-  };
 
   const getTaskInfo = async (id) => {
     try {
@@ -285,14 +205,6 @@ const Content = (props) => {
     }
   };
 
-  const deleteTask = (id) => {
-    deleteTaskApi(id).then(response => {
-      updateTasks()
-      deleteTaskState()
-      changeCategoryNameState("")
-    })
-  }
-
   const changeTaskStatus = async (id) => {
     const taskData = {
       name: taskName,
@@ -338,30 +250,24 @@ const Content = (props) => {
   return (
     <div className={s.root}>
       {isModalOpen && (<KirillLoh modalRef={modalRef} />)}
-
-      {isOpenTaskInfo && ( <AddTask modalRef={modalRef} addTask={addTask}/>)}
+      {isOpenTaskInfo && ( <AddTask modalRef={modalRef} />)}
 
       {isTaskOpen && (
-        <TaskVariants modalRef={modalRef} changeTaskStatus={changeTaskStatus} taskId={taskId}/>
-      )}
+        <TaskVariants modalRef={modalRef} changeTaskStatus={changeTaskStatus}/>)}
+
       {isTaskInfoOpen && ( <AboutTask modalRef={modalRef} completed={completed}/>)}
 
       {isTaskUpdateOpen && (
-        <EditTask modalRef={modalRef} 
-          completed={completed} changeTask={changeTask}/>
+        <EditTask modalRef={modalRef} completed={completed} changeTask={changeTask}/>
       )}
 
-      {isModalCategoryOpen && (
-        <AddCategory modalRef={modalRef} closeModalCategory={closeModalCategory}/>)}
-
-      {isEditCategoryOpen && ( <EditCategory modalRef={modalRef} onEditCategory={onEditCategory}/>
-      )}
-
+      {isModalCategoryOpen && ( <AddCategory modalRef={modalRef}/> )}
+      {isEditCategoryOpen && ( <EditCategory modalRef={modalRef}/>)}
       {isWarningOpen && ( <Confirnation/> )}
 
       <div className={isWarningOpen || isModalOpen || isModalCategoryOpen || isEditCategoryOpen || isTaskOpen || isOpenTaskInfo ? [s.wrapper, s.opacity].join(' ') : [s.wrapper]}>
         <Header avatarId={props.userData.id} name={props.userData.name} />
-        <Main updateAvatarId={props.userData.id} avatarId={props.userData.id}  getTaskStatus={getTaskStatus} taskStatuses={props.taskStatuses} statusId={statusId} completed={completed} getTaskInfo={getTaskInfo} fetchCategories={fetchCategories} openTaskInfo={openTaskInfo} addTask={props.addTask} tasks={props.tasks} updateCategories={props.updateCategories} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp} />
+        <Main updateAvatarId={props.userData.id} avatarId={props.userData.id}  getTaskStatus={getTaskStatus} taskStatuses={props.taskStatuses} statusId={statusId} completed={completed} getTaskInfo={getTaskInfo} fetchCategories={fetchCategories} openTaskInfo={openTaskInfo} tasks={props.tasks} categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp} />
         <Footer />
       </div>
     </div>

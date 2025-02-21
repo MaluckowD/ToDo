@@ -2,7 +2,7 @@ import s from "./Confirmation.module.css"
 import useStore from "../../store/useToDoStore.js";
 const Confirnation = (props) => {
   const exitWarning = useStore((state) => state.exitWarning);
-  const deleteTask = useStore((state) => state.deleteTasks);
+  const deleteTask = useStore((state) => state.deleteTask);
   const taskId = useStore((state) => state.taskId);
   return (
     <div className={[s.modal].join(" ")} >

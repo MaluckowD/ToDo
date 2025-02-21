@@ -15,7 +15,7 @@ const AddTask = (props) => {
   const handlePriorityChange = useStore((state) => state.handlePriorityChange)
   const categories = useStore((state) => state.categories)
   const error = useStore((state) => state.error);
-
+  const addTask = useStore((state) => state.addTask);
   return (
     <div className={s.modal} ref={props.modalRef}>
       <div className={s.modalcontent}>
@@ -61,7 +61,7 @@ const AddTask = (props) => {
           <option style={{ backgroundColor: "#3FAB30" }} value={3}>Низкий</option>
         </select>
         {error && <p style={{ width: "400px", marginBottom: "10px" }} className="text-red-500 text-center">{props.error}</p>}
-        <button className={s.closeModalCategory} onClick={props.addTask}>
+        <button className={s.closeModalCategory} onClick={addTask}>
           Добавить задачу
         </button>
         <button className={s.closeModalCategory} onClick={closeIsOpenTaskInfo}>Выйти</button>

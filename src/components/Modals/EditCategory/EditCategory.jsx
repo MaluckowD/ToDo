@@ -11,6 +11,7 @@ const EditCategory = (props) => {
   const handleColorChange = useStore((state) => state.handleColorChange);
   const categoryId = useStore((state) => state.categoryId);
   const error = useStore((state) => state.error);
+  const onEditCategory = useStore((state) => state.onEditCategory);
   return (
     <div className={[s.modal, s.modal_categoryAdd].join(" ")} ref={props.modalRef}>
       <div className={s.modalcontent}>
@@ -32,7 +33,7 @@ const EditCategory = (props) => {
         />
 
         {error && <p style={{ width: "350px", marginBottom: "10px" }} className="text-red-500 text-center">{props.error}</p>}
-        <button className={s.closeModalCategory} onClick={() => props.onEditCategory(categoryId)}>Редактировать</button>
+        <button className={s.closeModalCategory} onClick={() => onEditCategory(categoryId)}>Редактировать</button>
         <button className={s.closeModalCategory} onClick={closeModalEditCat}>Выйти</button>
       </div>
     </div>

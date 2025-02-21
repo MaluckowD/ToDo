@@ -6,7 +6,7 @@ import Login from "./components/Login/Login";
 import Registration from "./components/Registration/Registration";
 import Calendar from "./components/Content/Main/Calendar/Calendar";
 import Profile from "./components/Content/Main/Profile/Profile";
-import { getDataApi, categoriesNobaseApi, updateTasksApi } from "./api/api.ts"
+import { getDataApi, categoriesNobaseApi } from "./api/api.ts"
 import useStore from "./store/useToDoStore.js";
 function App(props) {
   //const [categories, setCategories] = useState(null);
@@ -106,24 +106,6 @@ function App(props) {
     }
   }, [token]);
 
-  const updateCategories = async () => {
-    try {
-      const response = await categoriesNobaseApi()
-      setCategories(response);
-    } catch (error) {
-      console.error("Ошибка при обновлении категорий:", error);
-    }
-  };
-  
-  const updateTasks = async () => {
-    try {
-      const response = await updateTasksApi()
-      setTasks(response);
-    } catch (error) {
-      console.error("Ошибка при обновлении задач:", error);
-    }
-  };
-
   const AuthRedirect = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
@@ -154,8 +136,7 @@ function App(props) {
           <Route path="/" element={<AuthRedirect/>} />
           <Route path="/login" element={<Login/>} />
           <Route path="/registration" element={<Registration/>} />
-          <Route path="/content" element={<Content taskStatuses={taskStatuses}  tasks={tasks} updateCategories={updateCategories} categories={categories} userData={userData}
-            isLoading={isLoading} error={error}  />}>
+          <Route path="/content" element={<Content taskStatuses={taskStatuses}  tasks={tasks} categories={categories} userData={userData} isLoading={isLoading} error={error}  />}>
             <Route index element={<Calendar />} />
             <Route path="settings" element={<Profile />} />
           </Route>
