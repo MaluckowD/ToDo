@@ -1,17 +1,22 @@
 import s from "./CategoryList.module.css"
 import close from "../../../../../images/close.svg"
 import image from "../../../../../images/image.svg"
-
+import useStore from "../../../../../store/useToDoStore.js";
 const CategoryList = (props) => {
+
+  const openModalCategory = useStore((state) => state.openModalCategory);
+  const openModalEditCategory = useStore((state) => state.openModalEditCategory);
+  const deleteCategoryDialog = useStore((state) => state.deleteCategoryDialog);
+
   const DeleteCategoryDialog = (id) => {
     props.setIsDialogOpen1(true)
-    props.setCategortId(id)
+    props.setCategoryId(id)
   }
   
   return (
     <div className={s.categorylist}>
       <div className={s.btn}>
-        <button onClick={props.openModalCategory}>Добавить категорию</button>
+        <button onClick={openModalCategory}>Добавить категорию</button>
       </div>
       <div className={s.list}>
         <div className={s.list_items}>
@@ -19,8 +24,8 @@ const CategoryList = (props) => {
             <div className={s.list_item}>
               <textarea 
               disabled style={{ backgroundColor: item.color, minHeight: "30px" }} value = {item.name}/>
-              <img onClick={() => props.openModalEditCategory(item.id)} src={image} />
-              <img onClick={() => DeleteCategoryDialog(item.id)} src={close} />
+              <img onClick={() => openModalEditCategory(item.id)} src={image} />
+              <img onClick={() => deleteCategoryDialog(item.id)} src={close} />
             </div>
           ))}
         </div>

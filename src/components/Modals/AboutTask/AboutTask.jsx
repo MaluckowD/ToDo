@@ -1,6 +1,21 @@
 import s from "../Modals.module.css"
 import s1 from "./AboutTask.module.css"
+import useStore from "../../../store/useToDoStore.js";
 const AboutTask = (props) => {
+  const taskName = useStore((state) => state.taskName);
+  const changeTaskName = useStore((state) => state.changeTaskName);
+  const taskDescription = useStore((state) => state.taskDescription);
+  const changeTaskDescription = useStore((state) => state.changeTaskDescription)
+  const date = useStore((state) => state.date)
+  const changeDate = useStore((state) => state.changeDate)
+  const selectedCategoryId = useStore((state) => state.selectedCategoryId);
+  const handleCategoryChange = useStore((state) => state.handleCategoryChange);
+  const taskPriority = useStore((state) => state.taskPriority);
+  const handlePriorityChange = useStore((state) => state.handlePriorityChange)
+  const categories = useStore((state) => state.categories)
+  const closeTaskInfoOpen = useStore((state) => state.closeTaskInfoOpen);
+  const completed = useStore((state) => state.completed);
+
   return (
     <div className={[s.modal, s1.module].join(" ")} ref={props.propsmodalRef}>
       <div className={s.modalcontent}>
@@ -8,16 +23,16 @@ const AboutTask = (props) => {
           maxlength='50'
           disabled
           type="text"
-          value={props.taskName}
-          onChange={(e) => props.setTaskName(e.target.value)}
+          value={taskName}
+          onChange={(e) => changeTaskName(e.target.value)}
           placeholder="Введите название для задачи"
         />
         <textarea className={s.taskDescription}
           maxlength='500'
           disabled
           type="text"
-          value={props.taskDescription}
-          onChange={(e) => props.setTaskDescription(e.target.value)}
+          value={taskDescription}
+          onChange={(e) => changeTaskDescription(e.target.value)}
           placeholder="Описание"
         />
         <input className={[s.categoryName, s.taskdate].join(" ")}
@@ -26,15 +41,15 @@ const AboutTask = (props) => {
             { color: "#000" }
           }
           type="date"
-          value={props.date}
-          onChange={(e) => props.setDate(e.target.value)}
+          value={date}
+          onChange={(e) => changeDate(e.target.value)}
           placeholder="Дата задачи"
         />
         <select className={s.taskinfo} disabled style={
           { color: "#000" }
-        } value={props.selectedCategoryId} onChange={props.handleCategoryChange}>
+        } value={selectedCategoryId} onChange={(e) => handleCategoryChange(e.target.value)}>
           <option disabled value="">Выберите категорию</option>
-          {props.categories.map((category) => (
+          {categories.map((category) => (
             <option style={{ backgroundColor: category.color }} key={category.id} value={category.id}>
               {category.name}
             </option>
@@ -43,8 +58,8 @@ const AboutTask = (props) => {
         <select disabled
           className={s.taskinfo}
           style={{ color: "#000" }}
-          value={props.taskPriority}
-          onChange={props.handlePriorityChange}
+          value={taskPriority}
+          onChange={(e) => handlePriorityChange(e.target.value)}
         >
           <option disabled value="">Выберите приоритет</option>
           <option style={{ backgroundColor: "#EB0000" }} value={1}>Высокий</option>
@@ -55,9 +70,9 @@ const AboutTask = (props) => {
           style={{ textAlign: "center" }}
           type="text"
           disabled
-          value={props.completed ? "Выполнена" : "Не выполнена"}
+          value={completed ? "Выполнена" : "Не выполнена"}
         />
-        <button className={s.closeModalCategory} onClick={props.closeTaskInfoOpen}>Выйти</button>
+        <button className={s.closeModalCategory} onClick={closeTaskInfoOpen}>Выйти</button>
       </div>
     </div>
   )

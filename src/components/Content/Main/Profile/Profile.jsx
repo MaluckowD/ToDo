@@ -6,6 +6,7 @@ import CategoryList from "./CategotyList/CategoryList"
 import Confirnation from "../../../Modals/Confirmation";
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
+import useStore from "../../../../store//useToDoStore.js";
 const Profile = (props) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isDialogOpen1, setIsDialogOpen1] = useState(false)
@@ -14,27 +15,29 @@ const Profile = (props) => {
   const exit1 = () => setIsDialogOpen1(false)
   const navigate = useNavigate()
   const overlayRef = useRef(null)
-  const token = props.getToken();
-
+  const token = useStore((state) => state.token);
+  const removeToken = useStore((state) => state.removeToken);
+  const updateCategories = useStore((state) => state.updateCategories);
+  const fetchCategories = useStore((state) => state.fetchCategories);
   const DeleteUser = () => {
-    if (token){
-      deleteUserApi().then( response => {
-        props.removeToken()
+    if (token) {
+      deleteUserApi().then(response => {
+        removeToken()
         navigate("/login");
       })
     }
   }
-  
+
   const deleteCategory = (id) => {
     if (token) {
       categorieDeleteApi(id).then(response => {
-        props.fetchCategories()
-        props.updateCategories();
+        fetchCategories()
+        updateCategories();
         exit1()
       })
     }
   }
-  
+
   useEffect(() => {
     const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
     document.documentElement.style.setProperty('--scrollbar-width', `${scrollBarWidth}px`);
@@ -59,20 +62,20 @@ const Profile = (props) => {
       }
     }
   }, [isDialogOpen]);
-  
+
   return (
 
     <div className={s.settings_item}>
       <div className={s.container}>
         {isDialogOpen && (
-          <Confirnation exit={exit} DeleteUser={DeleteUser}/>
+          <Confirnation exit={exit} DeleteUser={DeleteUser} />
         )}
         {isDialogOpen1 && (
           <Confirnation exit={exit1} DeleteUser={() => deleteCategory(categortId)} />
         )}
         <div className={isDialogOpen || isDialogOpen1 ? [s.content, s.block].join(" ") : [s.content]}>
-          <UserInfo updateAvatarId={props.userData.id} avatarId={props.userData.id} setIsDialogOpen={setIsDialogOpen} removeToken={props.removeToken} name={props.name} surname={props.surname} gender={props.gender} getToken={props.getToken} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp} />
-          <CategoryList setCategortId={setCategortId} setIsDialogOpen1={setIsDialogOpen1} fetchCategories={props.fetchCategories} openModalEditCategory={props.openModalEditCategory} updateCategories={props.updateCategories} getToken={props.getToken} openModalCategory={props.openModalCategory} categories={props.categories}/>
+          <UserInfo updateAvatarId={props.userData.id} avatarId={props.userData.id} setIsDialogOpen={setIsDialogOpen} name={props.name} surname={props.surname} gender={props.gender} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp} />
+          <CategoryList setCategortId={setCategortId} setIsDialogOpen1={setIsDialogOpen1} categories={props.categories} />
         </div>
       </div>
     </div>

@@ -6,7 +6,7 @@ import "./style.css"
 import CalendarMonth from './Calendarmonth';
 import { useRef } from 'react';
 import { categoriesInfo, taskInfoApi, editTaskApi } from "../../../../api/api.ts"
-
+import useStore from "../../../../store/useToDoStore.js";
 const monthNames = [
   "January",
   "February",
@@ -25,7 +25,13 @@ const monthNames = [
 const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 const Calendar = (props) => {
-  const token = props.getToken()
+
+  const openTaskInfoS = useStore((state) => state.openTaskInfoS)
+  const updateTasks = useStore((state) => state.updateTasks)
+  const getTaskInfo = useStore((state) => state.getTaskInfo)
+  const getTaskStatus = useStore((state) => state.getTaskStatus)
+
+  const tasks = useStore((state) => state.tasks)
   const [events, setEvents] = useState([]);
   const date = new Date();
   const [month, setMonth] = useState(date.getMonth());
@@ -131,8 +137,8 @@ const Calendar = (props) => {
   };
 
   useEffect(() => {
-    handleNewData(props.tasks);
-  }, [props.tasks]);
+    handleNewData(tasks);
+  }, [tasks]);
 
   const btnClass = (limit) => {
     return "leading-none rounded-lg transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 items-center focus:outline-none";
@@ -236,7 +242,7 @@ const Calendar = (props) => {
           date: newDate.toISOString().slice(0, 10)
         };
         await editTaskApi(taskId, taskData)
-        props.updateTasks()
+        updateTasks()
       } catch (error) {
         console.error('Ошибка при загрузке задачи для перетаскивания:', error);
       }
@@ -262,7 +268,7 @@ const Calendar = (props) => {
               <button onClick={goToCurrentMonth} className={s.current_day}>Текущий месяц</button>
             </div>
             <div className={s.click}>
-              <button onClick={props.openTaskInfo} className={s.addtask}>Добавить задачу</button>
+              <button onClick={openTaskInfoS} className={s.addtask}>Добавить задачу</button>
               <div className={["border rounded-lg px-1 pt-1",s.arrow].join(" ")}>
                 <button
                   type="button"
@@ -310,7 +316,7 @@ const Calendar = (props) => {
                   onDrop={(e) => handleDrop(e, date)}
                   onDragEnter={handleDragEnter}
                   onDragLeave={handleDragLeave}
-                  onClick={props.openTaskInfo}
+                  onClick={openTaskInfoS}
                   key={index}
                   data-date={`${year}-${month + 1}-${date}`}
                   className={["px-4 pt-2 border-r border-b relative w-[14.28%] min-h-[8rem]", s.adaptive].join(" ")}
@@ -335,7 +341,7 @@ const Calendar = (props) => {
                       )
                       .map((e) => {
                         const eventStyles = eventClass(e.event_theme);
-                        const taskStatus = props.getTaskStatus(e.task_id);
+                        const taskStatus = getTaskStatus(e.task_id);
                         return (
                           <div
                             key={e.event_title}
@@ -347,7 +353,7 @@ const Calendar = (props) => {
                             onClick={
                               (event) => {
                                 event.stopPropagation();
-                                props.getTaskInfo(e.task_id);
+                                getTaskInfo(e.task_id);
                               }
                             }
                             id={e.task_id}

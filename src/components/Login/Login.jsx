@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, NavLink } from 'react-router-dom';
-import s from './Login.module.css'; 
+import s from './Login.module.css';
 import { loginApi } from "../../api/api.ts"
 const Login = (props) => {
   const [email, setEmail] = useState("");
@@ -12,7 +12,7 @@ const Login = (props) => {
   const LoginCallback = async (e) => {
     e.preventDefault();
     setError(null);
-    const data = {email,password}
+    const data = { email, password }
     try {
       const response = await loginApi(data)
       //props.saveToken(response.data.access_token);
