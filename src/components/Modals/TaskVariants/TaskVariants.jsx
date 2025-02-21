@@ -6,6 +6,7 @@ const TaskVariants = (props) => {
   const TaskInfoOpen = useStore((state) => state.TaskInfoOpen);
   const TaskUpdateOpen = useStore((state) => state.TaskUpdateOpen);
   const taskId = useStore((state) => state.taskId);
+  const changeTaskStatus = useStore((state) => state.changeTaskStatus);
   return (
     <div className={[s.modal, s.modal_categoryAdd].join(" ")} ref={props.propsmodalRef}>
       <div className={s.modalcontent}>
@@ -15,7 +16,7 @@ const TaskVariants = (props) => {
         <button className={s.closeModalCategory} onClick={TaskUpdateOpen}>
           Редактировать задачу
         </button>
-        <button className={s.closeModalCategory} onClick={() => props.changeTaskStatus(
+        <button className={s.closeModalCategory} onClick={() => changeTaskStatus(
           taskId)}>
           Изменить статус
         </button>

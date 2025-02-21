@@ -17,6 +17,9 @@ const EditTask = (props) => {
   const closeTaskUpdateOpen = useStore((state) => state.closeTaskUpdateOpen);
   const error = useStore((state) => state.error);
   const taskId = useStore((state) => state.taskId);
+  const changeTask = useStore((state) => state.changeTask);
+  const completed = useStore((state) => state.completed);
+
   return (
     <div className={[s.modal, s1.editTask].join(" ")} ref={props.modalRef}>
       <div className={s.modalcontent}>
@@ -68,10 +71,10 @@ const EditTask = (props) => {
           style={{ textAlign: "center" }}
           type="text"
           disabled
-          value={props.completed ? "Выполнена" : "Не выполнена"}
+          value={completed ? "Выполнена" : "Не выполнена"}
         />
-        {error && <p style={{ width: "400px", marginBottom: "10px" }} className="text-red-500 text-center">{props.error}</p>}
-        <button className={s.closeModalCategory} onClick={() => props.changeTask(taskId)}>Сохранить изменения</button>
+        {error && <p style={{ width: "400px", marginBottom: "10px" }} className="text-red-500 text-center">{error}</p>}
+        <button className={s.closeModalCategory} onClick={() => changeTask(taskId)}>Сохранить изменения</button>
         <button className={s.closeModalCategory} onClick={closeTaskUpdateOpen}>Отменить изменения</button>
       </div>
     </div>

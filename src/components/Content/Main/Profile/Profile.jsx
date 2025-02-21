@@ -18,7 +18,7 @@ const Profile = (props) => {
   const token = useStore((state) => state.token);
   const removeToken = useStore((state) => state.removeToken);
   const updateCategories = useStore((state) => state.updateCategories);
-
+  const fetchCategories = useStore((state) => state.fetchCategories);
   const DeleteUser = () => {
     if (token) {
       deleteUserApi().then(response => {
@@ -31,7 +31,7 @@ const Profile = (props) => {
   const deleteCategory = (id) => {
     if (token) {
       categorieDeleteApi(id).then(response => {
-        props.fetchCategories()
+        fetchCategories()
         updateCategories();
         exit1()
       })
@@ -75,7 +75,7 @@ const Profile = (props) => {
         )}
         <div className={isDialogOpen || isDialogOpen1 ? [s.content, s.block].join(" ") : [s.content]}>
           <UserInfo updateAvatarId={props.userData.id} avatarId={props.userData.id} setIsDialogOpen={setIsDialogOpen} name={props.name} surname={props.surname} gender={props.gender} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp} />
-          <CategoryList setCategortId={setCategortId} setIsDialogOpen1={setIsDialogOpen1} fetchCategories={props.fetchCategories} categories={props.categories} />
+          <CategoryList setCategortId={setCategortId} setIsDialogOpen1={setIsDialogOpen1} categories={props.categories} />
         </div>
       </div>
     </div>

@@ -18,7 +18,7 @@ function App(props) {
   
   //const removeToken = useStore((state) => state.removeToken);
   //const fetchUserData = useStore((state) => state.fetchUserData);
-  const fetchCategories = useStore((state) => state.fetchCategories);
+  //const fetchCategories = useStore((state) => state.fetchCategories);
   //const updateCategories = useStore((state) => state.updateCategories);
 
   //const userData = useStore((state) => state.userData);

@@ -1,7 +1,14 @@
 import {create} from 'zustand'
-import { getDataApi, categoriesNobaseApi, updateTasksApi, categoriesInfo, fetchCategoriesApi, deleteTaskApi, addTaskApi, addCategoryApi, editCategoryApi } from '../api/api';
+import { getDataApi, categoriesNobaseApi, updateTasksApi, categoriesInfo, fetchCategoriesApi, deleteTaskApi, addTaskApi, addCategoryApi, editCategoryApi, changeTaskStatusApi, editTaskApi, taskInfoApi } from '../api/api';
 
 const useStore = create((set, get) => ({
+  getInitialStatusId1: () => {
+    const storedStatusId = localStorage.getItem('statusId');
+    return storedStatusId ? parseInt(storedStatusId) : 0;
+  },
+  statusId: 0,  //get().getInitialStatusId1(),
+
+  completed: undefined,
   userData: null,
   categories: [],
   tasks: [],
@@ -9,6 +16,23 @@ const useStore = create((set, get) => ({
   error: null,
   changeError: (value) => {
     set({ error: value })
+  },
+
+  openTaskInfoS: (e) => {
+    let dateString = e?.currentTarget?.getAttribute('data-date');
+    if (!dateString) {
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const day = String(today.getDate()).padStart(2, '0');
+      dateString = `${year}-${month}-${day}`;
+    }
+    const dateObj = new Date(dateString);
+    const year = dateObj.getFullYear();
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    const formattedDate = `${year}-${month}-${day}`;
+    get().openTaskInfoState(formattedDate)
   },
 
   taskStatuses: {},
@@ -78,6 +102,9 @@ const useStore = create((set, get) => ({
     }
   },
 
+  
+
+
   fetchCategories: async () => {
     try {
       const response = await categoriesNobaseApi()
@@ -101,6 +128,8 @@ const useStore = create((set, get) => ({
       console.error("Ошибка при обновлении категорий:", error);
     }
   },
+
+  
 
   onEditCategory: async (id) => {
     get().changeError(null)
@@ -153,10 +182,35 @@ const useStore = create((set, get) => ({
       console.error("Ошибка при обновлении задач:", error);
     }
   },
+  changeTask: async (id) => {
+    get().changeError(null)
+    try {
+      const taskData = {
+        name: get().taskName,
+        description: get().taskDescription,
+        priority: get().taskPriority,
+        category_id: parseInt(get().selectedCategoryId, 10),
+        date: get().date,
+      };
+      await editTaskApi(id, taskData)
+      await get().updateTasks();
+      get().closeTaskUpdateOpen();
+      get().TaskInfoOpen();
+    } catch (error) {
+      console.error("Ошибка при изменении задачи:", error);
+      if (error.response) {
+        get().changeError(`Ошибка при изменении задачи! Проверьте заполненность полей!`)
+      }
+      else if (error.request) {
+        get().changeError(`Ошибка сети`)
+      }
+    }
+  },
 
   isOpenTaskInfo: false,
   isModalCategoryOpen: false,
   openModalCategory: () => set({ isModalCategoryOpen: true }),
+  closeModalCategory: () => set({ isModalCategoryOpen: false }),
   closeModalCat: () => {
     set({
       error: null,
@@ -271,6 +325,59 @@ const useStore = create((set, get) => ({
     });
   },
 
+  getTaskInfo: async (id) => {
+    try {
+      const taskResponse = await taskInfoApi(id)
+      const taskData = taskResponse;
+      const categoryId = taskData.category_id;
+      get().changeTaskId(taskData.id)
+      set({completed: taskData.completed})
+      try {
+        await categoriesInfo(get().statusId)
+      } catch (e) {
+        console.error("ошибка при получении имени категории", e)
+      }
+      get().getTaskInfoState(taskData, categoryId)
+    } catch (error) {
+      console.error("Ошибка при получении данных задачи:", error);
+    }
+  },
+
+  changeTaskStatus: async (id) => {
+    const taskData = {
+      name: get().taskName,
+      description: get().taskDescription,
+      priority: get().taskPriority,
+      category_id: parseInt(get().selectedCategoryId, 10),
+      date: get().date
+    }
+    try {
+      const response = await changeTaskStatusApi(id, taskData)
+      const newTaskStatuses = { ...get().taskStatuses };
+      if (response.completed === true) {
+        set({completed: true})
+        newTaskStatuses[id] = {
+          completed: true,
+          statusId: id,
+        }
+        localStorage.setItem(`completed_${id}`, JSON.stringify(true));
+        localStorage.setItem(`statusId_${id}`, id);
+      } else {
+        set({ completed: false })
+        newTaskStatuses[id] = {
+          completed: false,
+          statusId: id,
+        }
+        localStorage.setItem(`completed_${id}`, JSON.stringify(false));
+        localStorage.setItem(`statusId_${id}`, id);
+      }
+      set({ taskStatuses: newTaskStatuses })
+      get().updateTasks();
+    } catch (error) {
+      console.error('Ошибка при изменении статуса задачи:', error);
+    }
+  },
+
   openWarning: () => {
     set({
       isWarningOpen: true,
@@ -280,12 +387,15 @@ const useStore = create((set, get) => ({
       selectedCategoryId: "",
       date: ""
     })
+    console.log(get().isWarningOpen)
   },
   exitWarning: () => {
     set({
-      isWarningOpen: false,
+      isWarningOpen: false
     })
+    console.log("HERE", get().isWarningOpen)
   },
+
   closeIsOpenTask: () => {
     set({
       isTaskOpen: false,
@@ -334,6 +444,9 @@ const useStore = create((set, get) => ({
       }
     }
   },
+  getTaskStatus: (taskId) => {
+    return get().taskStatuses[taskId] || set({ completed: false, statusId: 0 });
+  },
   deleteTask: (id) => {
     deleteTaskApi(id).then(response => {
       get().updateTasks()
@@ -377,7 +490,7 @@ const useStore = create((set, get) => ({
     set({
       categoryName: "",
       color: "#ffffff",
-      isModalCategoryOpen: false
+      isEditCategoryOpen: false
     })
   },
   
