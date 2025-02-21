@@ -1,23 +1,24 @@
 import React, { useState } from 'react';
-import useStore from "../../store/useToDoStore.js";
+import axios from 'axios';
 import { useNavigate, NavLink } from 'react-router-dom';
-import s from './Login.module.css'; 
+import s from './Login.module.css';
 import { loginApi } from "../../api/api.ts"
 const Login = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const saveToken = useStore((state) => state.saveToken);
 
   const LoginCallback = async (e) => {
     e.preventDefault();
     setError(null);
-    const data = {email,password}
+    const data = { email, password }
     try {
       const response = await loginApi(data)
-      saveToken(response.data.access_token);
+      //props.saveToken(response.data.access_token);
+      localStorage.setItem('access_token', response.data.access_token);
       navigate("/content");
+      //window.location.reload();
       window.location.href = "/content"
     } catch (error) {
       console.error("Ошибка авторизации:", error);
