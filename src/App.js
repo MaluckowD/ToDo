@@ -45,7 +45,6 @@ function App(props) {
   }, []);
 
   useEffect(() => {
-    
     if (token) {
       fetchUserData();
     }
@@ -104,7 +103,7 @@ function App(props) {
           <Route path="/" element={<AuthRedirect/>} />
           <Route path="/login" element={<Login/>} />
           <Route path="/registration" element={<Registration/>} />
-          <Route path="/content" element={<Content isLoading={isLoading}/>}>
+          <Route path="/content" element={<Content/>}>
             <Route index element={<Calendar />} />
             <Route path="settings" element={<Profile />} />
           </Route>

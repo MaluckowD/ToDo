@@ -7,7 +7,7 @@ import Confirnation from "../../../Modals/Confirmation";
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import useStore from "../../../../store//useToDoStore.js";
-const Profile = (props) => {
+const Profile = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isDialogOpen1, setIsDialogOpen1] = useState(false)
   const [categortId, setCategortId] = useState(-1)
@@ -19,6 +19,10 @@ const Profile = (props) => {
   const removeToken = useStore((state) => state.removeToken);
   const updateCategories = useStore((state) => state.updateCategories);
   const fetchCategories = useStore((state) => state.fetchCategories);
+  const isDialogOpenForDeleteUser = useStore((state) => state.isDialogOpenForDeleteUser);
+  const isDialogOpenForDeleteCategory = useStore((state) => state.isDialogOpenForDeleteCategory);
+  const isDialogOpenForDeleteTask = useStore((state) => state.isDialogOpenForDeleteTask);
+
   const DeleteUser = () => {
     if (token) {
       deleteUserApi().then(response => {
@@ -67,10 +71,10 @@ const Profile = (props) => {
 
     <div className={s.settings_item}>
       <div className={s.container}>
-        {isDialogOpen && (
+        {isDialogOpenForDeleteUser && (
           <Confirnation exit={exit} DeleteUser={DeleteUser} />
         )}
-        {isDialogOpen1 && (
+        {isDialogOpenForDeleteCategory && (
           <Confirnation exit={exit1} DeleteUser={() => deleteCategory(categortId)} />
         )}
         <div className={isDialogOpen || isDialogOpen1 ? [s.content, s.block].join(" ") : [s.content]}>

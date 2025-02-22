@@ -14,7 +14,7 @@ import AddCategory from '../Modals/AddCategory/AddCategory';
 import EditCategory from '../Modals/EditCategory/EditCategory';
 import useStore from "../../store/useToDoStore.js";
 
-const Content = (props) => {
+const Content = () => {
   const [redirectToLogin, setRedirectToLogin] = useState(false);
   const isLoading = useStore((state) => state.isLoading)
   const isTaskUpdateOpen = useStore((state) => state.isTaskUpdateOpen);
@@ -33,6 +33,7 @@ const Content = (props) => {
   const error = useStore((state) => state.error);
   const handleKeyDown = useStore((state) => state.handleKeyDown);
   const handleClickOutside = useStore((state) => state.handleClickOutside);
+  const isDialogOpenForDeleteTask = useStore((state) => state.isDialogOpenForDeleteTask);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
@@ -78,6 +79,7 @@ const Content = (props) => {
   if (!userData) {
     return <div>Загрузка данных пользователя...</div>;
   }
+
   const quary = isWarningOpen || isModalOpen || isModalCategoryOpen ||isEditCategoryOpen || isTaskOpen || isOpenTaskInfo
   
   return (
@@ -89,7 +91,7 @@ const Content = (props) => {
       {isTaskUpdateOpen && (<EditTask modalRef={modalRef} />)}
       {isModalCategoryOpen && ( <AddCategory modalRef={modalRef}/> )}
       {isEditCategoryOpen && ( <EditCategory modalRef={modalRef}/>)}
-      {isWarningOpen && ( <Confirnation/> )}
+      {isDialogOpenForDeleteTask && ( <Confirnation /> )}
       <div className={quary ? [s.wrapper, s.opacity].join(' ') : [s.wrapper]}>
         <Header/>
         <Main/>

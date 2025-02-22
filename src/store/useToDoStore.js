@@ -4,7 +4,7 @@ import {  getDataApi, categoriesNobaseApi, updateTasksApi,
           addTaskApi, addCategoryApi, editCategoryApi, 
           changeTaskStatusApi, editTaskApi, taskInfoApi, 
           UserEditApi, getAvatarData, addAvatarApi, 
-          fetchUserName } 
+          fetchUserName, deleteUserApi, categorieDeleteApi } 
 from '../api/api';
 import userAvatar from "../images/user.jpg"
 
@@ -29,11 +29,36 @@ const useStore = create((set, get) => ({
   numOfDays: [],
   emptyDays: [],
   name: "",
+  isDialogOpenForDeleteUser: false,
+  isDialogOpenForDeleteCategory: false,
+  isDialogOpenForDeleteTask: false,
+  DeleteUserDialog: () => {set({isDialogOpenForDeleteUser: true})},
+  deleteCategoryDialog: (id) => { 
+    set({ isDialogOpenForDeleteCategory: true,
+      categoryId: id})
+  },
+  deleteTaskDialog: () => { 
+    set({ isDialogOpenForDeleteTask: true,
+      isTaskOpen: false
+    })
+  },
+  closeDeleteUserDialog: () => { set({ isDialogOpenForDeleteUser: false }) },
+  closeDeleteCategoryDialog: () => { set({ isDialogOpenForDeleteCategory: false }) },
+  closeDeleteTaskDialog: () => { set({ isDialogOpenForDeleteTask: false }) },
   changeName: (value) => {
     set({name: value})
   },
   changeSurname: (value) => {
     set({ surname: value })
+  },
+
+  deleteUser: () => {
+    if (get().token) {
+      deleteUserApi().then(response => {
+        get().removeToken()
+
+      })
+    }
   },
   changeGender: (value) => {
     set({ gender: value })
@@ -556,14 +581,8 @@ const useStore = create((set, get) => ({
       selectedCategoryId: "",
       date: ""
     })
-    console.log(get().isWarningOpen)
   },
 
-  deleteCategoryDialog: (id) => {
-    set({ isWarningOpen: true, categoryId: id })
-    console.log("Id", get().categoryId)
-
-  },
   exitWarning: () => {
     set({
       isWarningOpen: false
@@ -641,6 +660,16 @@ const useStore = create((set, get) => ({
       categoryId: categoryId
     })
   },
+
+  deleteCategory: async () => {
+    if (get().token) {
+      await categorieDeleteApi(get().categoryId)
+      await get().fetchCategories()
+      await get().updateCategories();
+      set({ isDialogOpenForDeleteCategory: false })
+
+    }
+  },
   deleteTaskState: () => {
     set({
       isTaskOpen: false,
@@ -648,7 +677,7 @@ const useStore = create((set, get) => ({
       taskPriority: "",
       taskDescription: "",
       date: "",
-      isWarningOpen: false
+      isDialogOpenForDeleteTask: false
     })
   },
   changeCategoryNameState: (value) => {

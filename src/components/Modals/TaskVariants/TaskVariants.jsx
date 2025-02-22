@@ -1,7 +1,7 @@
 import s from "../Modals.module.css"
 import useStore from "../../../store/useToDoStore.js";
 const TaskVariants = (props) => {
-  const openWarning = useStore((state) => state.openWarning);
+  const deleteTaskDialog = useStore((state) => state.deleteTaskDialog);
   const closeIsOpenTask = useStore((state) => state.closeIsOpenTask);
   const TaskInfoOpen = useStore((state) => state.TaskInfoOpen);
   const TaskUpdateOpen = useStore((state) => state.TaskUpdateOpen);
@@ -20,7 +20,7 @@ const TaskVariants = (props) => {
           taskId)}>
           Изменить статус
         </button>
-        <button className={s.closeModalCategory} onClick={openWarning}>
+        <button className={s.closeModalCategory} onClick={deleteTaskDialog}>
           Удалить задачу
         </button>
         <button className={s.closeModalCategory} onClick={closeIsOpenTask}>Выйти</button>
