@@ -9,27 +9,22 @@ import useStore from "../../../../store/useToDoStore.js";
 import { monthNames, days } from "../../../../constants/index.js"
 import { isToday, adjustCellHeights, btnClass, eventClass } from "../../../../utils/Calendar_functions.js"
 const Calendar = (props) => {
-
+  
   const openTaskInfoS = useStore((state) => state.openTaskInfoS)
   const getTaskInfo = useStore((state) => state.getTaskInfo)
   const getTaskStatus = useStore((state) => state.getTaskStatus)
   const tasks = useStore((state) => state.tasks)
   const events = useStore((state) => state.events)
   const handleNewData = useStore((state) => state.handleNewData)
-
   const month = useStore((state) => state.month)
   const year = useStore((state) => state.year)
-  
   const numOfDays = useStore((state) => state.numOfDays)
   const emptyDays = useStore((state) => state.emptyDays)
   const getNoOfDays = useStore((state) => state.getNoOfDays)
-
   const nextMonth = useStore((state) => state.nextMonth)
   const prevMonth = useStore((state) => state.prevMonth)
-  
   const goToCurrentMonth = useStore((state) => state.goToCurrentMonth)
   const handleDrop = useStore((state) => state.handleDrop)
-  
   const cellRefs = useRef([]);
   const draggedItem = useRef(null);
 
@@ -43,7 +38,6 @@ const Calendar = (props) => {
     getNoOfDays();
   }, [month]);
 
-  
   useEffect(() => {
     handleNewData(tasks);
   }, [tasks]);
@@ -52,7 +46,6 @@ const Calendar = (props) => {
     draggedItem.current = event.task_id;
     e.dataTransfer.setData("text/plain", event.task_id);
   };
-
   const handleDragOver = (e) => {
     e.preventDefault();
   };

@@ -21,7 +21,7 @@ const useStore = create((set, get) => ({
   userData: null,
   categories: [],
   tasks: [],
-  isLoading: false,
+  isLoading: true,
   error: null,
   events: [],
   month: new Date().getMonth(),
@@ -40,6 +40,30 @@ const useStore = create((set, get) => ({
 
   changeError: (value) => {
     set({ error: value })
+  },
+
+  handleKeyDown: (event) => {
+    if (event.key === 'Escape') {
+      get().closeModalCat();
+      get().closeModal();
+      get().closeModalEditCat();
+      get().closeIsOpenTaskInfo();
+      get().closeIsOpenTask();
+      get().closeTaskInfoOpen()
+      get().closeTaskUpdateOpen()
+    }
+  },
+
+  handleClickOutside: (event, modalRef) => {
+    if (modalRef.current && !modalRef.current.contains(event.target)) {
+      get().closeModalCat();
+      get().closeModal();
+      get().closeModalEditCat();
+      get().closeIsOpenTaskInfo();
+      get().closeIsOpenTask();
+      get().closeTaskInfoOpen()
+      get().closeTaskUpdateOpen()
+    }
   },
 
   nextMonth: () => {
