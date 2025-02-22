@@ -75,7 +75,7 @@ const Profile = (props) => {
         )}
         <div className={isDialogOpen || isDialogOpen1 ? [s.content, s.block].join(" ") : [s.content]}>
           <UserInfo setIsDialogOpen={setIsDialogOpen}/>
-          <CategoryList setCategortId={setCategortId} setIsDialogOpen1={setIsDialogOpen1} />
+          <CategoryList setIsDialogOpen1={setIsDialogOpen1}/>
         </div>
       </div>
     </div>
