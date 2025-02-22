@@ -705,7 +705,7 @@ const useStore = create((set, get) => ({
     if (response) {
       return `https://api.energy-cerber.ru/static/avatars/${get().userData.id}.webp`;
     } else {
-      return get().userAvatar;
+      return userAvatar;
     }
   },
 
