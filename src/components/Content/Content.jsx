@@ -15,80 +15,37 @@ import EditCategory from '../Modals/EditCategory/EditCategory';
 import useStore from "../../store/useToDoStore.js";
 
 const Content = (props) => {
+  
   const [redirectToLogin, setRedirectToLogin] = useState(false);
-
-  const changeError = useStore((state) => state.changeError);
-
+  const isLoading = useStore((state) => state.isLoading)
   const isTaskUpdateOpen = useStore((state) => state.isTaskUpdateOpen);
   const isTaskInfoOpen = useStore((state) => state.isTaskInfoOpen);
-  
-  const TaskInfoOpen = useStore((state) => state.TaskInfoOpen);
-  const closeTaskInfoOpen = useStore((state) => state.closeTaskInfoOpen);
-  const closeTaskUpdateOpen = useStore((state) => state.closeTaskUpdateOpen);
-  
   const fetchCategories = useStore((state) => state.fetchCategories);
   const isModalOpen = useStore((state) => state.isModalOpen);
-  const closeModal = useStore((state) => state.closeModal);
   const isOpenTaskInfo = useStore((state) => state.isOpenTaskInfo);
   const isWarningOpen = useStore((state) => state.isWarningOpen);
-
-  const closeIsOpenTask = useStore((state) => state.closeIsOpenTask);
   const isTaskOpen = useStore((state) => state.isTaskOpen);
-
   const isModalCategoryOpen = useStore((state) => state.isModalCategoryOpen)
-  const closeIsOpenTaskInfo = useStore((state) => state.closeIsOpenTaskInfo)
   const navigate = useNavigate();
   const modalRef = useRef(null);
   const token = useStore((state) => state.token);
-  const closeModalCat = useStore((state) => state.closeModalCat);
   const isEditCategoryOpen = useStore((state) => state.isEditCategoryOpen);
   const userData = useStore((state) => state.userData);
   const error = useStore((state) => state.error);
-
-  const closeModalEditCat = useStore((state) => state.closeModalEditCat);
-
-  const CloseTaskUpdateOpen = () => {
-    closeTaskUpdateOpen()
-    TaskInfoOpen()
-    changeError(null)
-  }
+  const handleKeyDown = useStore((state) => state.handleKeyDown);
+  const handleClickOutside = useStore((state) => state.handleClickOutside);
 
   useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === 'Escape') {
-        closeModalCat();
-        closeModal();
-        closeModalEditCat();
-        closeIsOpenTaskInfo();
-        closeIsOpenTask();
-        closeTaskInfoOpen()
-        closeTaskUpdateOpen()
-      }
-    };
-
     window.addEventListener('keydown', handleKeyDown);
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-
   }, []);
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (modalRef.current && !modalRef.current.contains(event.target)) {
-        closeModalCat();
-        closeModal();
-        closeModalEditCat();
-        closeIsOpenTaskInfo();
-        closeIsOpenTask();
-        closeTaskInfoOpen()
-        closeTaskUpdateOpen()
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('mousedown', (e) => handleClickOutside(e,modalRef));
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('mousedown', (e) => handleClickOutside(e, modalRef));
     };
   }, [modalRef]);
 
@@ -111,7 +68,7 @@ const Content = (props) => {
   }, [redirectToLogin, navigate])
 
   
-  if (props.isLoading) {
+  if (isLoading) {
     return <p>Загрузка данных...</p>;
   }
 

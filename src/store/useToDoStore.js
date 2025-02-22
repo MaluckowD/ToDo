@@ -2,13 +2,16 @@ import {create} from 'zustand'
 import {  getDataApi, categoriesNobaseApi, updateTasksApi, 
           categoriesInfo, fetchCategoriesApi, deleteTaskApi, 
           addTaskApi, addCategoryApi, editCategoryApi, 
-  changeTaskStatusApi, editTaskApi, taskInfoApi, UserEditApi, getAvatarData, addAvatarApi, fetchUserName } from '../api/api';
+          changeTaskStatusApi, editTaskApi, taskInfoApi, 
+          UserEditApi, getAvatarData, addAvatarApi, 
+          fetchUserName } 
+from '../api/api';
 import userAvatar from "../images/user.jpg"
+
 const getInitialStatusId1 = () => {
   const storedStatusId = localStorage.getItem('statusId');
   return storedStatusId ? parseInt(storedStatusId) : 0;
 }
-
 const statusId = getInitialStatusId1
 
 const useStore = create((set, get) => ({
@@ -18,7 +21,7 @@ const useStore = create((set, get) => ({
   userData: null,
   categories: [],
   tasks: [],
-  isLoading: false,
+  isLoading: true,
   error: null,
   events: [],
   month: new Date().getMonth(),
@@ -39,24 +42,100 @@ const useStore = create((set, get) => ({
     set({ error: value })
   },
 
+  handleKeyDown: (event) => {
+    if (event.key === 'Escape') {
+      get().closeModalCat();
+      get().closeModal();
+      get().closeModalEditCat();
+      get().closeIsOpenTaskInfo();
+      get().closeIsOpenTask();
+      get().closeTaskInfoOpen()
+      get().closeTaskUpdateOpen()
+    }
+  },
+
+  handleClickOutside: (event, modalRef) => {
+    if (modalRef.current && !modalRef.current.contains(event.target)) {
+      get().closeModalCat();
+      get().closeModal();
+      get().closeModalEditCat();
+      get().closeIsOpenTaskInfo();
+      get().closeIsOpenTask();
+      get().closeTaskInfoOpen()
+      get().closeTaskUpdateOpen()
+    }
+  },
+
   nextMonth: () => {
     if (get().month === 11) {
-      set({ year :((prevYear) => prevYear + 1), month: 0})
+      set({ year: get().year + 1, month: 0})
     } else {
-      set({ month: (prevMonth) => prevMonth + 1})
+      set({ month: get().month + 1})
     }
   },
 
   prevMonth: () => {
     if (get().month === 0) {
-      set({ year: ((prevYear) => prevYear - 1), month: 11 })
+      set({ year: get().year - 1, month: 11 })
     } else {
-      set({ month: (prevMonth) => prevMonth - 1 })
+      set({ month: get().month - 1 })
     }
   },
+
+  handleDrop: async (e, date, draggedItem, s) => {
+    if (e.target.closest(`.${s.adaptive}`)) {
+      e.target.closest(`.${s.adaptive}`).classList.remove(s.dragover)
+    }
+    e.preventDefault();
+    const taskId = e.dataTransfer.getData("text/plain");
+    if (draggedItem.current && taskId) {
+      try {
+        const response = await taskInfoApi(taskId)
+        const newDate = new Date(get().year, get().month, date + 1)
+        const taskData = {
+          ...response,
+          date: newDate.toISOString().slice(0, 10)
+        };
+        await editTaskApi(taskId, taskData)
+        get().updateTasks()
+      } catch (error) {
+        console.error('Ошибка при загрузке задачи для перетаскивания:', error);
+      }
+      draggedItem.current = null
+    }
+  },
+
   
   updateMonthYear: (newMonth, newYear) => {
     set({ month: newMonth, year: newYear })
+  },
+
+  goToCurrentMonth: () => {
+    const currentDate = new Date();
+    set({ month: currentDate.getMonth(), year: currentDate.getFullYear() })
+
+  },
+  numOfDays: [],
+  emptyDays: [],
+  getNoOfDays: () => {
+    let i;
+    let daysInMonth = new Date(get().year, get().month + 1, 0).getDate();
+    let dayOfWeek = new Date(get().year, get().month).getDay();
+    let emptyDaysArray = [];
+    if (dayOfWeek === 0) {
+      for (i = 1; i <= 6; i++) {
+        emptyDaysArray.push(i);
+      }
+    } else {
+      for (i = 1; i <= dayOfWeek - 1; i++) {
+        emptyDaysArray.push(i);
+      }
+    }
+    let daysArray = [];
+    for (i = 1; i <= daysInMonth; i++) {
+      daysArray.push(i);
+    }
+    set({ numOfDays: daysArray, emptyDays: emptyDaysArray })
   },
 
   handleNewData: async (incomingData) => {

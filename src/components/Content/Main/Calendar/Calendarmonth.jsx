@@ -1,13 +1,14 @@
-import React, { useState, useRef } from "react";
+import React from "react";
 import { Calendar } from 'primereact/calendar';
 import s from "./Calendar.module.css";
-
-const CalendarMonth = ({ updateMonthAndYear, year}) => {
+import useStore from "../../../../store/useToDoStore.js";
+const CalendarMonth = () => {
+  const updateMonthYear = useStore((state) => state.updateMonthYear)
   const handleDateChange = (event) => {
-    if (updateMonthAndYear) {
+    if (updateMonthYear) {
       const selectedMonth = event.value.getMonth();
       const selectedYear = event.value.getFullYear();
-      updateMonthAndYear(selectedMonth, selectedYear);
+      updateMonthYear(selectedMonth, selectedYear);
     }
   };
 
