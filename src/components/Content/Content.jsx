@@ -17,12 +17,9 @@ import useStore from "../../store/useToDoStore.js";
 const Content = (props) => {
   const [redirectToLogin, setRedirectToLogin] = useState(false);
 
-  const changeError = useStore((state) => state.changeError);
-
   const isTaskUpdateOpen = useStore((state) => state.isTaskUpdateOpen);
   const isTaskInfoOpen = useStore((state) => state.isTaskInfoOpen);
   
-  const TaskInfoOpen = useStore((state) => state.TaskInfoOpen);
   const closeTaskInfoOpen = useStore((state) => state.closeTaskInfoOpen);
   const closeTaskUpdateOpen = useStore((state) => state.closeTaskUpdateOpen);
   
@@ -46,12 +43,6 @@ const Content = (props) => {
   const error = useStore((state) => state.error);
 
   const closeModalEditCat = useStore((state) => state.closeModalEditCat);
-
-  const CloseTaskUpdateOpen = () => {
-    closeTaskUpdateOpen()
-    TaskInfoOpen()
-    changeError(null)
-  }
 
   useEffect(() => {
     const handleKeyDown = (event) => {
