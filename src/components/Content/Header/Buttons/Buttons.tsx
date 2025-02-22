@@ -1,18 +1,12 @@
 import { NavLink } from "react-router-dom"
 import s from "./Buttons.module.css"
-import { fetchUserName } from "../../../../api/api"
 import { useNavigate } from "react-router-dom"
 import useStore from "../../../../store/useToDoStore.js";
 const Buttons = (props) => {
   const navigate = useNavigate();
-  const token = useStore((state) => state.token);
   const removeToken = useStore((state) => state.removeToken);
-  const UpdateCallBack = () => {
-    if (token) {
-      fetchUserName();
-    }
-  }
-
+  const UpdateCallBack = useStore((state) => state.UpdateCallBack);
+  
   const handleLogout = () => {
     removeToken(); 
     navigate("/login");

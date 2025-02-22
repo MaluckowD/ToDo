@@ -74,8 +74,8 @@ const Profile = (props) => {
           <Confirnation exit={exit1} DeleteUser={() => deleteCategory(categortId)} />
         )}
         <div className={isDialogOpen || isDialogOpen1 ? [s.content, s.block].join(" ") : [s.content]}>
-          <UserInfo avatarId={props.userData.id} setIsDialogOpen={setIsDialogOpen} name={props.name} surname={props.surname} gender={props.gender} updateUserDataInApp={props.updateUserDataInApp} />
-          <CategoryList setCategortId={setCategortId} setIsDialogOpen1={setIsDialogOpen1} categories={props.categories} />
+          <UserInfo setIsDialogOpen={setIsDialogOpen}/>
+          <CategoryList setCategortId={setCategortId} setIsDialogOpen1={setIsDialogOpen1} />
         </div>
       </div>
     </div>

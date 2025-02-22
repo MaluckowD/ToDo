@@ -18,8 +18,8 @@ function App(props) {
   
   //const removeToken = useStore((state) => state.removeToken);
   const fetchUserData = useStore((state) => state.fetchUserData);
-  //const fetchCategories = useStore((state) => state.fetchCategories);
-  //const updateCategories = useStore((state) => state.updateCategories);
+  const fetchCategories = useStore((state) => state.fetchCategories);
+  const updateCategories = useStore((state) => state.updateCategories);
 
   //const userData = useStore((state) => state.userData);
   //const categories = useStore((state) => state.categories);
@@ -27,17 +27,16 @@ function App(props) {
   //const isLoading = useStore((state) => state.isLoading);
   //const error = useStore((state) => state.error);
   //const taskStatuses = useStore((state) => state.taskStatuses);
-  //const token = useStore((state) => state.token);
-  //const setToken = useStore((state) => state.setToken);
+  const token = useStore((state) => state.token);
+  const setToken = useStore((state) => state.setToken);
   
   const [categories, setCategories] = useState(null);
-  const [tasks, setTasks] = useState(null);
-  const [userData, setUserData] = useState(null);
+
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  //const [taskStatuses, setTaskStatuses] = useState({});
-  const getToken = () => localStorage.getItem('access_token');
-  const [token, setToken] = useState(() => getToken());
+
+  //const getToken = () => localStorage.getItem('access_token');
+  //const [token, setToken] = useState(() => getToken());
   const updateTasks = useStore((state) => state.updateTasks);
 
 
@@ -45,25 +44,14 @@ function App(props) {
     document.title = "ToDo";
   }, []);
 
-  const updateUserDataInApp = (updatedUserData) => {
-    setUserData(updatedUserData);
-  };
-
-  const saveToken = (token) => {
-    localStorage.setItem('access_token', token);
-    setToken(token);
-  };
-
-  const removeToken = () => {
-    localStorage.removeItem('access_token');
-  }
-
   useEffect(() => {
     
     if (token) {
       fetchUserData();
     }
   }, [token]);
+
+  
 
   updateTasks()
 
@@ -84,13 +72,14 @@ function App(props) {
       fetchCategories();
     }
   }, [token]);
+  
 
   const AuthRedirect = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-      const storedToken = getToken();
+      const storedToken = token;
       if (storedToken) {
         setToken(storedToken);
       }
@@ -115,7 +104,7 @@ function App(props) {
           <Route path="/" element={<AuthRedirect/>} />
           <Route path="/login" element={<Login/>} />
           <Route path="/registration" element={<Registration/>} />
-          <Route path="/content" element={<Content tasks={tasks} categories={categories} isLoading={isLoading} error={error}  />}>
+          <Route path="/content" element={<Content isLoading={isLoading}/>}>
             <Route index element={<Calendar />} />
             <Route path="settings" element={<Profile />} />
           </Route>

@@ -2,74 +2,26 @@ import s from "./UserInfo.module.css"
 import userAvatar from "../../../../../images/user.jpg"
 import iconChoice from "../../../../../images/choiceIcon.svg"
 import React, { useState, useEffect } from "react";
-import { UserEditApi, addAvatarApi, getAvatarData } from "../../../../../api/api.ts"
 import useStore from "../../../../../store/useToDoStore.js";
-const UserInfo = (props) => {
-  const updateUserDataInApp = useStore((state) => state.updateUserDataInApp);
-  const fetchUserData = useStore((state) => state.fetchUserData);
-  const userData = useStore((state) => state.userData);
-  const [name, setName] = useState(props.name);
-  const [surname, setSurname] = useState(props.surname);
-  const [gender, setGender] = useState(props.gender);
-  const [error, setError] = useState(null);
-  const token = useStore((state) => state.token);
-  const DeleteUserDialog = () => props.setIsDialogOpen(true)
-  const [avatarUrl, setAvatarUrl] = useState(userAvatar);
 
-  const getAvatarUrl = async () => {
-    const response = await getAvatarData(userData.id);
-    if (response) {
-      return `https://api.energy-cerber.ru/static/avatars/${userData.id}.webp`;
-    } else {
-      return userAvatar;
-    }
-  };
+const UserInfo = (props) => {
+  const UpdateUserInfo = useStore((state) => state.UpdateUserInfo);
+  const userData = useStore((state) => state.userData);
+  const error = useStore((state) => state.error);
+  const avatarUrl = useStore((state) => state.avatarUrl);
+  const loadAvatar = useStore((state) => state.loadAvatar);
+  const handleFileChange = useStore((state) => state.handleFileChange);
+  const [name, setName] = useState(userData.name);
+  const [surname, setSurname] = useState(userData.surname);
+  const [gender, setGender] = useState(userData.gender);
+  
+  const DeleteUserDialog = () => props.setIsDialogOpen(true)
 
   useEffect(() => {
-    const loadAvatar = async () => {
-      const url = await getAvatarUrl();
-      setAvatarUrl(url);
-    };
-
     loadAvatar();
-
   }, [userData.id]);
 
-  const handleFileChange = async (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const formData = new FormData();
-      formData.append('avatar', file);
-      try {
-        const response = await addAvatarApi(formData)
-        window.location.reload();
-      }
-      catch (error) {
-        console.log("error_avatar")
-      }
-    } else {
-    }
-  };
-
-  const UpdateUserInfo = async () => {
-    setError(null);
-    if (token) {
-      try {
-        const response = await UserEditApi({ name, surname, gender })
-        fetchUserData()
-      }
-      catch (error) {
-        if (error.response) {
-          setError(`Ошибка при обновлении данных пользователя. Длина имени и фамилии от 2 символов!`);
-        }
-        else if (error.request) {
-          setError(`Ошибка сети`)
-        }
-      }
-    }
-  };
-
-  if (!props.userData) return <p>Загрузка данных...</p>;
+  if (!userData) return <p>Загрузка данных...</p>;
 
   return (
     <div className={s.userinfo}>
@@ -98,7 +50,7 @@ const UserInfo = (props) => {
           />
         </div>
         <div className={s.email}>
-          <input style={{ opacity: "0.5" }} disabled value={props.userData.email} type="text" placeholder="Ваша эл.почта" />
+          <input style={{ opacity: "0.5" }} disabled value={userData.email} type="text" placeholder="Ваша эл.почта" />
         </div>
         <div className={s.user_sex}>
           <select className={s.user_style} value={gender}
@@ -106,11 +58,11 @@ const UserInfo = (props) => {
             <option value="male">Мужской</option>
             <option value="female">Женский</option>
           </select>
-          <input style={{ opacity: "0.5" }} disabled value={props.userData.short_name} type="text" placeholder="Псевдоним" className={s.user_sex_item} />
+          <input style={{ opacity: "0.5" }} disabled value={userData.short_name} type="text" placeholder="Псевдоним" className={s.user_sex_item} />
         </div>
         {error && <p style={{ width: "400px", marginBottom: "10px" }} className="text-red-500 text-center">{error}</p>}
         <div className={s.save_change}>
-          <button onClick={UpdateUserInfo}>Сохранить изменения</button>
+          <button onClick={() => UpdateUserInfo(name, surname, gender)}>Сохранить изменения</button>
         </div>
         <div className={s.save_change}>
           <button onClick={DeleteUserDialog}>Удалить пользователя</button>
