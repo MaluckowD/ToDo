@@ -7,8 +7,8 @@ const Main = (props) => {
   return (
     <main className={s.main}>
       <Routes>
-        <Route index element={<Calendar openTaskInfo={props.openTaskInfo}  />} />
-        <Route path="settings" element={<Profile updateAvatarId={props.userData.id} avatarId={props.userData.id} fetchCategories={props.fetchCategories}  categories={props.categories} name={props.userData.name} surname={props.userData.surname} gender={props.userData.gender} userData={props.userData} updateUserDataInApp={props.updateUserDataInApp} />} />
+        <Route index element={<Calendar />}/>
+        <Route path="settings" element={<Profile/>} />
       </Routes>
     </main>
   )

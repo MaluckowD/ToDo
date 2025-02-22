@@ -1,24 +1,39 @@
 import {create} from 'zustand'
-import { getDataApi, categoriesNobaseApi, updateTasksApi, categoriesInfo, fetchCategoriesApi, deleteTaskApi, addTaskApi, addCategoryApi, editCategoryApi, changeTaskStatusApi, editTaskApi, taskInfoApi } from '../api/api';
-
+import {  getDataApi, categoriesNobaseApi, updateTasksApi, 
+          categoriesInfo, fetchCategoriesApi, deleteTaskApi, 
+          addTaskApi, addCategoryApi, editCategoryApi, 
+  changeTaskStatusApi, editTaskApi, taskInfoApi, UserEditApi, getAvatarData, addAvatarApi, fetchUserName } from '../api/api';
+import userAvatar from "../images/user.jpg"
 const getInitialStatusId1 = () => {
   const storedStatusId = localStorage.getItem('statusId');
   return storedStatusId ? parseInt(storedStatusId) : 0;
 }
 
 const statusId = getInitialStatusId1
+
 const useStore = create((set, get) => ({
   
-  statusId: statusId,  //get().getInitialStatusId1(),
+  statusId: statusId,
   completed: undefined,
   userData: null,
   categories: [],
   tasks: [],
   isLoading: false,
   error: null,
+  changeName: (value) => {
+    set({name: value})
+  },
+  changeSurname: (value) => {
+    set({ surname: value })
+  },
+  changeGender: (value) => {
+    set({ gender: value })
+  },
+
   changeError: (value) => {
     set({ error: value })
   },
+
 
   openTaskInfoS: (e) => {
     let dateString = e?.currentTarget?.getAttribute('data-date');
@@ -156,13 +171,15 @@ const useStore = create((set, get) => ({
     }
   },
 
-  closeModalCategory: async () => {
+  closeModalCategoryApi: async () => {
+    console.log("Data")
     get().changeError(null)
     try {
       const categoryData = {
         name: get().categoryName,
         color: get().color,
       };
+      console.log("Data", categoryData)
       await addCategoryApi(categoryData)
       await get().updateCategories();
       await get().fetchCategories();
@@ -240,6 +257,8 @@ const useStore = create((set, get) => ({
       isTaskInfoOpen: false
     })
   },
+
+  
 
   TaskUpdateOpen: () => {
     set({
@@ -499,8 +518,77 @@ const useStore = create((set, get) => ({
     set({
       categoryName: "",
       color: "#ffffff",
-      isEditCategoryOpen: false
+      isEditCategoryOpen: false,
+      isModalCategoryOpen: false
     })
+  },
+
+  avatarUrl: userAvatar,
+  getAvatarUrl: async () => {
+    const response = await getAvatarData(get().userData.id);
+    if (response) {
+      return `https://api.energy-cerber.ru/static/avatars/${get().userData.id}.webp`;
+    } else {
+      return get().userAvatar;
+    }
+  },
+
+  loadAvatar: async () => {
+    const url = await get().getAvatarUrl();
+    set({avatarUrl: url})
+  },
+
+  UpdateUserInfo: async (name, surname, gender) => {
+    get().changeError(null)
+    if (get().token) {
+      try {
+        const response = await UserEditApi({ name, surname, gender })
+        get().fetchUserData()
+      }
+      catch (error) {
+        if (error.response) {
+          get().changeError(`Ошибка при обновлении данных пользователя. Длина имени и фамилии от 2 символов!`)
+        }
+        else if (error.request) {
+          get().changeError(`Ошибка сети`)
+        }
+      }
+    }
+  },
+
+  UpdateCallBack: () => {
+
+    if (get().token) {
+      fetchUserName();
+    }
+  },
+
+  handleFileChange: async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append('avatar', file);
+      try {
+        const response = await addAvatarApi(formData)
+        window.location.reload();
+      }
+      catch (error) {
+        console.log("error_avatar")
+      }
+    } 
+  },
+  
+
+  fetchCategories: async () => {
+    try {
+      const response = await categoriesNobaseApi()
+      set({ categories: response })
+    } catch (error) {
+      get().changeError(error)
+      console.error("Ошибка при загрузке данных пользователя:", error); //////////
+    } finally {
+      set({ isLoading: false })
+    }
   },
   
   

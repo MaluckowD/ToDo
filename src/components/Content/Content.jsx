@@ -31,7 +31,7 @@ const Content = (props) => {
   const closeModal = useStore((state) => state.closeModal);
   const isOpenTaskInfo = useStore((state) => state.isOpenTaskInfo);
   const isWarningOpen = useStore((state) => state.isWarningOpen);
-  console.log(isWarningOpen)
+
   const closeIsOpenTask = useStore((state) => state.closeIsOpenTask);
   const isTaskOpen = useStore((state) => state.isTaskOpen);
 
@@ -43,11 +43,9 @@ const Content = (props) => {
   const closeModalCat = useStore((state) => state.closeModalCat);
   const isEditCategoryOpen = useStore((state) => state.isEditCategoryOpen);
   const userData = useStore((state) => state.userData);
+  const error = useStore((state) => state.error);
 
   const closeModalEditCat = useStore((state) => state.closeModalEditCat);
-
-  const completed = useStore((state) => state.completed);
-  const statusId = useStore((state) => state.statusId);
 
   const CloseTaskUpdateOpen = () => {
     closeTaskUpdateOpen()
@@ -117,17 +115,17 @@ const Content = (props) => {
     return <p>Загрузка данных...</p>;
   }
 
-  if (props.error) {
-    return <p>Ошибка: {props.error.message}</p>;
+  if (error) {
+    return <p>Ошибка: {error.message}</p>;
   }
 
   if (!userData.name) {
     return <div>Загрузка данных пользователя...</div>;
   }
-  console.log(userData)
+  const quary = isWarningOpen || isModalOpen || isModalCategoryOpen ||isEditCategoryOpen || isTaskOpen || isOpenTaskInfo
+  
   return (
     <div className={s.root}>
-
       {isModalOpen && (<KirillLoh modalRef={modalRef} />)}
       {isOpenTaskInfo && ( <AddTask modalRef={modalRef} />)}
       {isTaskOpen && ( <TaskVariants modalRef={modalRef} />)}
@@ -136,11 +134,10 @@ const Content = (props) => {
       {isModalCategoryOpen && ( <AddCategory modalRef={modalRef}/> )}
       {isEditCategoryOpen && ( <EditCategory modalRef={modalRef}/>)}
       {isWarningOpen && ( <Confirnation/> )}
-
-      <div className={isWarningOpen || isModalOpen || isModalCategoryOpen || isEditCategoryOpen || isTaskOpen || isOpenTaskInfo ? [s.wrapper, s.opacity].join(' ') : [s.wrapper]}>
+      <div className={quary ? [s.wrapper, s.opacity].join(' ') : [s.wrapper]}>
         <Header/>
-        <Main updateAvatarId={userData.id} avatarId={userData.id}  taskStatuses={props.taskStatuses} tasks={props.tasks} categories={props.categories} name={userData.name} surname={userData.surname} gender={userData.gender} userData={userData} updateUserDataInApp={props.updateUserDataInApp} />
-        <Footer />
+        <Main/>
+        <Footer/>
       </div>
     </div>
   )

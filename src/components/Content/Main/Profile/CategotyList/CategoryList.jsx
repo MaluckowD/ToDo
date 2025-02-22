@@ -7,6 +7,7 @@ const CategoryList = (props) => {
   const openModalCategory = useStore((state) => state.openModalCategory);
   const openModalEditCategory = useStore((state) => state.openModalEditCategory);
   const deleteCategoryDialog = useStore((state) => state.deleteCategoryDialog);
+  const categories = useStore((state) => state.categories);
 
   const DeleteCategoryDialog = (id) => {
     props.setIsDialogOpen1(true)
@@ -20,7 +21,7 @@ const CategoryList = (props) => {
       </div>
       <div className={s.list}>
         <div className={s.list_items}>
-          {props.categories.map( (item) => (
+          {categories.map( (item) => (
             <div className={s.list_item}>
               <textarea 
               disabled style={{ backgroundColor: item.color, minHeight: "30px" }} value = {item.name}/>

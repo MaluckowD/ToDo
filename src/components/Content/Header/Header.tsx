@@ -1,23 +1,18 @@
 import s from "./Header.module.css"
 import Userinfo from "./Userinfo/Userinfo"
 import Buttons from "./Buttons/Buttons"
+import useStore from "../../../store/useToDoStore.js"
 
-interface HeaderProps {
-  name: string;
-  avatarId: string;
-  getToken: () => string | null;
-  removeToken: () => void
-}
-
-const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
-  if (4 + 3 === 10) { //!props.name
+const Header = (props) => {
+  const userData = useStore((state) => state.userData);
+  if (!userData.name) { 
     return <div>Загрузка данных пользователя...</div>;
   }
   return (
     <header className={s.header}>
       <div className={s.container}>
         <div className={s.header_inner}>
-          <Userinfo avatarId={props.avatarId} />
+          <Userinfo/>
           <Buttons/>
         </div>
       </div>
