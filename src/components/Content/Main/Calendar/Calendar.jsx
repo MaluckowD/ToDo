@@ -7,8 +7,11 @@ import CalendarMonth from './Calendarmonth';
 import { useRef } from 'react';
 import useStore from "../../../../store/useToDoStore.js";
 import { monthNames, days } from "../../../../constants/index.js"
-import { isToday, adjustCellHeights, btnClass, eventClass } from "../../../../utils/Calendar_functions.js"
-const Calendar = (props) => {
+import {  isToday, adjustCellHeights, btnClass, 
+          eventClass, handleDragOver, handleDragEnter, 
+          handleDragStart, handleDragLeave } 
+from "../../../../utils/Calendar_functions.js"
+const Calendar = () => {
   
   const openTaskInfoS = useStore((state) => state.openTaskInfoS)
   const getTaskInfo = useStore((state) => state.getTaskInfo)
@@ -42,25 +45,6 @@ const Calendar = (props) => {
     handleNewData(tasks);
   }, [tasks]);
 
-  const handleDragStart = (e, event) => {
-    draggedItem.current = event.task_id;
-    e.dataTransfer.setData("text/plain", event.task_id);
-  };
-  const handleDragOver = (e) => {
-    e.preventDefault();
-  };
-  const handleDragEnter = (e) => {
-    e.preventDefault()
-    if (e.target.closest(`.${s.adaptive}`)) {
-      e.target.closest(`.${s.adaptive}`).classList.add(s.dragover)
-    }
-  };
-  const handleDragLeave = (e) => {
-    if (e.target.closest(`.${s.adaptive}`)) {
-      e.target.closest(`.${s.adaptive}`).classList.remove(s.dragover)
-    }
-  };
-  
   return (
     <>
       <div className="container mx-auto py-4 px-6">
@@ -123,10 +107,10 @@ const Calendar = (props) => {
               {numOfDays.map((date, index) => (
                 <div
                   ref={el => cellRefs.current[index] = el}
-                  onDragOver={handleDragOver}
+                  onDragOver={(e) => handleDragOver(e)}
                   onDrop={(e) => handleDrop(e, date, draggedItem, s)}
-                  onDragEnter={handleDragEnter}
-                  onDragLeave={handleDragLeave}
+                  onDragEnter={(e) => handleDragEnter(e, s)}
+                  onDragLeave={(e) => handleDragLeave(e, s)}
                   onClick={openTaskInfoS}
                   key={index}
                   data-date={`${year}-${month + 1}-${date}`}
@@ -157,7 +141,7 @@ const Calendar = (props) => {
                           <div
                             key={e.event_title}
                             draggable="true"
-                            onDragStart={(event) => handleDragStart(event, e)}
+                            onDragStart={(event) => handleDragStart(event, e, draggedItem)}
                             className={classNames(
                               "px-2 py-1 rounded-lg mt-1 overflow-hidden border"
                             )}

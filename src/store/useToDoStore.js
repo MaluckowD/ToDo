@@ -28,6 +28,7 @@ const useStore = create((set, get) => ({
   year: new Date().getFullYear(),
   numOfDays: [],
   emptyDays: [],
+  name: "",
   changeName: (value) => {
     set({name: value})
   },
