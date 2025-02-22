@@ -15,7 +15,6 @@ import EditCategory from '../Modals/EditCategory/EditCategory';
 import useStore from "../../store/useToDoStore.js";
 
 const Content = (props) => {
-  
   const [redirectToLogin, setRedirectToLogin] = useState(false);
   const isLoading = useStore((state) => state.isLoading)
   const isTaskUpdateOpen = useStore((state) => state.isTaskUpdateOpen);
@@ -76,7 +75,7 @@ const Content = (props) => {
     return <p>Ошибка: {error.message}</p>;
   }
 
-  if (!userData.name) {
+  if (!userData) {
     return <div>Загрузка данных пользователя...</div>;
   }
   const quary = isWarningOpen || isModalOpen || isModalCategoryOpen ||isEditCategoryOpen || isTaskOpen || isOpenTaskInfo

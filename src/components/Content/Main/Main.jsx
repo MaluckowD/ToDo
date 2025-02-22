@@ -3,7 +3,7 @@ import Profile from "./Profile/Profile"
 import Calendar from "./Calendar/Calendar"
 import { Route, Routes } from "react-router-dom"
 
-const Main = (props) => {
+const Main = () => {
   return (
     <main className={s.main}>
       <Routes>

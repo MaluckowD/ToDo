@@ -64,12 +64,14 @@ export const handleDragStart = (e, event, draggedItem) => {
 export const handleDragOver = (e) => {
   e.preventDefault();
 };
+
 export const handleDragEnter = (e, s) => {
   e.preventDefault()
   if (e.target.closest(`.${s.adaptive}`)) {
     e.target.closest(`.${s.adaptive}`).classList.add(s.dragover)
   }
 };
+
 export const handleDragLeave = (e, s) => {
   if (e.target.closest(`.${s.adaptive}`)) {
     e.target.closest(`.${s.adaptive}`).classList.remove(s.dragover)
