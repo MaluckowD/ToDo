@@ -20,6 +20,11 @@ const useStore = create((set, get) => ({
   tasks: [],
   isLoading: false,
   error: null,
+  events: [],
+  month: new Date().getMonth(),
+  year: new Date().getFullYear(),
+  numOfDays: [],
+  emptyDays: [],
   changeName: (value) => {
     set({name: value})
   },
@@ -32,6 +37,68 @@ const useStore = create((set, get) => ({
 
   changeError: (value) => {
     set({ error: value })
+  },
+
+  nextMonth: () => {
+    if (get().month === 11) {
+      set({ year :((prevYear) => prevYear + 1), month: 0})
+    } else {
+      set({ month: (prevMonth) => prevMonth + 1})
+    }
+  },
+
+  prevMonth: () => {
+    if (get().month === 0) {
+      set({ year: ((prevYear) => prevYear - 1), month: 11 })
+    } else {
+      set({ month: (prevMonth) => prevMonth - 1 })
+    }
+  },
+  
+  updateMonthYear: (newMonth, newYear) => {
+    set({ month: newMonth, year: newYear })
+  },
+
+  handleNewData: async (incomingData) => {
+    if (!Array.isArray(incomingData)) {
+      console.error("Ошибка: incomingData не является массивом");
+      return;
+    }
+
+    try {
+      const updatedEvents = await Promise.all(incomingData.map(async (item) => {
+        if (!item || !item.id || !item.name || !item.date) {
+          console.warn("Неверные данные:", item);
+          return null;
+        }
+
+        try {
+          const eventDate = new Date(item.date);
+          let theme = '';
+          try {
+            const response = await categoriesInfo(item.category_id)
+            theme = response.color;
+          } catch (categoryError) {
+            console.error("Ошибка при получении категории:", categoryError, item);
+            theme = '';
+          }
+          return {
+            id: item.id,
+            event_date: eventDate,
+            event_title: item.name,
+            event_theme: theme,
+            task_id: item.id
+          };
+        } catch (error) {
+          console.error("Ошибка при создании даты:", error, item);
+          return null;
+        }
+      }));
+
+      set({events: updatedEvents.filter(item => item !== null)});
+    } catch (error) {
+      console.error("Общая ошибка при обработке данных", error)
+    }
   },
 
 

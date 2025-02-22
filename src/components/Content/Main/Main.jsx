@@ -7,7 +7,7 @@ const Main = (props) => {
   return (
     <main className={s.main}>
       <Routes>
-        <Route index element={<Calendar />}/>
+        <Route index element={<Calendar/>}/>
         <Route path="settings" element={<Profile/>} />
       </Routes>
     </main>

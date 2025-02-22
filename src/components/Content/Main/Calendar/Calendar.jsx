@@ -3,26 +3,11 @@ import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/solid';
 import s from "./Calendar.module.css"
 import classNames from "./helper.ts";
 import "./style.css"
+import { monthNames, days } from "../../../../constants/index.js"
 import CalendarMonth from './Calendarmonth';
 import { useRef } from 'react';
-import { categoriesInfo, taskInfoApi, editTaskApi } from "../../../../api/api.ts"
+import { taskInfoApi, editTaskApi } from "../../../../api/api.ts"
 import useStore from "../../../../store/useToDoStore.js";
-const monthNames = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December"
-];
-
-const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 const Calendar = (props) => {
 
@@ -30,9 +15,13 @@ const Calendar = (props) => {
   const updateTasks = useStore((state) => state.updateTasks)
   const getTaskInfo = useStore((state) => state.getTaskInfo)
   const getTaskStatus = useStore((state) => state.getTaskStatus)
-
   const tasks = useStore((state) => state.tasks)
-  const [events, setEvents] = useState([]);
+  const events = useStore((state) => state.events)
+  const handleNewData = useStore((state) => state.handleNewData)
+  const nextMonth = useStore((state) => state.nextMonth)
+  const prevMonth = useStore((state) => state.prevMonth)
+  const updateMonthYear = useStore((state) => state.updateMonthYear)
+  
   const date = new Date();
   const [month, setMonth] = useState(date.getMonth());
   const [year, setYear] = useState(date.getFullYear());
@@ -46,6 +35,7 @@ const Calendar = (props) => {
     const d = new Date(year, month, date);
     return today.toDateString() === d.toDateString();
   };
+
   useEffect(() => {
     if (cellRefs.current) {
       adjustCellHeights();
@@ -91,50 +81,7 @@ const Calendar = (props) => {
 
   useEffect(() => {
     getNoOfDays();
-    console.log(month, year);
   }, [month]);
-
-  const handleNewData = async (incomingData) => {
-    if (!Array.isArray(incomingData)) {
-      console.error("Ошибка: incomingData не является массивом");
-      return;
-    }
-
-    try {
-      const updatedEvents = await Promise.all(incomingData.map(async (item) => {
-        if (!item || !item.id || !item.name || !item.date) {
-          console.warn("Неверные данные:", item);
-          return null;
-        }
-
-        try {
-          const eventDate = new Date(item.date);
-          let theme = '';
-          try {
-            const response = await categoriesInfo(item.category_id)
-            theme = response.color;
-          } catch (categoryError) {
-            console.error("Ошибка при получении категории:", categoryError, item);
-            theme = '';
-          }
-          return {
-            id: item.id,
-            event_date: eventDate,
-            event_title: item.name,
-            event_theme: theme,
-            task_id: item.id
-          };
-        } catch (error) {
-          console.error("Ошибка при создании даты:", error, item);
-          return null;
-        }
-      }));
-
-      setEvents(updatedEvents.filter(item => item !== null));
-    } catch (error) {
-      console.error("Общая ошибка при обработке данных", error)
-    }
-  };
 
   useEffect(() => {
     handleNewData(tasks);
@@ -142,28 +89,6 @@ const Calendar = (props) => {
 
   const btnClass = (limit) => {
     return "leading-none rounded-lg transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 items-center focus:outline-none";
-  };
-
-  const nextMonth = () => {
-    if (month === 11) {
-      setYear((prevYear) => prevYear + 1);
-      setMonth(0);
-    } else {
-      setMonth((prevMonth) => prevMonth + 1);
-    }
-  };
-
-  const prevMonth = () => {
-    if (month === 0) {
-      setYear((prevYear) => prevYear - 1);
-      setMonth(11);
-    } else {
-      setMonth((prevMonth) => prevMonth - 1);
-    }
-  };
-  const updateMonthYear = (newMonth, newYear) => {
-    setMonth(newMonth);
-    setYear(newYear);
   };
 
   const eventClass = (t) => {
