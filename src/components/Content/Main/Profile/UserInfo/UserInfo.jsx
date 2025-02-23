@@ -11,12 +11,11 @@ const UserInfo = (props) => {
   const avatarUrl = useStore((state) => state.avatarUrl);
   const loadAvatar = useStore((state) => state.loadAvatar);
   const handleFileChange = useStore((state) => state.handleFileChange);
+  const DeleteUserDialog = useStore((state) => state.DeleteUserDialog);
   const [name, setName] = useState(userData.name);
   const [surname, setSurname] = useState(userData.surname);
   const [gender, setGender] = useState(userData.gender);
   
-  const DeleteUserDialog = () => props.setIsDialogOpen(true)
-
   useEffect(() => {
     loadAvatar();
   }, [userData.id]);

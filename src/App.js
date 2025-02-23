@@ -43,35 +43,10 @@ function App(props) {
   useEffect(() => {
     document.title = "ToDo";
   }, []);
-
-  useEffect(() => {
-    
-    if (token) {
-      fetchUserData();
-    }
-  }, [token]);
-
+  fetchUserData();
   
 
-  updateTasks()
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await categoriesNobaseApi()
-        setCategories(response)
-      } catch (error) {
-        setError(error);
-        console.error("Ошибка при загрузке данных пользователя:", error); //////////
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (token) {
-      fetchCategories();
-    }
-  }, [token]);
+  
   
 
   const AuthRedirect = () => {
@@ -104,7 +79,7 @@ function App(props) {
           <Route path="/" element={<AuthRedirect/>} />
           <Route path="/login" element={<Login/>} />
           <Route path="/registration" element={<Registration/>} />
-          <Route path="/content" element={<Content isLoading={isLoading}/>}>
+          <Route path="/content" element={<Content/>}>
             <Route index element={<Calendar />} />
             <Route path="settings" element={<Profile />} />
           </Route>

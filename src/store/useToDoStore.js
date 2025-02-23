@@ -4,7 +4,7 @@ import {  getDataApi, categoriesNobaseApi, updateTasksApi,
           addTaskApi, addCategoryApi, editCategoryApi, 
           changeTaskStatusApi, editTaskApi, taskInfoApi, 
           UserEditApi, getAvatarData, addAvatarApi, 
-          fetchUserName } 
+          fetchUserName, deleteUserApi, categorieDeleteApi } 
 from '../api/api';
 import userAvatar from "../images/user.jpg"
 
@@ -29,18 +29,39 @@ const useStore = create((set, get) => ({
   numOfDays: [],
   emptyDays: [],
   name: "",
+  isDialogOpenForDeleteUser: false,
+  isDialogOpenForDeleteCategory: false,
+  isDialogOpenForDeleteTask: false,
+  DeleteUserDialog: () => {set({isDialogOpenForDeleteUser: true})},
+  deleteCategoryDialog: (id) => { 
+    set({ isDialogOpenForDeleteCategory: true,
+      categoryId: id})
+  },
+  deleteTaskDialog: () => { 
+    set({ isDialogOpenForDeleteTask: true,
+      isTaskOpen: false
+    })
+  },
+  closeDeleteUserDialog: () => { set({ isDialogOpenForDeleteUser: false }) },
+  closeDeleteCategoryDialog: () => { set({ isDialogOpenForDeleteCategory: false }) },
+  closeDeleteTaskDialog: () => { set({ isDialogOpenForDeleteTask: false }) },
   changeName: (value) => {
     set({name: value})
   },
   changeSurname: (value) => {
     set({ surname: value })
   },
+
+  deleteUser: () => {
+    if (get().token) {
+      deleteUserApi().then(response => {
+        get().removeToken()
+
+      })
+    }
+  },
   changeGender: (value) => {
     set({ gender: value })
-  },
-
-  changeError: (value) => {
-    set({ error: value })
   },
 
   handleKeyDown: (event) => {
@@ -222,7 +243,7 @@ const useStore = create((set, get) => ({
 
   fetchCategories: async () => {
     try {
-      fetchCategoriesApi().then(
+      await fetchCategoriesApi().then(
         response => {
           set({ categories: response })
         }
@@ -233,7 +254,9 @@ const useStore = create((set, get) => ({
   },
 
   updateUserDataInApp: async (updatedUserData) => {
-    set({userData: updatedUserData})
+    set({
+      userData: updatedUserData
+    })
   },
 
   fetchUserData: async () => {
@@ -256,10 +279,6 @@ const useStore = create((set, get) => ({
         set({ taskStatuses: initialTaskStatuses })
       }
     } catch (error) {
-      set({error: error})
-      set({ userData: [] })
-      set({ categories: []})
-      set({ tasks: [] })
       localStorage.removeItem('access_token');
       console.error("Ошибка при загрузке данных пользователя:", error);
     } finally {
@@ -270,15 +289,13 @@ const useStore = create((set, get) => ({
   
 
 
-  fetchCategories: async () => {
+  fetchCategoriesNoBase: async () => {
     try {
       const response = await categoriesNobaseApi()
-      set({categories:response})
+      set({categories: response})
     } 
     catch (error) {
-      set({
-        error: "Ошибка при загрузке данных пользователя:",
-        categories: [],});
+      console.error("Ошибка при загрузке данных пользователя:")
     }
     finally {
       set({isLoading: false});
@@ -297,30 +314,32 @@ const useStore = create((set, get) => ({
   
 
   onEditCategory: async (id) => {
-    get().changeError(null)
+    //set({ error: null})
+    const categoryName = get().categoryName;
+    const color = get().color;
+
     try {
       const categoryData = {
-        name: get().categoryName,
-        color: get().color,
+        name: categoryName,
+        color: color,
       };
-      await editCategoryApi(id, categoryData)
+      await editCategoryApi(id, categoryData);
       await get().updateCategories();
-      await get().fetchCategories();
-      get().closeModalCategoryState()
+      await get().fetchCategoriesNoBase();
+      get().closeModalCategoryState();
     } catch (error) {
       console.error('Ошибка при редактировании категории:', error);
       if (error.response) {
-        get().changeError(`Ошибка при редактировании. Проверьте заполнение полей!`)
+        //set({ error: `Ошибка при редактировании. Проверьте заполнение полей!` })
       }
       else if (error.request) {
-        get().changeError(`Ошибка сети`)
+        //set({ error: `Ошибка сети` })
       }
     }
   },
 
   closeModalCategoryApi: async () => {
-    console.log("Data")
-    get().changeError(null)
+
     try {
       const categoryData = {
         name: get().categoryName,
@@ -328,15 +347,15 @@ const useStore = create((set, get) => ({
       };
       console.log("Data", categoryData)
       await addCategoryApi(categoryData)
-      await get().updateCategories();
-      await get().fetchCategories();
+      get().updateCategories();
+      await get().fetchCategoriesNoBase();
       get().closeModalCategoryState()
     } catch (error) {
       console.error("Ошибка при создании категории:", error);
       if (error.response) {
-        get().changeError("Ошибка при создании категории. Проверьте заполненность полей")
+        //get().changeError("Ошибка при создании категории. Проверьте заполненность полей")
       } else if (error.request) {
-        get().changeError(`Ошибка сети`)
+        //get().changeError(`Ошибка сети`)
       }
     }
   },
@@ -350,7 +369,7 @@ const useStore = create((set, get) => ({
     }
   },
   changeTask: async (id) => {
-    get().changeError(null)
+    //get().changeError(null)
     try {
       const taskData = {
         name: get().taskName,
@@ -366,10 +385,10 @@ const useStore = create((set, get) => ({
     } catch (error) {
       console.error("Ошибка при изменении задачи:", error);
       if (error.response) {
-        get().changeError(`Ошибка при изменении задачи! Проверьте заполненность полей!`)
+        //get().changeError(`Ошибка при изменении задачи! Проверьте заполненность полей!`)
       }
       else if (error.request) {
-        get().changeError(`Ошибка сети`)
+        //get().changeError(`Ошибка сети`)
       }
     }
   },
@@ -556,14 +575,8 @@ const useStore = create((set, get) => ({
       selectedCategoryId: "",
       date: ""
     })
-    console.log(get().isWarningOpen)
   },
 
-  deleteCategoryDialog: (id) => {
-    set({ isWarningOpen: true, categoryId: id })
-    console.log("Id", get().categoryId)
-
-  },
   exitWarning: () => {
     set({
       isWarningOpen: false
@@ -594,9 +607,11 @@ const useStore = create((set, get) => ({
       console.error("Ошибка при обновлении задач:", error);
     }
   },
-
+  
   addTask: async () => {
-    get().changeError(null)
+    console.log("Начало addTask");
+    get().fetchCategories()
+    //get().changeError(null);
     try {
       const taskData = {
         name: get().taskName,
@@ -605,18 +620,23 @@ const useStore = create((set, get) => ({
         category_id: parseInt(get().selectedCategoryId, 10),
         date: get().date,
       };
-      console.log(taskData)
-      await addTaskApi(taskData)
-      await get().updateTasks();
+      console.log("Данные задачи:", taskData);
+      
+      const response = await addTaskApi(taskData);
+      console.log("Ответ сервера:", response);
+      get().changeDate(taskData.date);
       get().closeIsOpenTaskInfo();
-      get().changeDate(taskData.date)
-    }
-    catch (error) {
-      console.error("Ошибка при добавлении задачи:", error);
+      await get().updateTasks();
+    } catch (error) {
+      console.error("Ошибка в addTask:", error);
       if (error.response) {
-        get().changeError(`Ошибка при добавлении задачи! Проверьте заполненность полей!`)
+        //set({ error: `Ошибка при добавлении задачи! Проверьте заполненность полей!` })
+        //get().changeError(`Ошибка при добавлении задачи! Проверьте заполненность полей!`);
+        console.log(get().error);
       } else if (error.request) {
-        get().changeError(`Ошибка сети`)
+        //get().changeError(`Ошибка сети`);
+      } else {
+        //get().changeError(`Неизвестная ошибка`);
       }
     }
   },
@@ -641,6 +661,16 @@ const useStore = create((set, get) => ({
       categoryId: categoryId
     })
   },
+
+  deleteCategory: async () => {
+    if (get().token) {
+      await categorieDeleteApi(get().categoryId)
+      await get().fetchCategoriesNoBase()
+      await get().updateCategories();
+      set({ isDialogOpenForDeleteCategory: false })
+
+    }
+  },
   deleteTaskState: () => {
     set({
       isTaskOpen: false,
@@ -648,7 +678,7 @@ const useStore = create((set, get) => ({
       taskPriority: "",
       taskDescription: "",
       date: "",
-      isWarningOpen: false
+      isDialogOpenForDeleteTask: false
     })
   },
   changeCategoryNameState: (value) => {
@@ -676,7 +706,7 @@ const useStore = create((set, get) => ({
     if (response) {
       return `https://api.energy-cerber.ru/static/avatars/${get().userData.id}.webp`;
     } else {
-      return get().userAvatar;
+      return userAvatar;
     }
   },
 
@@ -686,7 +716,7 @@ const useStore = create((set, get) => ({
   },
 
   UpdateUserInfo: async (name, surname, gender) => {
-    get().changeError(null)
+    //get().changeError(null)
     if (get().token) {
       try {
         const response = await UserEditApi({ name, surname, gender })
@@ -694,10 +724,10 @@ const useStore = create((set, get) => ({
       }
       catch (error) {
         if (error.response) {
-          get().changeError(`Ошибка при обновлении данных пользователя. Длина имени и фамилии от 2 символов!`)
+          //get().changeError(`Ошибка при обновлении данных пользователя. Длина имени и фамилии от 2 символов!`)
         }
         else if (error.request) {
-          get().changeError(`Ошибка сети`)
+          //get().changeError(`Ошибка сети`)
         }
       }
     }
@@ -723,22 +753,7 @@ const useStore = create((set, get) => ({
         console.log("error_avatar")
       }
     } 
-  },
-  
-
-  fetchCategories: async () => {
-    try {
-      const response = await categoriesNobaseApi()
-      set({ categories: response })
-    } catch (error) {
-      get().changeError(error)
-      console.error("Ошибка при загрузке данных пользователя:", error); //////////
-    } finally {
-      set({ isLoading: false })
-    }
-  },
-  
-  
+  }
 }));
 
 export default useStore;
