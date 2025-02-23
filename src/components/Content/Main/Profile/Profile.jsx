@@ -22,7 +22,8 @@ const Profile = () => {
   const isDialogOpenForDeleteUser = useStore((state) => state.isDialogOpenForDeleteUser);
   const isDialogOpenForDeleteCategory = useStore((state) => state.isDialogOpenForDeleteCategory);
   const isDialogOpenForDeleteTask = useStore((state) => state.isDialogOpenForDeleteTask);
-
+ 
+  
   const DeleteUser = () => {
     if (token) {
       deleteUserApi().then(response => {
@@ -31,6 +32,7 @@ const Profile = () => {
       })
     }
   }
+  updateCategories()
 
   const deleteCategory = (id) => {
     if (token) {

@@ -43,34 +43,10 @@ function App(props) {
   useEffect(() => {
     document.title = "ToDo";
   }, []);
-
-  useEffect(() => {
-    if (token) {
-      fetchUserData();
-    }
-  }, [token]);
-
+  fetchUserData();
   
 
-  updateTasks()
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await categoriesNobaseApi()
-        setCategories(response)
-      } catch (error) {
-        setError(error);
-        console.error("Ошибка при загрузке данных пользователя:", error); //////////
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (token) {
-      fetchCategories();
-    }
-  }, [token]);
+  
   
 
   const AuthRedirect = () => {

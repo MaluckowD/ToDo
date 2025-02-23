@@ -27,10 +27,12 @@ const Calendar = () => {
   const nextMonth = useStore((state) => state.nextMonth)
   const prevMonth = useStore((state) => state.prevMonth)
   const goToCurrentMonth = useStore((state) => state.goToCurrentMonth)
+  const fetchCategories = useStore((state) => state.fetchCategories)
   const handleDrop = useStore((state) => state.handleDrop)
   const cellRefs = useRef([]);
   const draggedItem = useRef(null);
 
+  fetchCategories()
   useEffect(() => {
     if (cellRefs.current) {
       adjustCellHeights(cellRefs);

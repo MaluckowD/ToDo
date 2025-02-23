@@ -73,7 +73,7 @@ const Content = () => {
   }
 
   if (error) {
-    return <p>Ошибка: {error.message}</p>;
+    return <p>Ошибка: {error}</p>;
   }
 
   if (!userData) {
