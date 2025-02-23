@@ -14,7 +14,6 @@ const AddTask = (props) => {
   const taskPriority = useStore((state) => state.taskPriority);
   const handlePriorityChange = useStore((state) => state.handlePriorityChange)
   const categories = useStore((state) => state.categories)
-  const error = useStore((state) => state.error);
   const addTask = useStore((state) => state.addTask);
   return (
     <div className={s.modal} ref={props.modalRef}>

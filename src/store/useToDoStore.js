@@ -22,7 +22,7 @@ const useStore = create((set, get) => ({
   categories: [],
   tasks: [],
   isLoading: true,
-  error: null,
+  error: "Привет",
   events: [],
   month: new Date().getMonth(),
   year: new Date().getFullYear(),

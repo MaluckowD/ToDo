@@ -3,11 +3,9 @@ import useStore from "../../store/useToDoStore.js";
 import { useNavigate } from "react-router-dom";
 const Confirnation = (props) => {
   const navigate = useNavigate()
-  const exitWarning = useStore((state) => state.exitWarning);
   const deleteTask = useStore((state) => state.deleteTask);
   const taskId = useStore((state) => state.taskId);
   const categortId = useStore((state) => state.categortId);
-  console.log("Category,", categortId)
   const deleteUser = useStore((state) => state.deleteUser);
   const isDialogOpenForDeleteUser = useStore((state) => state.isDialogOpenForDeleteUser);
   const closeDeleteCategoryDialog = useStore((state) => state.closeDeleteCategoryDialog);

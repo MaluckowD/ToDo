@@ -6,49 +6,19 @@ import Login from "./components/Login/Login";
 import Registration from "./components/Registration/Registration";
 import Calendar from "./components/Content/Main/Calendar/Calendar";
 import Profile from "./components/Content/Main/Profile/Profile";
-import { categoriesNobaseApi } from "./api/api.ts"
 import useStore from "./store/useToDoStore.js";
-function App(props) {
-  //const [categories, setCategories] = useState(null);
-  //const [tasks, setTasks] = useState(null);
-  //const [userData, setUserData] = useState(null);
-  //const [isLoading, setIsLoading] = useState(true);
-  //const [error, setError] = useState(null);
-  //const [taskStatuses, setTaskStatuses] = useState({});
-  
-  //const removeToken = useStore((state) => state.removeToken);
-  const fetchUserData = useStore((state) => state.fetchUserData);
-  const fetchCategories = useStore((state) => state.fetchCategories);
-  const updateCategories = useStore((state) => state.updateCategories);
+function App() {
 
-  //const userData = useStore((state) => state.userData);
-  //const categories = useStore((state) => state.categories);
-  //const tasks = useStore((state) => state.tasks);
-  //const isLoading = useStore((state) => state.isLoading);
-  //const error = useStore((state) => state.error);
-  //const taskStatuses = useStore((state) => state.taskStatuses);
+  const fetchUserData = useStore((state) => state.fetchUserData);
   const token = useStore((state) => state.token);
   const setToken = useStore((state) => state.setToken);
   
-  const [categories, setCategories] = useState(null);
-
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  //const getToken = () => localStorage.getItem('access_token');
-  //const [token, setToken] = useState(() => getToken());
-  const updateTasks = useStore((state) => state.updateTasks);
-
-
   useEffect(() => {
     document.title = "ToDo";
   }, []);
+
   fetchUserData();
   
-
-  
-  
-
   const AuthRedirect = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
@@ -72,6 +42,7 @@ function App(props) {
     }, [navigate, token, loading]);
     return null;
   };
+
   return (
     <div className={s.wrapper}>
       <BrowserRouter>

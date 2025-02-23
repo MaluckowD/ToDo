@@ -9,11 +9,6 @@ const CategoryList = (props) => {
   const deleteCategoryDialog = useStore((state) => state.deleteCategoryDialog);
   const categories = useStore((state) => state.categories);
 
-  const DeleteCategoryDialog = (id) => {
-    props.setIsDialogOpen1(true)
-    props.setCategoryId(id)
-  }
-  
   return (
     <div className={s.categorylist}>
       <div className={s.btn}>
