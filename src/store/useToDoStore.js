@@ -4,7 +4,7 @@ import {  getDataApi, categoriesNobaseApi, updateTasksApi,
           addTaskApi, addCategoryApi, editCategoryApi, 
           changeTaskStatusApi, editTaskApi, taskInfoApi, 
           UserEditApi, getAvatarData, addAvatarApi, 
-          fetchUserName, deleteUserApi, categorieDeleteApi } 
+          deleteUserApi, categorieDeleteApi } 
 from '../api/api';
 import userAvatar from "../images/user.jpg"
 
@@ -121,7 +121,6 @@ const useStore = create((set, get) => ({
     }
   },
 
-  
   updateMonthYear: (newMonth, newYear) => {
     set({ month: newMonth, year: newYear })
   },
@@ -204,7 +203,6 @@ const useStore = create((set, get) => ({
     }
   },
 
-
   openTaskInfoS: (e) => {
     let dateString = e?.currentTarget?.getAttribute('data-date');
     if (!dateString) {
@@ -234,7 +232,6 @@ const useStore = create((set, get) => ({
     }
   },
   saveToken: (token) => {
-    console.log("Setting token:", token);
     localStorage.setItem('access_token', token);
     set({ token: token });
   },
@@ -255,17 +252,10 @@ const useStore = create((set, get) => ({
     }
   },
 
-  updateUserDataInApp: async (updatedUserData) => {
-    set({
-      userData: updatedUserData
-    })
-  },
-
   fetchUserData: async () => {
     set({ isLoading: true })
     try {
       const response = await getDataApi()
-      console.log(response)
       set({ userData: response })
       set({ categories: response.categories })
       set({ tasks: response.tasks })
@@ -283,13 +273,8 @@ const useStore = create((set, get) => ({
     } catch (error) {
       localStorage.removeItem('access_token');
       console.error("Ошибка при загрузке данных пользователя:", error);
-    } finally {
-      set({ isLoading: false })
-    }
+    } finally { set({ isLoading: false })}
   },
-
-  
-
 
   fetchCategoriesNoBase: async () => {
     try {
@@ -345,7 +330,6 @@ const useStore = create((set, get) => ({
         name: get().categoryName,
         color: get().color,
       };
-      console.log("Data", categoryData)
       await addCategoryApi(categoryData)
       get().updateCategories();
       await get().fetchCategoriesNoBase();
@@ -353,11 +337,8 @@ const useStore = create((set, get) => ({
     } catch (error) {
       console.error("Ошибка при создании категории:", error);
       if (error.response) {
-        set({
-          ERROR: "Ошибка при создании категории.Проверьте заполненность полей"})
-      } else if (error.request) {
-        set({ERROR: `Ошибка сети`})
-      }
+        set({ ERROR: "Ошибка при создании категории.Проверьте заполненность полей"})
+      } else if (error.request) { set({ERROR: `Ошибка сети`})}
     }
   },
 
@@ -371,7 +352,6 @@ const useStore = create((set, get) => ({
   },
   changeTask: async (id) => {
     set({ ERROR: null})
-    //get().changeError(null)
     try {
       const taskData = {
         name: get().taskName,
@@ -439,31 +419,15 @@ const useStore = create((set, get) => ({
   },
 
   taskName: "",
-  changeTaskName: (value) => {
-    set({
-      taskName: value
-    })
-  },
+  changeTaskName: (value) => { set({ taskName: value})},
   taskDescription: "",
-  changeTaskDescription: (value) => {
-    set({
-      taskDescription: value
-    })
-  },
+  changeTaskDescription: (value) => { set({taskDescription: value})},
   taskPriority: 1,
   categoryName: "",
   date: "",
-  changeDate: (value) => {
-    set({
-      date: value
-    })
-  },
+  changeDate: (value) => { set({ date: value })},
   selectedCategoryId: "",
-  handleCategoryChange: (value) => {
-    set({
-      selectedCategoryId: value
-    })
-  },
+  handleCategoryChange: (value) => { set({ selectedCategoryId: value})},
   openTaskInfoState: (formattedDate) => {
     set({
       date: formattedDate,
@@ -472,9 +436,7 @@ const useStore = create((set, get) => ({
   },
   taskPriority: 1,
   handlePriorityChange: (value) => {
-    set({
-      taskPriority: parseInt(value, 10)
-    })
+    set({ taskPriority: parseInt(value, 10) })
   },
 
   closeIsOpenTaskInfo: () => {
@@ -577,12 +539,7 @@ const useStore = create((set, get) => ({
     })
   },
 
-  exitWarning: () => {
-    set({
-      isWarningOpen: false
-    })
-    console.log("HERE", get().isWarningOpen)
-  },
+  exitWarning: () => { set({ isWarningOpen: false})},
 
   closeIsOpenTask: () => {
     set({
@@ -594,11 +551,8 @@ const useStore = create((set, get) => ({
     })
   },
   taskId: 0,
-  changeTaskId: (id) => {
-    set({
-      taskId: id
-    })
-  },
+  changeTaskId: (id) => { set({ taskId: id})},
+
   updateTasks: async () => {
     try {
       const response = await updateTasksApi()
@@ -609,9 +563,7 @@ const useStore = create((set, get) => ({
   },
   
   addTask: async () => {
-    console.log("Начало addTask");
     get().fetchCategories()
-    //get().changeError(null);
     try {
       const taskData = {
         name: get().taskName,
@@ -620,10 +572,8 @@ const useStore = create((set, get) => ({
         category_id: parseInt(get().selectedCategoryId, 10),
         date: get().date,
       };
-      console.log("Данные задачи:", taskData);
-      
+
       const response = await addTaskApi(taskData);
-      console.log("Ответ сервера:", response);
       get().changeDate(taskData.date);
       get().closeIsOpenTaskInfo();
       await get().updateTasks();
@@ -631,20 +581,16 @@ const useStore = create((set, get) => ({
       console.error("Ошибка в addTask:", error);
       if (error.response) {
         set({ ERROR: `Ошибка при добавлении задачи! Проверьте заполненность полей!` })
-        //get().changeError(`Ошибка при добавлении задачи! Проверьте заполненность полей!`);
         console.log(get().error);
-      } else if (error.request) {
-        set({ ERROR: `Ошибка сети` })
-        //get().changeError(`Ошибка сети`);
-      } else {
-        set({ERROR: `Неизвестная ошибка`})
-        //get().changeError(`Неизвестная ошибка`);
-      }
+      } else if (error.request) { set({ ERROR: `Ошибка сети` })} 
+      else { set({ERROR: `Неизвестная ошибка`})}
     }
   },
+
   getTaskStatus: (taskId) => {
     return get().taskStatuses[taskId] || {completed: false, statusId: 0 };
   },
+
   deleteTask: async (id) => {
     await deleteTaskApi(id)
     await get().updateTasks()
@@ -683,16 +629,8 @@ const useStore = create((set, get) => ({
       isDialogOpenForDeleteTask: false
     })
   },
-  changeCategoryNameState: (value) => {
-    set({
-      categoryName: value,
-    })
-  },
-  handleColorChange: (value) => {
-    set({
-      color: value,
-    })
-  },
+  changeCategoryNameState: (value) => { set({ categoryName: value})},
+  handleColorChange: (value) => { set({ color: value })},
   closeModalCategoryState: () => {
     set({
       categoryName: "",
@@ -719,7 +657,6 @@ const useStore = create((set, get) => ({
   },
 
   UpdateUserInfo: async (name, surname, gender) => {
-    //get().changeError(null)
     if (get().token) {
       try {
         const response = await UserEditApi({ name, surname, gender })
@@ -729,20 +666,11 @@ const useStore = create((set, get) => ({
       catch (error) {
         if (error.response) {
           set({ ERROR: `Ошибка при обновлении данных пользователя. Длина имени и фамилии от 2 символов!` })
-          //get().changeError(`Ошибка при обновлении данных пользователя. Длина имени и фамилии от 2 символов!`)
         }
         else if (error.request) {
           set({ ERROR: `Ошибка сети` })
-          //get().changeError(`Ошибка сети`)
         }
       }
-    }
-  },
-
-  UpdateCallBack: () => {
-
-    if (get().token) {
-      fetchUserName();
     }
   },
 
@@ -752,7 +680,7 @@ const useStore = create((set, get) => ({
       const formData = new FormData();
       formData.append('avatar', file);
       try {
-        const response = await addAvatarApi(formData)
+        await addAvatarApi(formData)
         window.location.reload();
       }
       catch (error) {
