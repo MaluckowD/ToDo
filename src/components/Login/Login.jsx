@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate, NavLink } from 'react-router-dom';
 import s from './Login.module.css';
 import { loginApi } from "../../api/api.ts"
-const Login = (props) => {
+const Login = () => {
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);

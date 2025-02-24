@@ -4,7 +4,8 @@ import s from "./Registration.module.css";
 import { useNavigate } from "react-router-dom";
 import { sendCodeApi, confirmationApi, registartionApi } from "../../api/api.ts"
 
-const Registration = (props) => {
+const Registration = () => {
+  
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [shortName, setShortName] = useState("");
