@@ -30,7 +30,6 @@ const Content = () => {
   const token = useStore((state) => state.token);
   const isEditCategoryOpen = useStore((state) => state.isEditCategoryOpen);
   const userData = useStore((state) => state.userData);
-  const error = useStore((state) => state.error);
   const handleKeyDown = useStore((state) => state.handleKeyDown);
   const handleClickOutside = useStore((state) => state.handleClickOutside);
   const isDialogOpenForDeleteTask = useStore((state) => state.isDialogOpenForDeleteTask);
@@ -67,13 +66,8 @@ const Content = () => {
     }
   }, [redirectToLogin, navigate])
 
-  
   if (isLoading) {
     return <p>Загрузка данных...</p>;
-  }
-
-  if (error) {
-    return <p>Ошибка: {error}</p>;
   }
 
   if (!userData) {

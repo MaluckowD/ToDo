@@ -22,7 +22,7 @@ const useStore = create((set, get) => ({
   categories: [],
   tasks: [],
   isLoading: true,
-  error: "Привет",
+  ERROR: null,
   events: [],
   month: new Date().getMonth(),
   year: new Date().getFullYear(),
@@ -33,24 +33,18 @@ const useStore = create((set, get) => ({
   isDialogOpenForDeleteCategory: false,
   isDialogOpenForDeleteTask: false,
   DeleteUserDialog: () => {set({isDialogOpenForDeleteUser: true})},
+
   deleteCategoryDialog: (id) => { 
-    set({ isDialogOpenForDeleteCategory: true,
-      categoryId: id})
-  },
+    set({ isDialogOpenForDeleteCategory: true, categoryId: id})},
+
   deleteTaskDialog: () => { 
-    set({ isDialogOpenForDeleteTask: true,
-      isTaskOpen: false
-    })
-  },
+    set({ isDialogOpenForDeleteTask: true, isTaskOpen: false})},
+
   closeDeleteUserDialog: () => { set({ isDialogOpenForDeleteUser: false }) },
   closeDeleteCategoryDialog: () => { set({ isDialogOpenForDeleteCategory: false }) },
   closeDeleteTaskDialog: () => { set({ isDialogOpenForDeleteTask: false }) },
-  changeName: (value) => {
-    set({name: value})
-  },
-  changeSurname: (value) => {
-    set({ surname: value })
-  },
+  changeName: (value) => { set({name: value}) },
+  changeSurname: (value) => { set({ surname: value }) },
 
   deleteUser: () => {
     if (get().token) {
@@ -158,6 +152,14 @@ const useStore = create((set, get) => ({
       daysArray.push(i);
     }
     set({ numOfDays: daysArray, emptyDays: emptyDaysArray })
+  },
+
+  handleDateChange: (event) => {
+    if (get().updateMonthYear) {
+      const selectedMonth = event.value.getMonth();
+      const selectedYear = event.value.getFullYear();
+      get().updateMonthYear(selectedMonth, selectedYear);
+    }
   },
 
   handleNewData: async (incomingData) => {
@@ -311,10 +313,8 @@ const useStore = create((set, get) => ({
     }
   },
 
-  
-
   onEditCategory: async (id) => {
-    //set({ error: null})
+    set({ ERROR: null})
     const categoryName = get().categoryName;
     const color = get().color;
 
@@ -330,16 +330,16 @@ const useStore = create((set, get) => ({
     } catch (error) {
       console.error('Ошибка при редактировании категории:', error);
       if (error.response) {
-        //set({ error: `Ошибка при редактировании. Проверьте заполнение полей!` })
+        set({ ERROR: `Ошибка при редактировании. Проверьте заполнение полей!` })
       }
       else if (error.request) {
-        //set({ error: `Ошибка сети` })
+        set({ ERROR: `Ошибка сети` })
       }
     }
   },
 
   closeModalCategoryApi: async () => {
-
+    set({ ERROR : null})
     try {
       const categoryData = {
         name: get().categoryName,
@@ -353,9 +353,10 @@ const useStore = create((set, get) => ({
     } catch (error) {
       console.error("Ошибка при создании категории:", error);
       if (error.response) {
-        //get().changeError("Ошибка при создании категории. Проверьте заполненность полей")
+        set({
+          ERROR: "Ошибка при создании категории.Проверьте заполненность полей"})
       } else if (error.request) {
-        //get().changeError(`Ошибка сети`)
+        set({ERROR: `Ошибка сети`})
       }
     }
   },
@@ -369,6 +370,7 @@ const useStore = create((set, get) => ({
     }
   },
   changeTask: async (id) => {
+    set({ ERROR: null})
     //get().changeError(null)
     try {
       const taskData = {
@@ -385,10 +387,10 @@ const useStore = create((set, get) => ({
     } catch (error) {
       console.error("Ошибка при изменении задачи:", error);
       if (error.response) {
-        //get().changeError(`Ошибка при изменении задачи! Проверьте заполненность полей!`)
+        set({ ERROR: `Ошибка при изменении задачи! Проверьте заполненность полей!` })
       }
       else if (error.request) {
-        //get().changeError(`Ошибка сети`)
+        set({ ERROR: `Ошибка сети` })
       }
     }
   },
@@ -399,7 +401,7 @@ const useStore = create((set, get) => ({
   closeModalCategory: () => set({ isModalCategoryOpen: false }),
   closeModalCat: () => {
     set({
-      error: null,
+      ERROR: null,
       isModalCategoryOpen: false,
     });
   },
@@ -424,8 +426,6 @@ const useStore = create((set, get) => ({
     })
   },
 
-  
-
   TaskUpdateOpen: () => {
     set({
       isTaskUpdateOpen: true
@@ -433,7 +433,8 @@ const useStore = create((set, get) => ({
   },
   closeTaskUpdateOpen: () => {
     set({
-      isTaskUpdateOpen: false
+      isTaskUpdateOpen: false,
+      ERROR: null
     })
   },
 
@@ -463,7 +464,6 @@ const useStore = create((set, get) => ({
       selectedCategoryId: value
     })
   },
-  error: null,
   openTaskInfoState: (formattedDate) => {
     set({
       date: formattedDate,
@@ -484,7 +484,7 @@ const useStore = create((set, get) => ({
       taskPriority: "",
       categoryName: "",
       date: "",
-      error: null
+      ERROR: null
     })
   },
   color: '#ffffff',
@@ -493,7 +493,7 @@ const useStore = create((set, get) => ({
       isEditCategoryOpen: false,
       categoryName: "",
       color: '#ffffff',
-      error: null
+      ERROR: null
     })
 
   },
@@ -630,12 +630,14 @@ const useStore = create((set, get) => ({
     } catch (error) {
       console.error("Ошибка в addTask:", error);
       if (error.response) {
-        //set({ error: `Ошибка при добавлении задачи! Проверьте заполненность полей!` })
+        set({ ERROR: `Ошибка при добавлении задачи! Проверьте заполненность полей!` })
         //get().changeError(`Ошибка при добавлении задачи! Проверьте заполненность полей!`);
         console.log(get().error);
       } else if (error.request) {
+        set({ ERROR: `Ошибка сети` })
         //get().changeError(`Ошибка сети`);
       } else {
+        set({ERROR: `Неизвестная ошибка`})
         //get().changeError(`Неизвестная ошибка`);
       }
     }
@@ -696,7 +698,8 @@ const useStore = create((set, get) => ({
       categoryName: "",
       color: "#ffffff",
       isEditCategoryOpen: false,
-      isModalCategoryOpen: false
+      isModalCategoryOpen: false,
+      ERROR: null
     })
   },
 
@@ -721,12 +724,15 @@ const useStore = create((set, get) => ({
       try {
         const response = await UserEditApi({ name, surname, gender })
         get().fetchUserData()
+        set({ERROR: null})
       }
       catch (error) {
         if (error.response) {
+          set({ ERROR: `Ошибка при обновлении данных пользователя. Длина имени и фамилии от 2 символов!` })
           //get().changeError(`Ошибка при обновлении данных пользователя. Длина имени и фамилии от 2 символов!`)
         }
         else if (error.request) {
+          set({ ERROR: `Ошибка сети` })
           //get().changeError(`Ошибка сети`)
         }
       }

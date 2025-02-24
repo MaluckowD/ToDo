@@ -2,7 +2,7 @@ import s from "./CategoryList.module.css"
 import close from "../../../../../images/close.svg"
 import image from "../../../../../images/image.svg"
 import useStore from "../../../../../store/useToDoStore.js";
-const CategoryList = (props) => {
+const CategoryList = () => {
 
   const openModalCategory = useStore((state) => state.openModalCategory);
   const openModalEditCategory = useStore((state) => state.openModalEditCategory);

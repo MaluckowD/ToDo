@@ -1,5 +1,5 @@
 import s from "./Profile.module.css"
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import UserInfo from "./UserInfo/UserInfo"
 import CategoryList from "./CategotyList/CategoryList"
 import Confirnation from "../../../Modals/Confirmation";
@@ -15,12 +15,8 @@ const Profile = () => {
   return (
     <div className={s.settings_item}>
       <div className={s.container}>
-        {isDialogOpenForDeleteUser && (
-          <Confirnation/>
-        )}
-        {isDialogOpenForDeleteCategory && (
-          <Confirnation/>
-        )}
+        {isDialogOpenForDeleteUser && ( <Confirnation/>)}
+        {isDialogOpenForDeleteCategory && ( <Confirnation/>)}
         <div className={s.content}>
           <UserInfo/>
           <CategoryList/>

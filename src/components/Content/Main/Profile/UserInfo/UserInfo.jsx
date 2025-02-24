@@ -4,14 +4,16 @@ import iconChoice from "../../../../../images/choiceIcon.svg"
 import React, { useState, useEffect } from "react";
 import useStore from "../../../../../store/useToDoStore.js";
 
-const UserInfo = (props) => {
+const UserInfo = () => {
+
   const UpdateUserInfo = useStore((state) => state.UpdateUserInfo);
   const userData = useStore((state) => state.userData);
-  const error = useStore((state) => state.error);
+  const ERROR = useStore((state) => state.ERROR);
   const avatarUrl = useStore((state) => state.avatarUrl);
   const loadAvatar = useStore((state) => state.loadAvatar);
   const handleFileChange = useStore((state) => state.handleFileChange);
   const DeleteUserDialog = useStore((state) => state.DeleteUserDialog);
+  
   const [name, setName] = useState(userData.name);
   const [surname, setSurname] = useState(userData.surname);
   const [gender, setGender] = useState(userData.gender);
@@ -59,7 +61,7 @@ const UserInfo = (props) => {
           </select>
           <input style={{ opacity: "0.5" }} disabled value={userData.short_name} type="text" placeholder="Псевдоним" className={s.user_sex_item} />
         </div>
-        {error && <p style={{ width: "400px", marginBottom: "10px" }} className="text-red-500 text-center">{error}</p>}
+        {ERROR && <p style={{ width: "400px", marginBottom: "10px" }} className="text-red-500 text-center">{ERROR}</p>}
         <div className={s.save_change}>
           <button onClick={() => UpdateUserInfo(name, surname, gender)}>Сохранить изменения</button>
         </div>

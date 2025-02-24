@@ -3,19 +3,19 @@ import s from "../Modals.module.css"
 import useStore from "../../../store/useToDoStore.js";
 
 const EditCategory = (props) => {
-  console.log(props.categoryId)
+
   const closeModalEditCat = useStore((state) => state.closeModalEditCat);
   const changeCategoryNameState = useStore((state) => state.changeCategoryNameState);
   const categoryName = useStore((state) => state.categoryName);
   const color = useStore((state) => state.color);
   const handleColorChange = useStore((state) => state.handleColorChange);
   const categoryId = useStore((state) => state.categoryId);
-  const error = useStore((state) => state.error);
+  const ERROR = useStore((state) => state.ERROR);
   const onEditCategory = useStore((state) => state.onEditCategory);
+
   return (
     <div className={[s.modal, s.modal_categoryAdd].join(" ")} ref={props.modalRef}>
       <div className={s.modalcontent}>
-
         <input className={[s.categoryName, s1.categoryNamemodificate].join(" ")}
           maxlength='50'
           type="text"
@@ -32,7 +32,7 @@ const EditCategory = (props) => {
           onChange={(e) => handleColorChange(e.target.value)}
         />
 
-        {error && <p style={{ width: "350px", marginBottom: "10px" }} className="text-red-500 text-center">{props.error}</p>}
+        {ERROR && <p style={{ width: "350px", marginBottom: "10px" }} className="text-red-500 text-center">{ERROR}</p>}
         <button className={s.closeModalCategory} onClick={() => onEditCategory(categoryId)}>Редактировать</button>
         <button className={s.closeModalCategory} onClick={closeModalEditCat}>Выйти</button>
       </div>

@@ -15,7 +15,7 @@ const EditTask = (props) => {
   const handlePriorityChange = useStore((state) => state.handlePriorityChange)
   const categories = useStore((state) => state.categories)
   const closeTaskUpdateOpen = useStore((state) => state.closeTaskUpdateOpen);
-  const error = useStore((state) => state.error);
+  const ERROR = useStore((state) => state.ERROR);
   const taskId = useStore((state) => state.taskId);
   const changeTask = useStore((state) => state.changeTask);
   const completed = useStore((state) => state.completed);
@@ -73,7 +73,7 @@ const EditTask = (props) => {
           disabled
           value={completed ? "Выполнена" : "Не выполнена"}
         />
-        {error && <p style={{ width: "400px", marginBottom: "10px" }} className="text-red-500 text-center">{error}</p>}
+        {ERROR && <p style={{ width: "400px", marginBottom: "10px" }} className="text-red-500 text-center">{ERROR}</p>}
         <button className={s.closeModalCategory} onClick={() => changeTask(taskId)}>Сохранить изменения</button>
         <button className={s.closeModalCategory} onClick={closeTaskUpdateOpen}>Отменить изменения</button>
       </div>

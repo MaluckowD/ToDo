@@ -3,7 +3,7 @@ import Userinfo from "./Userinfo/Userinfo"
 import Buttons from "./Buttons/Buttons"
 import useStore from "../../../store/useToDoStore.js"
 
-const Header = (props) => {
+const Header = () => {
   const userData = useStore((state) => state.userData);
   if (!userData.name) { 
     return <div>Загрузка данных пользователя...</div>;

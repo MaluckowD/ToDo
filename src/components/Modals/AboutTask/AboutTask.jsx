@@ -2,6 +2,7 @@ import s from "../Modals.module.css"
 import s1 from "./AboutTask.module.css"
 import useStore from "../../../store/useToDoStore.js";
 const AboutTask = (props) => {
+  
   const taskName = useStore((state) => state.taskName);
   const changeTaskName = useStore((state) => state.changeTaskName);
   const taskDescription = useStore((state) => state.taskDescription);
