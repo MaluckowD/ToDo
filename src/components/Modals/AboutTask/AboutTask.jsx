@@ -1,7 +1,9 @@
 import s from "../Modals.module.css"
 import s1 from "./AboutTask.module.css"
 import useStore from "../../../store/useToDoStore.js";
-const AboutTask = (props) => {
+
+
+const AboutTask: React.FC = (props) => {
   
   const taskName = useStore((state) => state.taskName);
   const changeTaskName = useStore((state) => state.changeTaskName);
@@ -18,7 +20,7 @@ const AboutTask = (props) => {
   const completed = useStore((state) => state.completed);
 
   return (
-    <div className={[s.modal, s1.module].join(" ")} ref={props.propsmodalRef}>
+    <div className={[s.modal, s1.module].join(" ")} ref={props.modalRef}>
       <div className={s.modalcontent}>
         <input className={s.categoryName}
           maxlength='50'

@@ -1,6 +1,6 @@
-export const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+export const days:string[] = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-export const monthNames = [
+export const monthNames: string[] = [
   "January",
   "February",
   "March",

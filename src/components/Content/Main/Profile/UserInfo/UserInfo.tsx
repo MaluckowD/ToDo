@@ -4,7 +4,7 @@ import iconChoice from "../../../../../images/choiceIcon.svg"
 import React, { useState, useEffect } from "react";
 import useStore from "../../../../../store/useToDoStore.js";
 
-const UserInfo = () => {
+const UserInfo: React.FC = () => {
 
   const UpdateUserInfo = useStore((state) => state.UpdateUserInfo);
   const userData = useStore((state) => state.userData);
@@ -34,7 +34,7 @@ const UserInfo = () => {
       <div className={s.user_data}>
         <div className={s.user_name}>
           <input
-            maxlength='50'
+            maxLength= {50}
             className={s.name_adaptive}
             value={name}
             type="text"
@@ -42,7 +42,7 @@ const UserInfo = () => {
             onChange={(e) => setName(e.target.value)}
           />
           <input
-            maxlength='50'
+            maxLength={50}
             value={surname}
             type="text"
             placeholder="Фамилия"

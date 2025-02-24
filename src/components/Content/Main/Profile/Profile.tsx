@@ -3,8 +3,9 @@ import React from 'react';
 import UserInfo from "./UserInfo/UserInfo"
 import CategoryList from "./CategotyList/CategoryList"
 import Confirnation from "../../../Modals/Confirmation";
-import useStore from "../../../../store//useToDoStore.js";
-const Profile = () => {
+import useStore from "../../../../store/useToDoStore.js";
+
+const Profile: React.FC = () => {
 
   const updateCategories = useStore((state) => state.updateCategories);
   const isDialogOpenForDeleteUser = useStore((state) => state.isDialogOpenForDeleteUser);

@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/solid';
 import s from "./Calendar.module.css"
-import classNames from "./helper.ts";
+import classNames from "./helper";
 import "./style.css"
 import CalendarMonth from './Calendarmonth';
 import { useRef } from 'react';
 import useStore from "../../../../store/useToDoStore.js";
-import { monthNames, days } from "../../../../constants/index.js"
+import { monthNames, days } from "../../../../constants"
 import {  isToday, adjustCellHeights, btnClass, 
           eventClass, handleDragOver, handleDragEnter, 
           handleDragStart, handleDragLeave } 
 from "../../../../utils/Calendar_functions.js"
-const Calendar = () => {
+const Calendar: React.FC = () => {
   
   const openTaskInfoS = useStore((state) => state.openTaskInfoS)
   const getTaskInfo = useStore((state) => state.getTaskInfo)
@@ -109,7 +109,7 @@ const Calendar = () => {
               ))}
               {numOfDays.map((date, index) => (
                 <div
-                  ref={el => cellRefs.current[index] = el}
+                  ref={el => { cellRefs.current[index] = el; }}
                   onDragOver={(e) => handleDragOver(e)}
                   onDrop={(e) => handleDrop(e, date, draggedItem, s)}
                   onDragEnter={(e) => handleDragEnter(e, s)}

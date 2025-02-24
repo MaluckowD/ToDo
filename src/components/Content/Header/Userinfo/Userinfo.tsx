@@ -1,10 +1,10 @@
 import { NavLink } from "react-router-dom"
 import s from "./Userinfo.module.css"
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import userAvatar from "../../../../images/user.jpg"
 import useStore from "../../../../store/useToDoStore.js";
 
-const Userinfo = () => {
+const Userinfo: React.FC = () => {
 
   const userData = useStore((state) => state.userData);
   const UpdateCallBack = useStore((state) => state.UpdateCallBack);

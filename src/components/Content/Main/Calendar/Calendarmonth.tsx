@@ -1,4 +1,3 @@
-import React from "react";
 import { Calendar } from 'primereact/calendar';
 import s from "./Calendar.module.css";
 import useStore from "../../../../store/useToDoStore.js";

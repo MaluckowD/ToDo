@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from "react-router-dom";
 import Header from "./Header/Header"
-import Main from "./Main/Main"
+import Main from "./Main/Main.tsx"
 import Footer from "./Footer/Footer"
 import KirillLoh from '../Modals/KirillLoh/KirillLoh';
 import AddTask from '../Modals/AddTask/AddTask';
