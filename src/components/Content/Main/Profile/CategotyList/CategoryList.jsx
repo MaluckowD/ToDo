@@ -2,18 +2,13 @@ import s from "./CategoryList.module.css"
 import close from "../../../../../images/close.svg"
 import image from "../../../../../images/image.svg"
 import useStore from "../../../../../store/useToDoStore.js";
-const CategoryList = (props) => {
+const CategoryList = () => {
 
   const openModalCategory = useStore((state) => state.openModalCategory);
   const openModalEditCategory = useStore((state) => state.openModalEditCategory);
   const deleteCategoryDialog = useStore((state) => state.deleteCategoryDialog);
   const categories = useStore((state) => state.categories);
 
-  const DeleteCategoryDialog = (id) => {
-    props.setIsDialogOpen1(true)
-    props.setCategoryId(id)
-  }
-  
   return (
     <div className={s.categorylist}>
       <div className={s.btn}>

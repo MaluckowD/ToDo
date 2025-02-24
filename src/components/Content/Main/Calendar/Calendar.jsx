@@ -33,6 +33,7 @@ const Calendar = () => {
   const draggedItem = useRef(null);
 
   fetchCategories()
+  
   useEffect(() => {
     if (cellRefs.current) {
       adjustCellHeights(cellRefs);

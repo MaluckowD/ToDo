@@ -4,13 +4,12 @@ import React, { useEffect } from "react";
 import userAvatar from "../../../../images/user.jpg"
 import useStore from "../../../../store/useToDoStore.js";
 
-const Userinfo = (props) => {
+const Userinfo = () => {
 
   const userData = useStore((state) => state.userData);
   const UpdateCallBack = useStore((state) => state.UpdateCallBack);
   const loadAvatar = useStore((state) => state.loadAvatar);
   const avatarUrl = useStore((state) => state.avatarUrl);
-
 
   useEffect(() => {
     loadAvatar();
