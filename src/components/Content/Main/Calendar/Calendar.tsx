@@ -10,7 +10,7 @@ import { monthNames, days } from "../../../../constants"
 import {  isToday, adjustCellHeights, btnClass, 
           eventClass, handleDragOver, handleDragEnter, 
           handleDragStart, handleDragLeave } 
-          from "../../../../utils/Calendar_functions.js"
+          from "../../../../utils/Calendar_functions"
 const Calendar: React.FC = () => {
   
   const openTaskInfoS = useStore((state) => state.openTaskInfoS)

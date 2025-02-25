@@ -1,15 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import "./globals.css";
+import './globals.css';
 
-const rootElement = document.getElementById('root');
+const rootElement: HTMLElement | null = document.getElementById('root');
 
-// Проверка на null перед созданием root
 if (rootElement) {
-  const root = ReactDOM.createRoot(rootElement);
+  const root: ReactDOM.Root = ReactDOM.createRoot(rootElement);
 
-  root.render( <App/> );
+  root.render(<App />);
 } else {
   console.error("Элемент с id 'root' не найден в документе.");
 }

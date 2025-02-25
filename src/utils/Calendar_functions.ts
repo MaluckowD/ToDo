@@ -1,4 +1,4 @@
-export const isToday = (year, month, date) => {
+export const isToday = (year: number, month: number, date: number): boolean => {
   const today = new Date();
   const d = new Date(year, month, date);
   return today.toDateString() === d.toDateString();
