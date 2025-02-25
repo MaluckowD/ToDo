@@ -7,6 +7,7 @@ import Registration from "./components/Registration/Registration";
 import Calendar from "./components/Content/Main/Calendar/Calendar";
 import Profile from "./components/Content/Main/Profile/Profile";
 import useStore from "./store/useToDoStore.js";
+
 function App() {
 
   const fetchUserData = useStore((state) => state.fetchUserData);

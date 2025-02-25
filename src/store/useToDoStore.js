@@ -11,6 +11,8 @@ import userAvatar from "../images/user.jpg"
 const getInitialStatusId1 = () => {
   const storedStatusId = localStorage.getItem('statusId');
   return storedStatusId ? parseInt(storedStatusId) : 0;
+
+  
 }
 const statusId = getInitialStatusId1
 
@@ -158,6 +160,27 @@ const useStore = create((set, get) => ({
       const selectedMonth = event.value.getMonth();
       const selectedYear = event.value.getFullYear();
       get().updateMonthYear(selectedMonth, selectedYear);
+    }
+  },
+
+  exit: () => {
+    if (get().isDialogOpenForDeleteUser === true){
+      get().closeDeleteUserDialog()
+    } else if (get().isDialogOpenForDeleteCategory === true) {
+      get().closeDeleteCategoryDialog()
+    } else if (get().isDialogOpenForDeleteTask === true) {
+      get().closeDeleteTaskDialog()
+    }
+  },
+
+  deleteData:  (navigate) => {
+    if (get().isDialogOpenForDeleteUser === true) {
+      get().deleteUser()
+      navigate("/login");
+    } else if (get().isDialogOpenForDeleteCategory === true) {
+      get().deleteCategory(get().categortId)
+    } else if (get().isDialogOpenForDeleteTask === true) {
+      get().deleteTask(get().taskId)
     }
   },
 
