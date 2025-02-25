@@ -1,10 +1,11 @@
 import React from "react";
 import s from "../Modals.module.css"
-import useStore from "../../../store/useToDoStore.js";
+import useStore from "../../../store/useToDoStore";
 import {IProps} from "../../../types/propsModals.js"
 
 const AddTask: React.FC<IProps> = React.memo (
   ({ modalRef }) => {
+    
     const closeIsOpenTaskInfo = useStore((state) => state.closeIsOpenTaskInfo);
     const changeTaskName = useStore((state) => state.changeTaskName);
     const taskName = useStore((state) => state.taskName);
@@ -44,7 +45,7 @@ const AddTask: React.FC<IProps> = React.memo (
             placeholder="Дата задачи"
           />
           <select style={{ color: "#000" }} value={selectedCategoryId} 
-            onChange={(e) => handleCategoryChange(e.target.value)}>
+            onChange={(e) => handleCategoryChange(parseInt(e.target.value, 10))}>
             <option value="" disabled>Выберите категорию</option>
             {categories.map((category) => (
               <option style={{ backgroundColor: category.color }} key={category.id} value={category.id}>
@@ -56,7 +57,7 @@ const AddTask: React.FC<IProps> = React.memo (
           <select
             style={{ color: "#000" }}
             value={taskPriority}
-            onChange={(e) => handlePriorityChange(e.target.value)}
+            onChange={(e) => handlePriorityChange(parseInt(e.target.value, 10))}
           >
             <option value="" disabled>Выберите приоритет</option>
             <option style={{ backgroundColor: "#EB0000" }} value={1}>Высокий</option>

@@ -1,6 +1,6 @@
 import React from "react";
 import s from "../Modals.module.css"
-import useStore from "../../../store/useToDoStore.js";
+import useStore from "../../../store/useToDoStore";
 import {IProps} from "../../../types/propsModals"
 
 const TaskVariants: React.FC<IProps> = React.memo (

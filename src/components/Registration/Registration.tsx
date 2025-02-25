@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import s from "./Registration.module.css";
 import { useNavigate } from "react-router-dom";
-import { sendCodeApi, confirmationApi, registartionApi } from "../../api/api.ts"
+import { sendCodeApi, confirmationApi, registartionApi } from "../../api/api"
 
-const Registration = () => {
+const Registration: React.FC = () => {
   
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
@@ -14,7 +14,7 @@ const Registration = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isConfirmation, setIsConfirmation] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [errorCode, setErrorCode] = useState(null);
   const [code, setCode] = useState("");
   const navigate = useNavigate()
@@ -84,7 +84,7 @@ const Registration = () => {
     };
 
     try {
-      const confirmationResponse = await confirmationApi(userData.email, 77777)
+      const confirmationResponse = await confirmationApi(userData.email, "77777")
       if (confirmationResponse.status === 200 || confirmationResponse.status === 201) {
         try {
           const registrationResponse = await registartionApi(userData)
@@ -125,7 +125,7 @@ const Registration = () => {
           <div className={s.modalcontent}>
             <h3>Введите код</h3>
             <div>
-              <label for="code">Код подтверждения</label>
+              <label htmlFor = "code">Код подтверждения</label>
               <input
                 id="code"
                 value={code}
@@ -140,14 +140,13 @@ const Registration = () => {
           </div>
         </div>
       )}
-
-      <div className={isConfirmation ? [s.content, s.opacity].join(' ') : [s.content]}>
+      <div className={isConfirmation ? [s.content, s.opacity].join(' ') : [s.content].join(' ')}>
         <h2>Регистрация</h2>
         <div className={s.name}>
           <div className={s.name_item}>
             <p className={s.name_description}>Имя</p>
             <input
-              maxlength='100'
+              maxLength={100}
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -157,7 +156,7 @@ const Registration = () => {
           <div className={s.name_itemsecond}>
             <p className={s.name_description}>Фамилия</p>
             <input
-              maxlength='100'
+              maxLength={100}
               type="text"
               value={surname}
               onChange={(e) => setSurname(e.target.value)}
@@ -177,7 +176,7 @@ const Registration = () => {
           <div className={s.email}>
             <p className={s.name_description}>Введите ваше короткое имя</p>
             <input
-              maxlength='100'
+              maxLength={100}
               type="text"
               value={shortName}
               onChange={(e) => setShortName(e.target.value)}
@@ -187,7 +186,7 @@ const Registration = () => {
           <div className={s.email}>
             <p className={s.name_description}>Ваша эл. почта</p>
             <input
-              maxlength='100'
+              maxLength={100}
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -197,7 +196,7 @@ const Registration = () => {
           <div className={s.sex}>
             <p className={s.sex_description}>Пароль</p>
             <input
-              maxlength='100'
+              maxLength={100}
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -207,7 +206,7 @@ const Registration = () => {
           <div className={s.validation}>
             <p className={s.validation_description}>Подтвердите пароль</p>
             <input
-              maxlength='100'
+              maxLength={100}
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
@@ -223,7 +222,6 @@ const Registration = () => {
           <p>Уже есть аккаунт? <NavLink to="/">Войти</NavLink></p>
         </div>
       </div>
-
     </div>
   )
 }

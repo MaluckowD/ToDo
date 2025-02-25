@@ -7,18 +7,10 @@ import {  getDataApi, categoriesNobaseApi, updateTasksApi,
           deleteUserApi, categorieDeleteApi } 
 from '../api/api';
 import userAvatar from "../images/user.jpg"
-
-const getInitialStatusId1 = () => {
-  const storedStatusId = localStorage.getItem('statusId');
-  return storedStatusId ? parseInt(storedStatusId) : 0;
-
+import { IStore } from 'types/store';
+const useStore = create<IStore>((set, get) => ({
   
-}
-const statusId = getInitialStatusId1
-
-const useStore = create((set, get) => ({
-  
-  statusId: statusId,
+  statusId: 0,
   completed: undefined,
   userData: null,
   categories: [],
@@ -46,7 +38,7 @@ const useStore = create((set, get) => ({
   closeDeleteCategoryDialog: () => { set({ isDialogOpenForDeleteCategory: false }) },
   closeDeleteTaskDialog: () => { set({ isDialogOpenForDeleteTask: false }) },
   changeName: (value) => { set({name: value}) },
-  changeSurname: (value) => { set({ surname: value }) },
+  //changeSurname: (value) => { set({ surname: value }) },
 
   deleteUser: () => {
     if (get().token) {
@@ -56,9 +48,7 @@ const useStore = create((set, get) => ({
       })
     }
   },
-  changeGender: (value) => {
-    set({ gender: value })
-  },
+  //changeGender: (value) => {set({ gender: value })},
 
   handleKeyDown: (event) => {
     if (event.key === 'Escape') {
@@ -132,8 +122,6 @@ const useStore = create((set, get) => ({
     set({ month: currentDate.getMonth(), year: currentDate.getFullYear() })
 
   },
-  numOfDays: [],
-  emptyDays: [],
   getNoOfDays: () => {
     let i;
     let daysInMonth = new Date(get().year, get().month + 1, 0).getDate();
@@ -178,7 +166,7 @@ const useStore = create((set, get) => ({
       get().deleteUser()
       navigate("/login");
     } else if (get().isDialogOpenForDeleteCategory === true) {
-      get().deleteCategory(get().categortId)
+      get().deleteCategory(get().categoryId)
     } else if (get().isDialogOpenForDeleteTask === true) {
       get().deleteTask(get().taskId)
     }
@@ -450,23 +438,22 @@ const useStore = create((set, get) => ({
   date: "",
   changeDate: (value) => { set({ date: value })},
   selectedCategoryId: "",
-  handleCategoryChange: (value) => { set({ selectedCategoryId: value})},
+  handleCategoryChange: (value) => { set({ selectedCategoryId: value.toString() })},
   openTaskInfoState: (formattedDate) => {
     set({
       date: formattedDate,
       isOpenTaskInfo: true
     })
   },
-  taskPriority: 1,
   handlePriorityChange: (value) => {
-    set({ taskPriority: parseInt(value, 10) })
+    set({ taskPriority: parseInt(value.toString() , 10) })
   },
 
   closeIsOpenTaskInfo: () => {
     set({ isOpenTaskInfo: false, 
       taskName: "",
       taskDescription: "",
-      taskPriority: "",
+      taskPriority: -1,
       categoryName: "",
       date: "",
       ERROR: null
@@ -534,7 +521,7 @@ const useStore = create((set, get) => ({
           statusId: id,
         }
         localStorage.setItem(`completed_${id}`, JSON.stringify(true));
-        localStorage.setItem(`statusId_${id}`, id);
+        localStorage.setItem(`statusId_${id}`, id.toString());
       } else {
         set({ completed: false })
         newTaskStatuses[id] = {
@@ -542,7 +529,7 @@ const useStore = create((set, get) => ({
           statusId: id,
         }
         localStorage.setItem(`completed_${id}`, JSON.stringify(false));
-        localStorage.setItem(`statusId_${id}`, id);
+        localStorage.setItem(`statusId_${id}`, id.toString());
       }
       set({ taskStatuses: newTaskStatuses })
       get().updateTasks();
@@ -604,7 +591,6 @@ const useStore = create((set, get) => ({
       console.error("Ошибка в addTask:", error);
       if (error.response) {
         set({ ERROR: `Ошибка при добавлении задачи! Проверьте заполненность полей!` })
-        console.log(get().error);
       } else if (error.request) { set({ ERROR: `Ошибка сети` })} 
       else { set({ERROR: `Неизвестная ошибка`})}
     }
@@ -627,7 +613,7 @@ const useStore = create((set, get) => ({
       taskName: taskData.name,
       taskPriority: taskData.priority,
       taskDescription: taskData.description,
-      selectedCategoryId: categoryId,
+      selectedCategoryId: categoryId.toString(),
       date: taskData.date,
       categoryId: categoryId
     })
@@ -646,7 +632,7 @@ const useStore = create((set, get) => ({
     set({
       isTaskOpen: false,
       taskName: "",
-      taskPriority: "",
+      taskPriority: -1,
       taskDescription: "",
       date: "",
       isDialogOpenForDeleteTask: false

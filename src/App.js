@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import s from "./App.module.css";
-import Content from "./components/Content/Content";
-import Login from "./components/Login/Login";
-import Registration from "./components/Registration/Registration";
-import Calendar from "./components/Content/Main/Calendar/Calendar";
-import Profile from "./components/Content/Main/Profile/Profile";
-import useStore from "./store/useToDoStore.js";
+import Content from "./components/Content/Content.tsx";
+import Login from "./components/Login/Login.tsx";
+import Registration from "./components/Registration/Registration.tsx";
+import Calendar from "./components/Content/Main/Calendar/Calendar.tsx";
+import Profile from "./components/Content/Main/Profile/Profile.tsx";
+import useStore from "./store/useToDoStore";
 
-function App() {
+function App() 
+{
 
   const fetchUserData = useStore((state) => state.fetchUserData);
   const token = useStore((state) => state.token);

@@ -3,7 +3,7 @@ import s1 from "./KirillLoh.module.css";
 import s from "../Modals.module.css";
 import Kirillloh from "../../../images/Кирилл2.jpg";
 import Ville from "../../../images/Vinne.jpg";
-import useStore from "../../../store/useToDoStore.js";
+import useStore from "../../../store/useToDoStore"
 import {IProps} from "../../../types/propsModals"
 
 const KirillLoh: React.FC<IProps> = React.memo(

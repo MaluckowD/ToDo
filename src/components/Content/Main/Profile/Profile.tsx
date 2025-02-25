@@ -3,7 +3,7 @@ import React from 'react';
 import UserInfo from "./UserInfo/UserInfo"
 import CategoryList from "./CategotyList/CategoryList"
 import Confirnation from "../../../Modals/Confirmation";
-import useStore from "../../../../store/useToDoStore.js";
+import useStore from "../../../../store/useToDoStore"
 
 const Profile: React.FC = () => {
 

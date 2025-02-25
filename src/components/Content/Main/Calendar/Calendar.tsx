@@ -5,12 +5,12 @@ import classNames from "./helper";
 import "./style.css"
 import CalendarMonth from './Calendarmonth';
 import { useRef } from 'react';
-import useStore from "../../../../store/useToDoStore.js";
+import useStore from "../../../../store/useToDoStore";
 import { monthNames, days } from "../../../../constants"
 import {  isToday, adjustCellHeights, btnClass, 
           eventClass, handleDragOver, handleDragEnter, 
           handleDragStart, handleDragLeave } 
-from "../../../../utils/Calendar_functions.js"
+          from "../../../../utils/Calendar_functions.js"
 const Calendar: React.FC = () => {
   
   const openTaskInfoS = useStore((state) => state.openTaskInfoS)

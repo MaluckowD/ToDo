@@ -1,5 +1,5 @@
 import s from "./Footer.module.css"
-import useStore from "../../../store/useToDoStore.js"
+import useStore from "../../../store/useToDoStore"
 
 const Footer: React.FC = () => {
   const openModal = useStore((state) => state.openModal);

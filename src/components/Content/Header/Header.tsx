@@ -1,7 +1,7 @@
 import s from "./Header.module.css"
 import Userinfo from "./Userinfo/Userinfo"
 import Buttons from "./Buttons/Buttons"
-import useStore from "../../../store/useToDoStore.js"
+import useStore from "../../../store/useToDoStore"
 
 const Header: React.FC = () => {
   const userData = useStore((state) => state.userData);

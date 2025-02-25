@@ -2,7 +2,7 @@ import s from "./UserInfo.module.css"
 import userAvatar from "../../../../../images/user.jpg"
 import iconChoice from "../../../../../images/choiceIcon.svg"
 import React, { useState, useEffect } from "react";
-import useStore from "../../../../../store/useToDoStore.js";
+import useStore from "../../../../../store/useToDoStore"
 
 const UserInfo: React.FC = () => {
 

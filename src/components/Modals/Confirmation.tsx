@@ -1,10 +1,11 @@
+import React from "react";
 import s from "./Confirmation.module.css"
-import useStore from "../../store/useToDoStore.js";
+import useStore from "../../store/useToDoStore";
 import { useNavigate } from "react-router-dom";
-const Confirnation = (props) => {
+
+const Confirnation: React.FC = () => {
 
   const navigate = useNavigate()
-
   const exit = useStore((state) => state.exit);
   const deleteData = useStore((state) => state.deleteData);
 
@@ -21,10 +22,8 @@ const Confirnation = (props) => {
           </button>
         </div>
       </div>
-      
     </div>
   )
-
 }
 
 export default Confirnation

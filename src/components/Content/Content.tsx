@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from "react-router-dom";
 import Header from "./Header/Header"
-import Main from "./Main/Main.tsx"
+import Main from "./Main/Main"
 import Footer from "./Footer/Footer"
 import KirillLoh from '../Modals/KirillLoh/KirillLoh';
 import AddTask from '../Modals/AddTask/AddTask';
@@ -12,9 +12,10 @@ import AboutTask from '../Modals/AboutTask/AboutTask';
 import EditTask from '../Modals/EditTask/EditTask';
 import AddCategory from '../Modals/AddCategory/AddCategory';
 import EditCategory from '../Modals/EditCategory/EditCategory';
-import useStore from "../../store/useToDoStore.js";
+import useStore from "../../store/useToDoStore"
 
-const Content = () => {
+const Content: React.FC = () => {
+
   const [redirectToLogin, setRedirectToLogin] = useState(false);
   const isLoading = useStore((state) => state.isLoading)
   const isTaskUpdateOpen = useStore((state) => state.isTaskUpdateOpen);
@@ -86,7 +87,7 @@ const Content = () => {
       {isModalCategoryOpen && ( <AddCategory modalRef={modalRef}/> )}
       {isEditCategoryOpen && ( <EditCategory modalRef={modalRef}/>)}
       {isDialogOpenForDeleteTask && ( <Confirnation /> )}
-      <div className={quary ? [s.wrapper, s.opacity].join(' ') : [s.wrapper]}>
+      <div className={quary ? [s.wrapper, s.opacity].join(' ') : [s.wrapper].join(' ')}>
         <Header/>
         <Main/>
         <Footer/>
@@ -95,4 +96,4 @@ const Content = () => {
   )
 }
 
-export default Content
+export default Content  

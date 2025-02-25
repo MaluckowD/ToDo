@@ -1,7 +1,7 @@
 import React from "react";
 import s1 from "./EditCategory.module.css"
 import s from "../Modals.module.css"
-import useStore from "../../../store/useToDoStore.js";
+import useStore from "../../../store/useToDoStore"
 import {IProps} from "../../../types/propsModals"
 
 const EditCategory: React.FC<IProps> = React.memo (

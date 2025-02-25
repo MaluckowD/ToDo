@@ -1,7 +1,7 @@
 import React from "react";
 import s from "../Modals.module.css"
 import s1 from "./AboutTask.module.css"
-import useStore from "../../../store/useToDoStore.js";
+import useStore from "../../../store/useToDoStore";
 import {IProps} from "../../../types/propsModals"
 
 const AboutTask: React.FC<IProps> = React.memo(
@@ -51,7 +51,7 @@ const AboutTask: React.FC<IProps> = React.memo(
           />
           <select className={s.taskinfo} disabled style={
             { color: "#000" }
-          } value={selectedCategoryId} onChange={(e) => handleCategoryChange(e.target.value)}>
+          } value={selectedCategoryId} onChange={(e) => handleCategoryChange(parseInt(e.target.value, 10))}>
             <option disabled value="">Выберите категорию</option>
             {categories.map((category) => (
               <option style={{ backgroundColor: category.color }} key={category.id} value={category.id}>
@@ -63,7 +63,7 @@ const AboutTask: React.FC<IProps> = React.memo(
             className={s.taskinfo}
             style={{ color: "#000" }}
             value={taskPriority}
-            onChange={(e) => handlePriorityChange(e.target.value)}
+            onChange={(e) => handlePriorityChange(parseInt(e.target.value, 10))}
           >
             <option disabled value="">Выберите приоритет</option>
             <option style={{ backgroundColor: "#EB0000" }} value={1}>Высокий</option>
