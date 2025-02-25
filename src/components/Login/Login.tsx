@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { useNavigate, NavLink } from 'react-router-dom';
 import s from './Login.module.css';
-import { loginApi } from "../../api/api.ts"
-const Login = () => {
+import { loginApi } from "../../api/api"
+
+const Login: React.FC = () => {
   
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const LoginCallback = async (e) => {
+  const LoginCallback = async (e: FormEvent) => {
     e.preventDefault();
     setError(null);
     const data = { email, password }
@@ -18,7 +19,7 @@ const Login = () => {
       localStorage.setItem('access_token', response.data.access_token);
       navigate("/content");
       window.location.href = "/content"
-    } catch (error) {
+    } catch (error){
       console.error("Ошибка авторизации:", error);
       if (error.response) {
         setError(`Неверный логин или пароль!`)
@@ -48,7 +49,7 @@ const Login = () => {
               </label>
               <div className="mt-2">
                 <input
-                  maxLength='100'
+                  maxLength={100}
                   id="email"
                   name="email"
                   type="email"
@@ -74,7 +75,7 @@ const Login = () => {
               </div>
               <div className="mt-2">
                 <input
-                  maxLength='100'
+                  maxLength={100}
                   id="password"
                   name="password"
                   type="password"
