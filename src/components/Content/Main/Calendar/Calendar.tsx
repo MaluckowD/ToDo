@@ -139,22 +139,22 @@ const Calendar: React.FC = () => {
                       )
                       .map((e) => {
                         const eventStyles = eventClass(e.event_theme);
-                        const taskStatus = getTaskStatus(e.task_id);
+                        const taskStatus = getTaskStatus(parseInt(e.task_id, 10));
                         return (
                           <div
                             key={e.event_title}
                             draggable="true"
-                            onDragStart={(event) => handleDragStart(event, e, draggedItem)}
+                            onDragStart={(event) => handleDragStart(event, { ...e, event_date: e.event_date.toString() }, draggedItem)}
                             className={classNames(
                               "px-2 py-1 rounded-lg mt-1 overflow-hidden border"
                             )}
                             onClick={
                               (event) => {
                                 event.stopPropagation();
-                                getTaskInfo(e.task_id);
+                                getTaskInfo(parseInt(e.task_id, 10));
                               }
                             }
-                            id={e.task_id}
+                            id={(e.task_id).toString()}
                             style={{
                               margin: '5px',
                               cursor: 'pointer',
