@@ -38,7 +38,6 @@ const useStore = create<IStore>((set, get) => ({
   closeDeleteCategoryDialog: () => { set({ isDialogOpenForDeleteCategory: false }) },
   closeDeleteTaskDialog: () => { set({ isDialogOpenForDeleteTask: false }) },
   changeName: (value) => { set({name: value}) },
-  //changeSurname: (value) => { set({ surname: value }) },
 
   deleteUser: () => {
     if (get().token) {
@@ -48,7 +47,6 @@ const useStore = create<IStore>((set, get) => ({
       })
     }
   },
-  //changeGender: (value) => {set({ gender: value })},
 
   handleKeyDown: (event) => {
     if (event.key === 'Escape') {

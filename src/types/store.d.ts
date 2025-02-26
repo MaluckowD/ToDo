@@ -26,9 +26,7 @@ export interface IStore {
     closeDeleteCategoryDialog: () => void,
     closeDeleteTaskDialog: () => void,
     changeName: (value: string) => void,
-    //changeSurname: (value: string) => void,
     deleteUser: () => void;
-    //changeGender: (value: string) => void;
     handleKeyDown: (event: FormEvent) => void;
     handleClickOutside: (event: FormEvent, modalRef:MutableRefObject<HTMLElement | null>) => void
     nextMonth: () => void;
