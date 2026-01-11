@@ -13,22 +13,18 @@ const App: React.FC = () => {
   const token = useStore((state) => state.token);
   const setToken = useStore((state) => state.setToken);
 
-  // Устанавливаем заголовок документа
   useEffect(() => {
     document.title = "ToDo";
   }, []);
 
-  // Загружаем данные пользователя
   useEffect(() => {
     fetchUserData();
   }, [fetchUserData]);
 
-  // Компонент для редиректа в зависимости от наличия токена
   const AuthRedirect: FC = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState<boolean>(true);
 
-    // Проверяем токен в localStorage
     useEffect(() => {
       const storedToken = token;
       if (storedToken) {
@@ -37,7 +33,6 @@ const App: React.FC = () => {
       setLoading(false);
     }, [setToken, token]);
 
-    // Редирект в зависимости от токена
     useEffect(() => {
       if (!loading) {
         if (token) {
